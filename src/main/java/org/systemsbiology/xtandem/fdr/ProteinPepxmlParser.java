@@ -1,0 +1,594 @@
+package org.systemsbiology.xtandem.fdr;
+
+import com.lordjoe.lib.xml.*;
+import org.systemsbiology.xtandem.peptide.*;
+
+import java.io.*;
+import java.util.*;
+
+
+/**
+ * org.systemsbiology.xtandem.fdr.ProteinPepxmlParser
+ *
+ * @author attilacsordas
+ * @date 09/05/13
+ */
+public class ProteinPepxmlParser {
+
+    public static class SpectrumQuery {
+        public final String spectrum;
+        public final double mass;
+        public final int charge;
+        public final double retentionTime;
+        private final List<SpectrumHit> hits = new ArrayList<SpectrumHit>();
+
+        public SpectrumQuery(String spectrum, double mass, int charge, double rewtentionTime) {
+            this.spectrum = spectrum;
+            this.mass = mass;
+            this.charge = charge;
+            this.retentionTime = rewtentionTime;
+        }
+
+        public void addSpectrumHit(SpectrumHit hit) {
+            hits.add(hit);
+        }
+
+        public int getHitsCount() {
+            return hits.size();
+        }
+        public List<SpectrumHit> getHits() {
+            return Collections.unmodifiableList(hits);
+        }
+
+    }
+
+    public static class SpectrumHit {
+        public final String id;
+        public final int hit_Rank;
+        public final double hypderscore;
+        public final IPolypeptide peptide;
+
+        public SpectrumHit(final String pId, final double pHypderscore,int pRank, final IPolypeptide pPeptide) {
+            id = pId;
+            hypderscore = pHypderscore;
+            hit_Rank = pRank;
+            peptide = pPeptide;
+        }
+
+        @Override
+        public String toString() {
+            return "SpectrumHit{" +
+                    "id='" + id + '\'' +
+                    ", peptide='" + peptide + '\'' +
+                    ", rank='" + hit_Rank + '\'' +
+                    ", hypderscore=" + hypderscore +
+                    '}';
+        }
+    }
+
+    public static class PositionModification {
+        public final int position;
+        public final double massChange;
+
+        public PositionModification(int position, double massChange) {
+            this.position = position;
+            this.massChange = massChange;
+        }
+
+        @Override
+        public String toString() {
+            return "PositionModification{" +
+                    "position=" + position +
+                    ", massChange=" + massChange +
+                    '}';
+        }
+
+        public String toModString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            sb.append(String.format("%10.3f", massChange).trim());
+            sb.append("]");
+            return sb.toString();
+        }
+    }
+
+
+    public static final boolean USE_EXPECTED = false; // otherwise use score
+
+    private final File m_File;
+    private final Map<String, Set<IdentifiedPSM>> proteinToHits = new HashMap<String, Set<IdentifiedPSM>>();
+    private final Map<String, Set<IdentifiedPSM>> uniqueProteinToHits = new HashMap<String, Set<IdentifiedPSM>>();
+    private final Map<String, List<SpectrumHit>> spectrumHits = new HashMap<String, List<SpectrumHit>>();
+
+    private String scan_id;
+
+    public ProteinPepxmlParser(String filename) {
+        this(new File(filename));
+
+
+    }
+
+    public ProteinPepxmlParser(File file) {
+        m_File = file;
+
+
+    }
+
+    public File getFilename() {
+        return m_File;
+    }
+
+
+    public Map<String,  List<SpectrumHit>> getSpectrumHits() {
+         return new HashMap<String, List<SpectrumHit>>(spectrumHits);
+    }
+
+    public List<SpectrumHit> getAllHits()
+    {
+        List<SpectrumHit> holder = new ArrayList<SpectrumHit>();
+        for (String s : spectrumHits.keySet()) {
+            holder.addAll(spectrumHits.get(s));
+        }
+
+        return holder;
+    }
+
+    /**
+     *
+     */
+    public void readFileAndGenerate(boolean onlyUniquePeptides, ISpectrumDataFilter... filters) {
+        @SuppressWarnings("UnusedDeclaration")
+        int numberProcessed = 0;
+        @SuppressWarnings("UnusedDeclaration")
+        double lastRetentionTime = 0;
+
+        @SuppressWarnings("UnusedDeclaration")
+        int numberUnProcessed = 0;
+        try {
+            LineNumberReader rdr = new LineNumberReader(new FileReader(m_File));
+            String line = rdr.readLine();
+            while (line != null) {
+                if (line.contains("<spectrum_query")) {
+                    String retention_time_sec = XMLUtil.extractAttribute(line, "retention_time_sec");
+                    scan_id = XMLUtil.extractAttribute(line, "start_scan");
+                    if (retention_time_sec == null) {
+                        lastRetentionTime = 0;
+                    } else {
+                        try {
+                            lastRetentionTime = Double.parseDouble(retention_time_sec.trim());
+                        } catch (NumberFormatException e) {
+                            lastRetentionTime = 0;
+                        }
+                    }
+                }
+                if (line.contains("</spectrum_query>")) {
+
+                }
+
+
+
+                //noinspection StatementWithEmptyBody,StatementWithEmptyBody
+                if (line.contains("<search_result")) {
+                    String[] reaultLines = readSearchResultLines(line, rdr);
+                    //              System.out.println(line);
+                    List<String[]> hits = readSearchHits(reaultLines);
+                    int ranks = 1;
+                    for (String[] searchHitLines : hits) {
+                        boolean processed = handleSearchHit(searchHitLines, lastRetentionTime, onlyUniquePeptides, filters);
+                        if(ranks++ > 1)
+                            break;
+                    }
+
+                }
+                line = rdr.readLine();
+
+            }
+
+            //noinspection UnnecessaryReturnStatement
+            return;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+     }
+
+    protected List<String[]> readSearchHits(String[] lines)
+    {
+        List<String[]> holder = new ArrayList<String[]>();
+        List<String> accum = new ArrayList<String>();
+        boolean accumulating = false;
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            if(line.contains("<search_hit"))  {
+                 accumulating = true;
+              }
+            if(accumulating)
+                accum.add(line);
+            if(line.contains("</search_hit"))  {
+                holder.add(accum.toArray(new String[accum.size()]));
+                accum.clear();
+                accumulating = false;
+            }
+
+        }
+         return holder;
+    }
+
+    protected String[] readSearchResultLines(String line, LineNumberReader rdr, @SuppressWarnings("UnusedParameters") ISpectrumDataFilter... filters) {
+        List<String> holder = new ArrayList<String>();
+
+        try {
+            while (line != null) {
+                holder.add(line);
+                if (line.contains("</search_result")) {
+                    break; // done
+                }
+                line = rdr.readLine();  // read next line
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String[] ret = new String[holder.size()];
+        holder.toArray(ret);
+        return ret;
+    }
+
+
+    @SuppressWarnings({"UnusedParameters", "UnusedAssignment"})
+    protected boolean handleSearchHit(String[] lines, double retentionTime, boolean onlyUniquePeptides, ISpectrumDataFilter... filters) {
+        //noinspection UnnecessaryLocalVariable,UnusedDeclaration,UnusedAssignment
+        Double expectedValue = null;
+        //noinspection UnnecessaryLocalVariable,UnusedDeclaration,UnusedAssignment
+        Double hyperScoreValue = null;
+        int index = 0;
+        String line = lines[index++];   // handle first line
+        while (!line.contains("<search_hit")) {
+            line = lines[index++];
+            if (index >= lines.length)
+                return false;
+        }
+        String id = scan_id;
+        List<PositionModification> modifications = new ArrayList<PositionModification>();
+
+        if ("".equals(id))
+            throw new UnsupportedOperationException("Fix This"); // ToDo
+
+        boolean trueHit = !line.contains("protein=\"DECOY_");
+        boolean processSpectrum = parseHitValue(line) <= 2;
+        //noinspection UnnecessaryLocalVariable,UnusedDeclaration,UnusedAssignment
+        boolean isUnique = true;
+        //noinspection UnnecessaryLocalVariable,UnusedDeclaration,UnusedAssignment
+        boolean isModified = false;
+        int rank = parseHitValue(line);
+
+        IdentifiedPSM peptide = processPeptide(line, retentionTime, id);
+
+        String  proteinId = parseQuotedValue(line,"protein");
+
+
+        for (; index < lines.length; index++) {
+            line = lines[index];
+
+            if (line.contains("</search_hit"))
+                break;         // we are done
+
+            if (line.contains("</modification_info>")) {
+                peptide = buildFromModification(peptide, modifications);
+
+            }
+
+            if (line.contains(" modified_peptide="))
+                peptide = processModifiedPeptide(line, retentionTime, id);
+
+            if (line.contains("<mod_aminoacid_mass ")) {
+                double delMass = parseNamedValue(line, "mass");
+                int position = parsePositionValue(line);
+                modifications.add(new PositionModification(position, delMass));
+            }
+
+            if (line.contains("<alternative_protein")) {
+                isUnique = false;
+                if (onlyUniquePeptides)
+                    processSpectrum = false; // only process unique hits
+            }
+
+            if (line.contains("<search_score name=\"hyperscore\" value=\"")) {
+                hyperScoreValue = parseValue(line);
+            }
+            if (line.contains("<search_score name=\"xcorr\" value=\"")) {
+                hyperScoreValue = parseValue(line);
+            }
+            if (line.contains("<search_score name=\"expect\" value=\"")) {
+                expectedValue = parseValue(line);
+            }
+            if (line.contains("protein=\"DECOY_")) {  // another protein
+                if (trueHit)
+                    processSpectrum = false; // one decoy one not
+            }
+            if (line.contains("<alternative_protein")) {  // another protein
+                if (!trueHit && !line.contains("protein=\"DECOY_")) // we start as decoy and fit to a real
+                    processSpectrum = false; // one decoy one not
+            }
+
+            if (line.contains("protein_descr=\"")) {
+            //    protein = processProtein(line);
+
+            }
+        }
+
+
+        while(id.startsWith("0"))
+            id = id.substring(1);
+
+        if(hyperScoreValue ==  null)
+            hyperScoreValue = new Double(0);
+
+        IPolypeptide peptide1 = peptide.getPeptide();
+        SpectrumHit hit = new SpectrumHit(id, hyperScoreValue,rank, peptide1);
+        List<SpectrumHit> addTo = spectrumHits.get(id) ;
+        if(addTo == null)  {
+            addTo = new ArrayList<SpectrumHit>();
+            spectrumHits.put(id, addTo);
+        }
+        addTo.add(hit);
+
+        if (processSpectrum) {
+            @SuppressWarnings("ConstantConditions")
+            String idP = proteinId;
+            if (id.contains("DECOY"))
+                return false;
+            Set<IdentifiedPSM> pps = proteinToHits.get(idP);
+            if (pps == null) {
+                pps = new HashSet<IdentifiedPSM>();
+                proteinToHits.put(idP, pps);
+            }
+            pps.add(peptide);
+            return true; // processed
+        }
+        return false; // unprocessed
+
+
+    }
+
+    public static IdentifiedPSM buildFromModification(IdentifiedPSM peptide, List<PositionModification> modifications) {
+        Polypeptide unmodified = (Polypeptide) peptide.getPeptide();
+        String id = unmodified.getId();
+        String s = unmodified.getSequence();
+        int charNumber = 0;
+        StringBuilder sequence = new StringBuilder();
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            sequence.append(c);
+            charNumber++;
+            PositionModification current = null;
+            for (PositionModification modification : modifications) {
+                  if (modification.position == charNumber) {
+                    current = modification;
+                    break;
+                }
+            }
+            if (current != null) {
+                modifications.remove(current);
+                sequence.append(current.toModString());
+            }
+        }
+
+        return processModifiedPeptidePSM(sequence.toString(), unmodified.getRetentionTime(), id);
+    }
+
+    public static IdentifiedPSM processPeptide(final String line, double retentionTime, String id) {
+        String peptide = XMLUtil.extractAttribute(line, "peptide");
+        if (peptide == null)
+            throw new IllegalArgumentException("bad line " + line);
+        Polypeptide polypeptide = Polypeptide.fromString(peptide);
+        polypeptide.setRetentionTime(retentionTime);
+        return new IdentifiedPSM(id, polypeptide);
+    }
+
+
+    public static IdentifiedPSM processModifiedPeptidePSM(final String peptide, double retentionTime, String id) {
+           Polypeptide polypeptide = Polypeptide.fromString(peptide);
+        polypeptide.setRetentionTime(retentionTime);
+        return new IdentifiedPSM(id, polypeptide);
+    }
+
+    public static IdentifiedPSM processModifiedPeptide(final String line, double retentionTime, String id) {
+        String peptide = XMLUtil.extractAttribute(line, "modified_peptide");
+        if (peptide == null)
+            throw new IllegalArgumentException("bad line " + line);
+        Polypeptide polypeptide = Polypeptide.fromString(peptide);
+        polypeptide.setRetentionTime(retentionTime);
+        return new IdentifiedPSM(id, polypeptide);
+    }
+
+    public static IProtein processProtein(final String line) {
+        String peptide = XMLUtil.extractAttribute(line, "protein_descr");
+        if (peptide == null)
+            throw new IllegalArgumentException("bad line " + line);
+        return Protein.getProtein(peptide, "", "", null);
+    }
+
+    protected void processSpectrum(SpectrumData spectrum, IDiscoveryDataHolder hd) {
+        double score;
+        if (USE_EXPECTED)
+            score = spectrum.getExpectedValue();
+        else
+            //noinspection ConstantConditions
+            score = spectrum.getHyperScoreValue();
+
+        if (spectrum.isTrueHit()) {
+            hd.addTrueDiscovery(score);
+//            if (spectrum.isModified())
+//                m_ModifiedHandler.addTrueDiscovery(score);
+//            else
+//                m_UnModifiedHandler.addTrueDiscovery(score);
+        } else {
+            hd.addFalseDiscovery(score);
+            if (spectrum.isModified())
+                throw new UnsupportedOperationException("Fix This"); // ToDo
+//                m_ModifiedHandler.addFalseDiscovery(score);
+//            else
+//                m_UnModifiedHandler.addFalseDiscovery(score);
+        }
+    }
+
+    public static double parseValue(String line) {
+        return parseNamedValue(line, "value");
+    }
+
+    public static double parseNamedValue(String line, String name) {
+        String s = parseQuotedValue(line, name);
+        if (s.length() == 0)
+            return 0;
+        return Double.parseDouble(s);
+    }
+
+    public static boolean parseIsModifiedValue(String line) {
+        String s = parseQuotedValue(line, "peptide");
+        //noinspection SimplifiableIfStatement
+        if (s.length() == 0)
+            return false;
+        return s.contains("[");    // modification string
+    }
+
+    public static int parseHitValue(String line) {
+        String s = parseQuotedValue(line, "hit_rank");
+        if (s.length() == 0)
+            return 0;
+        return Integer.parseInt(s);
+    }
+
+    public static int parsePositionValue(String line) {
+        String s = parseQuotedValue(line, "position");
+        if (s.length() == 0)
+            return 0;
+        return Integer.parseInt(s);
+    }
+
+    /**
+     * return a section of
+     *
+     * @param line
+     * @param start
+     * @return
+     */
+    public static String parseQuotedValue(String line, String start) {
+        final String str = start + "=\"";
+        int index = line.indexOf(str);
+        if (index == -1)
+            return "";
+        index += str.length();
+        int endIndex = line.indexOf("\"", index);
+        if (endIndex == -1)
+            return "";
+        return line.substring(index, endIndex);
+    }
+
+    public void appendPeptides(Appendable out) {
+        try {
+            List<String> proteins = new ArrayList<String>(proteinToHits.keySet());
+            Collections.sort(proteins);
+            for (String protein : proteins) {
+                Set<IdentifiedPSM> pps = proteinToHits.get(protein);
+                List<IdentifiedPSM> peptides = new ArrayList<IdentifiedPSM>(pps);
+                Collections.sort(peptides);
+
+                for (IdentifiedPSM psm : peptides) {
+                    Polypeptide peptide = (Polypeptide) psm.getPeptide(); // .getUnModified();
+                    out.append(peptide.toString());
+                    out.append("\t");
+                    out.append(psm.getId());
+                    out.append("\t");
+                    out.append(protein);
+                    out.append("\t");
+                    String rt = String.format("%11.3f", peptide.getRetentionTime()).trim();
+                    out.append(rt);
+                    out.append("\n");
+                }
+
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void appendProteins(Appendable out) {
+        try {
+            List<String> proteins = new ArrayList<String>(proteinToHits.keySet());
+            Collections.sort(proteins);
+            for (String protein : proteins) {
+                Set<IdentifiedPSM> pps = proteinToHits.get(protein);
+                List<IdentifiedPSM> psms = new ArrayList<IdentifiedPSM>(pps);
+                Collections.sort(psms);
+
+                out.append(protein);
+                for (IdentifiedPSM psm : psms) {
+                    out.append("\t");
+                    IPolypeptide unModified = psm.getPeptide(); // .getUnModified();
+                    out.append(unModified.toString());
+                    out.append("\t");
+                    out.append(psm.getId());
+
+                }
+                out.append("\n");
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    private static void originalMain(final String[] args) throws IOException {
+        if (args.length == 0)
+            throw new IllegalArgumentException("pass in pep.xml files to process");
+        String filename = args[0];
+        PrintWriter px = new PrintWriter(new FileWriter(filename + "_AllTargetProteins.tsv"));
+        for (int i = 0; i < args.length; i++) {
+            boolean onlyUniquePeptides = false;
+            String arg = args[i];
+            ProteinPepxmlParser fdrParser = new ProteinPepxmlParser(arg);
+            fdrParser.readFileAndGenerate(onlyUniquePeptides);
+            fdrParser.appendProteins(px);
+            px.close();
+            PrintWriter ppx = new PrintWriter(new FileWriter(filename + "_AllTargetPeptides.tsv"));
+            fdrParser.appendPeptides(ppx);
+            ppx.close();
+        }
+    }
+
+
+    private static void newMain(final String[] args) throws IOException {
+        if (args.length == 0)
+            throw new IllegalArgumentException("pass in pep.xml files to process");
+        String filename = args[0];
+        PrintWriter px = new PrintWriter(new FileWriter(filename + "_UniqueProteins.tsv"));
+        for (int i = 0; i < args.length; i++) {
+            boolean onlyUniquePeptides = true;
+            String arg = args[i];
+            ProteinPepxmlParser fdrParser = new ProteinPepxmlParser(arg);
+            fdrParser.readFileAndGenerate(onlyUniquePeptides);
+            fdrParser.appendProteins(px);
+            px.close();
+            PrintWriter ppx = new PrintWriter(new FileWriter(filename + "_UniquePeptides.tsv"));
+            fdrParser.appendPeptides(ppx);
+            ppx.close();
+        }
+    }
+
+
+    public static void main(String[] args) throws Exception {
+
+
+        //   newMain(args);
+        originalMain(args);
+
+    }
+
+
+}
