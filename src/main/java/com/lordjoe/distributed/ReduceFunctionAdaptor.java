@@ -31,12 +31,7 @@ public class ReduceFunctionAdaptor<K extends Serializable, V extends Serializabl
         Iterable<V> iterable = itr.getIterable();
         K key = itr.key;
 
-        final IKeyValueConsumer<KOUT, VOUT> consumer = new IKeyValueConsumer<KOUT, VOUT>() {
-            @Override
-            public void consume(final KeyValueObject<KOUT, VOUT> kv) {
-                holder.add(kv);
-            }
-        };
+        final IKeyValueConsumer<KOUT, VOUT> consumer = kv -> holder.add(kv);
         //noinspection unchecked
         reducer.handleValues( key, iterable, consumer);
         return holder;

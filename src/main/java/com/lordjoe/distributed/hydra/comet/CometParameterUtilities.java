@@ -29,9 +29,8 @@ public class CometParameterUtilities {
      * @param strings
      */
     public static void parseParameters(ISetableParameterHolder hdr, String[] strings) {
-        for (int i = 0; i < strings.length; i++) {
-            String line = strings[i];
-            handleParameterLine(hdr,line);
+        for (String line : strings) {
+            handleParameterLine(hdr, line);
         }
     }
 

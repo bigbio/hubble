@@ -594,8 +594,7 @@ public abstract class FileUtilities {
 
 
         synchronized (gRequiredFiles) {
-            for (int i = 0; i < gRequiredFiles.length; i++) {
-                String requiredFile = gRequiredFiles[i];
+            for (String requiredFile : gRequiredFiles) {
                 String error = locateRequiredFile(requiredFile);
                 if (!Util.isEmptyString(error)) {
                     if (sb.length() > 0)
@@ -694,8 +693,7 @@ public abstract class FileUtilities {
         File[] files = directory.listFiles();
         if (files == null)
             return;
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
+        for (File file : files) {
             if (file.isDirectory())
                 accumulateFiles(file, holder);
             else
@@ -810,12 +808,11 @@ public abstract class FileUtilities {
      */
     public static void expungeDirectoryContents(File TheDir) {
         String[] items = TheDir.list();
-        for (int i = 0; i < items.length; i++) {
-            File Test = new File(TheDir, items[i]);
+        for (String item : items) {
+            File Test = new File(TheDir, item);
             if (Test.isFile()) {
                 Test.delete();
-            }
-            else {
+            } else {
                 expungeDirectory(Test);
             }
         }
@@ -880,8 +877,8 @@ public abstract class FileUtilities {
             holder.addElement(DirectoryName);
 
         String[] Files = TestFile.list();
-        for (int j = 0; j < Files.length; j++) {
-            String test = pathConcat(DirectoryName, Files[j]);
+        for (String File : Files) {
+            String test = pathConcat(DirectoryName, File);
             getAllDirectoriesWithExtension(Base, test, Extension, holder);
         }
     }
@@ -996,13 +993,11 @@ public abstract class FileUtilities {
     public static File getLatestFileWithExtension(File dir, String extension) {
         File ret = null;
         String[] names = getAllFilesWithName(dir, extension);
-        for (int i = 0; i < names.length; i++) {
-            String name = names[i];
+        for (String name : names) {
             File test = new File(name);
             if (ret == null) {
                 ret = test;
-            }
-            else {
+            } else {
                 boolean testExists = test.exists();
                 boolean retExists = ret.exists();
 
@@ -1067,8 +1062,7 @@ public abstract class FileUtilities {
              String
                      NewExtension) {
         String[] files = getAllFilesWithExtension(DirectoryName, Extension);
-        for (int i = 0; i < files.length; i++)
-            setExtension(files[i], NewExtension);
+        for (String file : files) setExtension(file, NewExtension);
     }
 
     public static void setExtension
@@ -1193,9 +1187,9 @@ public abstract class FileUtilities {
                                                               Directory, String Extension) {
         String[] Files = Directory.list();
         long ret = 0;
-        for (int i = 0; i < Files.length; i++) {
-            if (Files[i].endsWith(Extension)) {
-                File test = new File(Directory, Files[i]);
+        for (String File : Files) {
+            if (File.endsWith(Extension)) {
+                File test = new File(Directory, File);
                 if (!test.isDirectory())
                     ret = Math.max(ret, test.lastModified());
             }
@@ -1219,8 +1213,8 @@ public abstract class FileUtilities {
     (File
              Directory, String[] testNames) {
         long ret = 0;
-        for (int i = 0; i < testNames.length; i++) {
-            File test = new File(Directory, testNames[i]);
+        for (String testName : testNames) {
+            File test = new File(Directory, testName);
             if (test.exists() && !test.isDirectory()) {
                 ret = Math.max(ret, test.lastModified());
             }
@@ -1243,9 +1237,9 @@ public abstract class FileUtilities {
         int BuildLength = BuildBase.length() + 1;
         String[] BuildClasses = FileUtilities.getAllFilesWithExtension(BuildBase, "class");
         java.util.List holder = new ArrayList();
-        for (int i = 0; i < BuildClasses.length; i++) {
-            if (BuildClasses[i].indexOf("$") == -1)
-                holder.add(BuildClasses[i].substring(BuildLength).replace('/', '.'));
+        for (String BuildClass : BuildClasses) {
+            if (BuildClass.indexOf("$") == -1)
+                holder.add(BuildClass.substring(BuildLength).replace('/', '.'));
         }
         String[] ret = Util.collectionToStringArray(holder);
         return (ret);
@@ -1274,18 +1268,18 @@ public abstract class FileUtilities {
         if (!UpperDirectory.isDirectory())
             throw new IllegalArgumentException(
                     "requested directory '" + UpperDirectory.getAbsolutePath() + "' is not a directory");
-        String ret = IncludedFile.getName();
+        StringBuilder ret = new StringBuilder(IncludedFile.getName());
         File Test = new File(IncludedFile.getParent());
         while (Test != null) {
             if (Test.equals(UpperDirectory))
                 break;
-            ret = Test.getName() + "/" + ret;
+            ret.insert(0, Test.getName() + "/");
             Test = new File(Test.getParent());
         }
         if (Test == null)
             throw new IllegalArgumentException("directory '" + UpperDirectory.getAbsolutePath() +
                     "' is not a m_ParentStream of file '" + IncludedFile.getAbsolutePath() + "'");
-        return (ret);
+        return (ret.toString());
     }
 
     /**
@@ -1434,15 +1428,14 @@ public abstract class FileUtilities {
         else {
             Files = TestFile.list(Filter);
         }
-        for (int j = 0; j < Files.length; j++) {
-            Subfile = new File(TestFile, Files[j]);
+        for (String File : Files) {
+            Subfile = new File(TestFile, File);
             if (Subfile.isDirectory()) {
                 SubFiles = getAllFilesWithFilter(Subfile, Filter);
-                for (int k = 0; k < SubFiles.length; k++) {
-                    ret.addElement(SubFiles[k]);
+                for (String SubFile : SubFiles) {
+                    ret.addElement(SubFile);
                 }
-            }
-            else {
+            } else {
                 String path = null;
                 /*    try {
                     path = Subfile.getCanonicalPath();
@@ -1490,8 +1483,7 @@ public abstract class FileUtilities {
             throw new IllegalArgumentException("File " + dir.getName() + " is not a directory");
         List holder = new ArrayList();
         String[] names = dir.list();
-        for (int i = 0; i < names.length; i++) {
-            String name = names[i];
+        for (String name : names) {
             File test = new File(dir, name);
             if (test.isDirectory())
                 holder.add(test);
@@ -1543,8 +1535,8 @@ public abstract class FileUtilities {
         else {
             Files = pTestFile.list(Filter);
         }
-        for (int j = 0; j < Files.length; j++) {
-            test = pathConcat(DirectoryName, Files[j]);
+        for (String File : Files) {
+            test = pathConcat(DirectoryName, File);
             ret.addElement(test);
         }
         String out[] = new String[ret.size()];
@@ -1585,14 +1577,14 @@ public abstract class FileUtilities {
             return (null);
         }
         Files = pTestFile.list();
-        for (int j = 0; j < Files.length; j++) {
-            test = pathConcat(DirectoryName, Files[j]);
+        for (String File : Files) {
+            test = pathConcat(DirectoryName, File);
             Subfile = new File(test);
             if (Subfile.isDirectory()) {
                 SubFiles = getAllSubDirectories(test);
                 if (SubFiles != null) {
-                    for (int k = 0; k < SubFiles.length; k++) {
-                        ret.addElement(SubFiles[k]);
+                    for (String SubFile : SubFiles) {
+                        ret.addElement(SubFile);
                     }
                 }
                 ret.addElement(test);
@@ -1627,8 +1619,7 @@ public abstract class FileUtilities {
         if (Files == null)
             return null;
         List<File> holder = new ArrayList<File>();
-        for (int i = 0; i < Files.length; i++) {
-            String file = Files[i];
+        for (String file : Files) {
             File testDir = new File(pTestFile, file);
             if (!testDir.isDirectory())
                 continue;
@@ -1638,8 +1629,8 @@ public abstract class FileUtilities {
         }
         SubFiles = new File[holder.size()];
         holder.toArray(SubFiles);
-        for (int j = 0; j < SubFiles.length; j++) {
-            File ans = findSubDirectory(SubFiles[j], name);
+        for (File SubFile : SubFiles) {
+            File ans = findSubDirectory(SubFile, name);
             if (ans != null) {
                 return ans;
             }
@@ -1682,18 +1673,15 @@ public abstract class FileUtilities {
     (File[] thislevel, List<File> nextLevel,
      String
              name) {
-        for (int i = 0; i < thislevel.length; i++) {
-            File test = thislevel[i];
+        for (File test : thislevel) {
             String tn = test.getName();
             if (tn.equals(name))
                 return test;
 
         }
-        for (int i = 0; i < thislevel.length; i++) {
-            File test = thislevel[i];
+        for (File test : thislevel) {
             String[] nls = test.list();
-            for (int j = 0; j < nls.length; j++) {
-                String nl = nls[j];
+            for (String nl : nls) {
                 File testDir = new File(test, nl);
                 if (!testDir.isDirectory())
                     continue;
@@ -1751,10 +1739,10 @@ public abstract class FileUtilities {
             return (null);
         }
         String[] AllFiles = Directory.list();
-        for (int i = 0; i < AllFiles.length; i++) {
-            String test = AllFiles[i].substring(0, FileStub.length());
+        for (String AllFile : AllFiles) {
+            String test = AllFile.substring(0, FileStub.length());
             if (FileStub.equalsIgnoreCase(test)) {
-                return (AllFiles[i]);
+                return (AllFile);
             }
         }
         return (null);
@@ -1798,18 +1786,16 @@ public abstract class FileUtilities {
         String[] items = Util.parseLinesWithBlanks(Text);
         ArrayList holder = new ArrayList();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < items.length; i++) {
-            String Text1 = items[i];
+        for (String Text1 : items) {
             if (Text1.length() == 0) {
                 if (sb.length() > 0) {
                     holder.add(sb.toString());
                     sb.setLength(0);
                 }
-            }
-            else {
+            } else {
                 if (sb.length() > 0)
                     sb.append("\n");
-                sb.append(items[i]);
+                sb.append(Text1);
             }
         }
         if (sb.length() > 0)
@@ -1961,8 +1947,8 @@ public abstract class FileUtilities {
     public static String buildString
             (String[] lines) {
         StringBuilder sb = new StringBuilder(2048);
-        for (int i = 0; i < lines.length; i++) {
-            sb.append(lines[i]);
+        for (String line : lines) {
+            sb.append(line);
             sb.append("\n");
         }
         return (sb.toString());
@@ -2256,8 +2242,7 @@ public abstract class FileUtilities {
              FileName, Object[] lines) {
         try {
             PrintWriter out = new PrintWriter(new FileOutputStream(FileName));
-            for (int i = 0; i < lines.length; i++)
-                out.println(lines[i]);
+            for (Object line : lines) out.println(line);
             out.close();
             return (true);
         }
@@ -2349,7 +2334,7 @@ public abstract class FileUtilities {
     (String
              Name, String
              Base) {
-        if (Name.indexOf(Base) == -1) {
+        if (!Name.contains(Base)) {
             return (Name);
         }
         int l = Base.length();
@@ -2483,8 +2468,7 @@ public abstract class FileUtilities {
         File[] files = dir.listFiles();
         if (files == null)
             return;
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
+        for (File file : files) {
             if (file.getName().endsWith(oldExtension)) {
                 String child = file.getName().replace(oldExtension, newExtension);
                 file.renameTo(new File(dir, child));
@@ -2691,8 +2675,7 @@ public abstract class FileUtilities {
         try {
             PrintWriter out = openPrintWriter(FileName);
             if (out != null) {
-                for (int i = 0; i < data.length; i++)
-                    out.println(data[i]);
+                for (String aData : data) out.println(aData);
                 out.close();
                 return (true);
             }
@@ -2718,8 +2701,7 @@ public abstract class FileUtilities {
         try {
             PrintWriter out = openPrintWriter(f);
             if (out != null) {
-                for (int i = 0; i < data.length; i++)
-                    out.println(data[i]);
+                for (String aData : data) out.println(aData);
                 out.close();
                 return (true);
             }
@@ -2759,8 +2741,7 @@ public abstract class FileUtilities {
         try {
             PrintWriter out = openAppendPrintWriter(f);
             if (out != null) {
-                for (int i = 0; i < data.length; i++)
-                    out.println(data[i]);
+                for (String aData : data) out.println(aData);
                 out.close();
                 return (true);
             }
@@ -3034,22 +3015,21 @@ public abstract class FileUtilities {
             String slash = System.getProperty("file.separator");
             File newFile;
 
-            for (int i = 0; i < filesToCopy.length; i++) {
+            for (File aFilesToCopy : filesToCopy) {
                 //If the File object represents a directory,
                 //recursively copy all files in that dir.
-                if (filesToCopy[i].isDirectory()) {
-                    newDirectory = new File(copyToDir + slash + filesToCopy[i].getName());
-                    recursiveCopy(filesToCopy[i], newDirectory, overwrite);
-                }
-                else {
-                    newFile = new File(copyToDir.toString() + slash + filesToCopy[i].getName());
+                if (aFilesToCopy.isDirectory()) {
+                    newDirectory = new File(copyToDir + slash + aFilesToCopy.getName());
+                    recursiveCopy(aFilesToCopy, newDirectory, overwrite);
+                } else {
+                    newFile = new File(copyToDir.toString() + slash + aFilesToCopy.getName());
                     //Just copy the file to its new home.
                     //If overwrite copy the file,
                     //or if not overright, but the file doesn't exist
                     //copy it over.
                     if (overwrite || (!newFile.exists())) {
-                        copyFile(filesToCopy[i].toString(),
-                                copyToDir.toString() + slash + filesToCopy[i].getName());
+                        copyFile(aFilesToCopy.toString(),
+                                copyToDir.toString() + slash + aFilesToCopy.getName());
                     }//if
                 }//else
             }//for
@@ -3215,9 +3195,9 @@ public abstract class FileUtilities {
             Lines = nonEmptyStrings(Lines);
             Util.sort(Lines);
             PrintWriter out = openPrintWriter(outFileName);
-            for (int i = 0; i < Lines.length; i++) {
-                if (Lines[i].length() > 0) {
-                    out.println(Lines[i]);
+            for (String Line : Lines) {
+                if (Line.length() > 0) {
+                    out.println(Line);
                 }
             }
             out.close();
@@ -3236,7 +3216,7 @@ public abstract class FileUtilities {
         }
         else {
             String TestName = TheFile.getName().toLowerCase();
-            return Boolean.valueOf(TestName.endsWith(Test.toLowerCase()));
+            return TestName.endsWith(Test.toLowerCase());
         }
     }
 
@@ -3246,9 +3226,9 @@ public abstract class FileUtilities {
             () {
         if (gOSIsCaseSensitive == null) {
             String osName = System.getProperty("os.name").toLowerCase();
-            gOSIsCaseSensitive = Boolean.valueOf(osName.indexOf("windows") == -1);
+            gOSIsCaseSensitive = !osName.contains("windows");
         }
-        return Boolean.valueOf(gOSIsCaseSensitive.booleanValue());
+        return gOSIsCaseSensitive.booleanValue();
     }
 
     private static Boolean gOSIsWindows;
@@ -3257,9 +3237,9 @@ public abstract class FileUtilities {
             () {
         if (gOSIsWindows == null) {
             String osName = System.getProperty("os.name").toLowerCase();
-            gOSIsWindows = Boolean.valueOf(osName.indexOf("windows") == -1);
+            gOSIsWindows = !osName.contains("windows");
         }
-        return (gOSIsWindows.booleanValue());
+        return (gOSIsWindows);
     }
 //
 // Drop empty strings from lines
@@ -3276,9 +3256,9 @@ public abstract class FileUtilities {
     public static String[] nonEmptyStrings
     (String[] Lines) {
         Vector accumulate = new Vector();
-        for (int i = 0; i < Lines.length; i++) {
-            if (!Util.isEmptyString(Lines[i])) {
-                accumulate.addElement(Lines[i]);
+        for (String Line : Lines) {
+            if (!Util.isEmptyString(Line)) {
+                accumulate.addElement(Line);
             }
         }
         String[] out = new String[accumulate.size()];
@@ -3415,14 +3395,13 @@ public abstract class FileUtilities {
 
         Files = TestFile.list();
 
-        for (int i = 0; i < Files.length; i++) {
-            File test = new File(TestFile, Files[i]);
+        for (String File : Files) {
+            File test = new File(TestFile, File);
             if (!test.isDirectory()) {
                 ret = Math.max(ret, test.lastModified());
-            }
-            else {
+            } else {
                 if (recurse)
-                    ret = Math.max(ret, getMostRecentFileDate(Files[i], recurse));
+                    ret = Math.max(ret, getMostRecentFileDate(File, recurse));
             }
         }
         return (ret);
@@ -3512,13 +3491,12 @@ public abstract class FileUtilities {
      Vector holder) {
         String[] Files = TestFile.list();
 
-        for (int i = 0; i < Files.length; i++) {
-            File test = new File(TestFile, Files[i]);
+        for (String File : Files) {
+            File test = new File(TestFile, File);
             if (!test.isDirectory()) {
                 if (test.lastModified() > date)
                     holder.addElement(test);
-            }
-            else {
+            } else {
                 if (recurse) {
                     accumulateFilesAfterDate(test, date, recurse, holder);
                 }
@@ -4041,8 +4019,7 @@ public abstract class FileUtilities {
         File[] allFiles = getAllFiles(theDir);
         boolean nameIsUnigue = false;
         Set<String> nameSeen = new HashSet<String>();
-        for (int i = 0; i < allFiles.length; i++) {
-            File allFile = allFiles[i];
+        for (File allFile : allFiles) {
             String name = allFile.getName();
             if (nameSeen.contains(name))
                 nameIsUnigue = true;
@@ -4068,22 +4045,21 @@ public abstract class FileUtilities {
     }
 
     public static void flattenDirectories(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i];
+        for (String arg : args) {
             flattenDirectory(arg, true);
         }
     }
 
     public static void removeWhiteSpace(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            File arg = new File(args[i]);
+        for (String arg1 : args) {
+            File arg = new File(arg1);
             removeWhiteSpace(arg);
         }
     }
 
     public static void removeWhiteSpace(File[] args) {
-        for (int i = 0; i < args.length; i++) {
-            removeWhiteSpace(args[i]);
+        for (File arg : args) {
+            removeWhiteSpace(arg);
         }
     }
 

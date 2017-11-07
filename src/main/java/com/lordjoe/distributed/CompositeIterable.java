@@ -29,11 +29,7 @@ public class CompositeIterable<T> implements Iterable<T>,Serializable {
     /**
      * iterable holding nothing
      */
-    public static final Iterable NULL_ITERABLE = new Iterable() {
-            public Iterator iterator() {
-            return NULL_ITERATOR;
-        }
-    };
+    public static final Iterable NULL_ITERABLE = () -> NULL_ITERATOR;
 
     public static <T> List<T> iterableAsList(Iterable<T> inp) {
         List<T> holder = new ArrayList<T>();

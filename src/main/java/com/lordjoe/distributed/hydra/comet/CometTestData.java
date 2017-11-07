@@ -2173,8 +2173,7 @@ public class CometTestData {
     static List<SpectrumBinnedScore> buildCometBinnedScores() {
         List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
         String[] lines = CORRELATION_DATA_FROM_COMET_EG0.trim().split("\n");
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
+        for (String line : lines) {
             holder.add(new SpectrumBinnedScore(line));
         }
 
@@ -2224,8 +2223,7 @@ public class CometTestData {
     public static List<XCorrUsedData> buildXCorrUsedData() {
         List<XCorrUsedData> holder = new ArrayList<XCorrUsedData>();
         String[] lines = USED_EG0_CROSSCORRELATION_DATA.trim().split("\n");
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
+        for (String line : lines) {
             holder.add(new XCorrUsedData(line));
         }
         return holder;

@@ -168,8 +168,7 @@ public class TestUtilities {
 
 
     public static boolean isInterestingPeptide(IPolypeptide... pp) {
-        for (int i = 0; i < pp.length; i++) {
-            IPolypeptide ppx = pp[i];
+        for (IPolypeptide ppx : pp) {
             String completeString = ppx.toString();
             if (ppx.isModified()) {
                 String sequence = ppx.getSequence();
@@ -184,8 +183,7 @@ public class TestUtilities {
     }
 
     public static boolean isInterestingSpectrum(IMeasuredSpectrum... spec) {
-        for (int i = 0; i < spec.length; i++) {
-            IMeasuredSpectrum sp = spec[i];
+        for (IMeasuredSpectrum sp : spec) {
             String id = sp.getId();
             if (INTERESTING_SPECTRUMS.contains(id))
                 return true;
@@ -279,12 +277,7 @@ public class TestUtilities {
     public static void saveBiggestKey(JavaPairRDD<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>> bySpectrumId, String biggestKey) {
         final String acceptKey = biggestKey;
 
-        JavaPairRDD<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>> onlyBiggest = bySpectrumId.filter(new Function<Tuple2<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>>, Boolean>() {
-            @Override
-            public Boolean call(Tuple2<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>> x) throws Exception {
-                return x._1().equals(acceptKey);
-            }
-        });
+        JavaPairRDD<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>> onlyBiggest = bySpectrumId.filter((Function<Tuple2<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>>, Boolean>) x -> x._1().equals(acceptKey));
         final List<Tuple2<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>>> collect = onlyBiggest.collect();
 
         Set<IPolypeptide> peptides = new HashSet<IPolypeptide>();
@@ -325,9 +318,8 @@ public class TestUtilities {
     public static int getNonZeroElements(float[] items)
     {
         int ret = 0;
-        for (int i = 0; i < items.length; i++) {
-            float item = items[i];
-            if(Math.abs(item ) > 0.0001)
+        for (float item : items) {
+            if (Math.abs(item) > 0.0001)
                 ret++;
         }
         return ret;

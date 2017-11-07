@@ -569,7 +569,6 @@ public static final int FLOAT64_SIZE = 8; // bytes per float 64
 
         if (d < len) {
             encode3to4(source, d + off, len - d, outBuff, e);
-            e += 4;
         }   // end if: some padding needed
 
         return outBuff;

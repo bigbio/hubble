@@ -47,9 +47,8 @@ public class ExceptionUtilities {
 
         try {
             StackTraceElement[] stackTrace = t.getStackTrace();
-            for (int i = 0; i < stackTrace.length; i++) {
-                StackTraceElement trace = stackTrace[i];
-                out.append("\tat " + trace + "\n");
+            for (StackTraceElement trace : stackTrace) {
+                out.append("\tat ").append(String.valueOf(trace)).append("\n");
 
             }
 

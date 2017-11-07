@@ -32,10 +32,7 @@ public class CountedSet<T> {
      * @return  count or 0 of nit fount
      */
     public int getCount(T key) {
-        if (m_Counts.containsKey(key))
-            return m_Counts.get(key);
-        else
-            return 0;
+        return m_Counts.getOrDefault(key, 0);
 
     }
 

@@ -46,10 +46,9 @@ public class DataSetTester {
         Dataset<DatasetTestObject> dataset = sqlCtx.createDataset(asRDD.rdd(), evidence);
 
         DatasetTestObject[] collect = (DatasetTestObject[]) dataset.collect();
-        for (int i = 0; i < collect.length; i++) {
-            DatasetTestObject test = collect[i];
+        for (DatasetTestObject test : collect) {
             int count = test.findCount();
-            if( count != DatasetTestObject.NUMBER_ENTRIES)
+            if (count != DatasetTestObject.NUMBER_ENTRIES)
                 throw new IllegalStateException("problem"); // ToDo change
         }
 
@@ -58,11 +57,10 @@ public class DataSetTester {
         dataset = sqlCtx.createDataset(asRDD.rdd(), evidence);
 
         collect = (DatasetTestObject[]) dataset.collect();
-        for (int i = 0; i < collect.length; i++) {
-            DatasetTestObject test = collect[i];
+        for (DatasetTestObject test : collect) {
             int count = test.findCount();
-            if( count != DatasetTestObject.NUMBER_ENTRIES)
-                    throw new IllegalStateException("problem"); // ToDo change
+            if (count != DatasetTestObject.NUMBER_ENTRIES)
+                throw new IllegalStateException("problem"); // ToDo change
         }
 
     }

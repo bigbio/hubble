@@ -319,8 +319,7 @@ public class PepxmlParser implements IEquivalent<PepxmlParser> {
 
     public static void main(String[] args) throws Exception {
         List<PepxmlParser> items = new ArrayList<PepxmlParser>();
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i];
+        for (String arg : args) {
             PepxmlParser pp = new PepxmlParser(new File(arg));
             items.add(pp);
         }

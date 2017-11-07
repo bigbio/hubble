@@ -51,9 +51,8 @@ public class ProteinMapper extends AbstractTandemFunction  implements  IMapperFu
         ret.setDigester((PeptideBondDigester) getDigester());
         PeptideModification[] modifications = getModifications();
         if (modifications != null && modifications.length > 0) {
-            for (int i = 0; i < modifications.length; i++) {
-                PeptideModification mod = modifications[i];
-                ret.addModification(modifications[i]);
+            for (PeptideModification mod : modifications) {
+                ret.addModification(mod);
             }
         }
         // if true we better have decoys in the database
@@ -120,9 +119,7 @@ public class ProteinMapper extends AbstractTandemFunction  implements  IMapperFu
 
         IPolypeptide[] pps = digester.digest(prot);
         PeptideModification[] modifications1 = getModifications();
-        for (int i = 0; i < pps.length; i++) {
-            IPolypeptide pp = pps[i];
-
+        for (IPolypeptide pp : pps) {
             if (!pp.isValid())
                 continue;
 
@@ -136,8 +133,7 @@ public class ProteinMapper extends AbstractTandemFunction  implements  IMapperFu
             if (!isDecoy || isGenerateDecoysForModifiedPeptides()) {
                 //  generate modified peptides and add to the output
                 IModifiedPeptide[] modifications = ModifiedPolypeptide.buildModifications(pp, modifications1);
-                for (int m = 0; m < modifications.length; m++) {
-                    IModifiedPeptide modification = modifications[m];
+                for (IModifiedPeptide modification : modifications) {
                     writePeptide(modification, holder);
 
                 }
@@ -148,14 +144,12 @@ public class ProteinMapper extends AbstractTandemFunction  implements  IMapperFu
         boolean semiTryptic = digester.isSemiTryptic();
         if (semiTryptic) {
             IPolypeptide[] semipps = digester.addSemiCleavages(prot);
-            for (int j = 0; j < semipps.length; j++) {
-                IPolypeptide semipp = semipps[j];
+            for (IPolypeptide semipp : semipps) {
                 if (!semipp.isValid())
                     continue;
                 writePeptide(semipp, holder);
                 IModifiedPeptide[] modifications = ModifiedPolypeptide.buildModifications(semipp, modifications1);
-                for (int k = 0; k < modifications.length; k++) {
-                    IModifiedPeptide modification = modifications[k];
+                for (IModifiedPeptide modification : modifications) {
                     writePeptide(modification, holder);
 
                 }

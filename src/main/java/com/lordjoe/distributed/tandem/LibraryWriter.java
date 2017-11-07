@@ -8,6 +8,7 @@ import org.systemsbiology.hadoop.*;
 import org.systemsbiology.xtandem.peptide.*;
 
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * com.lordjoe.distributed.tandem.LibraryWriter
@@ -19,29 +20,20 @@ public class LibraryWriter implements Serializable {
     public static JavaPairRDD<Integer, WriterObject> writeDatabase(JavaPairRDD<Integer, IPolypeptide> peptides) {
         final PolypeptideToFileName peptideToFileName = new PolypeptideToFileName();
 
-        Function<IPolypeptide, WriterObject> createAcc = new Function<IPolypeptide, WriterObject>() {
-            @Override
-            public WriterObject call(IPolypeptide pp) {
-                WriterObject a = new WriterObject(peptideToFileName, pp);
-                a.write(pp);
-                return a;
-            }
+        Function<IPolypeptide, WriterObject> createAcc = (Function<IPolypeptide, WriterObject>) pp -> {
+            WriterObject a = new WriterObject(peptideToFileName, pp);
+            a.write(pp);
+            return a;
         };
         Function2<WriterObject, IPolypeptide, WriterObject> addAndCount =
-                new Function2<WriterObject, IPolypeptide, WriterObject>() {
-                    @Override
-                    public WriterObject call(WriterObject a, IPolypeptide pp) {
-                        a.write(pp);
-                        return a;
-                    }
+                (Function2<WriterObject, IPolypeptide, WriterObject>) (a, pp) -> {
+                    a.write(pp);
+                    return a;
                 };
         Function2<WriterObject, WriterObject, WriterObject> combine =
-                new Function2<WriterObject, WriterObject, WriterObject>() {
-                    @Override
-                    public WriterObject call(WriterObject a, WriterObject b) {
-                        a.append(b);
-                        return a;
-                    }
+                (Function2<WriterObject, WriterObject, WriterObject>) (a, b) -> {
+                    a.append(b);
+                    return a;
                 };
         return peptides.combineByKey(createAcc, addAndCount, combine);
     }
@@ -65,7 +57,7 @@ public class LibraryWriter implements Serializable {
             sb.append( matchingMass);
             sb.append(",");
             IProteinPosition[] proteinPositions = pp.getProteinPositions();
-            sb.append(proteinPositions) ;
+            sb.append(Arrays.toString(proteinPositions)) ;
             getWriter().println(sb.toString());
 
         }

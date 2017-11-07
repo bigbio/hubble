@@ -257,12 +257,7 @@ public class LargeFileDirectTest {
         //long pairs = keyValues.count();
 
 
-        JavaRDD<DNAFragment> dnaData = keyValues.map(new Function<Tuple2<String, String>, DNAFragment>() {
-            @Override
-            public DNAFragment call(final Tuple2<String, String> v1) throws Exception {
-                return new DNAFragment(v1._1(), v1._2());
-            }
-        });
+        JavaRDD<DNAFragment> dnaData = keyValues.map((Function<Tuple2<String, String>, DNAFragment>) v1 -> new DNAFragment(v1._1(), v1._2()));
 
 
        boolean forceShuffle = true;

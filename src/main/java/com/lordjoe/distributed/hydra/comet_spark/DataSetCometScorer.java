@@ -104,8 +104,7 @@ public class DataSetCometScorer {
 
         StructType schema = cometSpectraToScore.schema();
         StructField[] fields = schema.fields();
-        for (int i = 0; i < fields.length; i++) {
-            StructField field = fields[i];
+        for (StructField field : fields) {
             System.out.println(field);
         }
 

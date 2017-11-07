@@ -20,12 +20,7 @@ public class StringCombiner {
         return inp.combineByKey(STARTER,new CONTINUER(separtator) ,new CONTINUER( separtator) ) ;
     }
 
-    public static final Function<String, String> STARTER = new Function<String, String>() {
-        @Override
-        public String call(final String v1) throws Exception {
-            return v1;
-        }
-    };
+    public static final Function<String, String> STARTER = (Function<String, String>) v1 -> v1;
 
     public static class CONTINUER implements Function2<String, String, String> {
         private final String sepatator;
@@ -42,11 +37,6 @@ public class StringCombiner {
 
     ;
 
-    public static final Function2<String, String, String> ENDER = new Function2<String, String, String>() {
-        @Override
-        public String call(final String v1, final String v2) throws Exception {
-            return v1 + "," + v2;
-        }
-    };
+    public static final Function2<String, String, String> ENDER = (Function2<String, String, String>) (v1, v2) -> v1 + "," + v2;
 
 }

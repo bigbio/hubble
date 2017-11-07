@@ -33,8 +33,8 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
 
     /// Some debugging hooks when we walk interesting cases
     public static boolean isMassInteresting(int mass) {
-        for (int i = 0; i < INTERESTING_MASSES.length; i++) {
-            if (mass == INTERESTING_MASSES[i])
+        for (int INTERESTING_MASS : INTERESTING_MASSES) {
+            if (mass == INTERESTING_MASS)
                 return true;
 
         }
@@ -215,12 +215,11 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
     }
 
     private String buildUrlNameValue(final String fileName) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("   ");
-        sb.append("<nameValue name=\"url\" ");
-        sb.append("value=\"" + fileName + "\" ");
-        sb.append("/>");
-        return sb.toString();
+        String sb = "   " +
+                "<nameValue name=\"url\" " +
+                "value=\"" + fileName + "\" " +
+                "/>";
+        return sb;
     }
 
     private void showStatistics() {
@@ -250,8 +249,7 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
         IScoringAlgorithm scorer = getApplication().getScorer();
 
         int[] limits = scorer.allSearchedMasses(mass);
-        for (int j = 0; j < limits.length; j++) {
-            int limit = limits[j];
+        for (int limit : limits) {
             writeScanToMassAtCharge(limit, pId, value, charge, filename, holder);
         }
     }
@@ -320,9 +318,7 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
     protected void writeScansToMass(final IMeasuredSpectrum value, final List<KeyValueObject<String, IMeasuredSpectrum>> holder, final String pId, double mass) {
         IScoringAlgorithm scorer = getApplication().getScorer();
         int[] limits = scorer.allSearchedMasses(mass);
-        for (int j = 0; j < limits.length; j++) {
-            int limit = limits[j];
-
+        for (int limit : limits) {
             if (isMassInteresting(limit))
                 XTandemUtilities.breakHere();
 

@@ -142,23 +142,19 @@ public class XMLTagInputFormat extends FileInputFormat<String, String> {
         }
         PathFilter inputFilter = new MultiPathFilter(filters);
 
-        for (int i = 0; i < dirs.length; ++i) {
-            Path p = dirs[i];
+        for (Path p : dirs) {
             FileSystem fs = p.getFileSystem(job.getConfiguration());
             FileStatus[] matches = fs.globStatus(p, inputFilter);
             if (matches == null) {
                 errors.add(new IOException("Input path does not exist: " + p));
-            }
-            else if (matches.length == 0) {
+            } else if (matches.length == 0) {
                 errors.add(new IOException("Input Pattern " + p + " matches 0 files"));
-            }
-            else {
+            } else {
                 for (FileStatus globStat : matches) {
                     if (globStat.isDir()) {
                         Collections.addAll(result, fs.listStatus(globStat.getPath(),
                                 inputFilter));
-                    }
-                    else {
+                    } else {
                         result.add(globStat);
                     }
                 }

@@ -408,20 +408,16 @@ public abstract class Util {
      */
     public static Object emptyArray(Class in) {
         synchronized (gEmptyArrays) {
-            Object ret = gEmptyArrays.get(in);
-            if (ret == null) {
-                ret = Array.newInstance(in, 0);
-                gEmptyArrays.put(in, ret);
-            }
+            Object ret = gEmptyArrays.computeIfAbsent(in, k -> Array.newInstance(in, 0));
             return (ret);
         }
     }
 
     public static String definedLengthNumber(int n, int places) {
-        String ret = Integer.toString(n);
+        StringBuilder ret = new StringBuilder(Integer.toString(n));
         while (ret.length() < places)
-            ret = "0" + ret;
-        return ret;
+            ret.insert(0, "0");
+        return ret.toString();
     }
 
     /**
@@ -1942,9 +1938,7 @@ public abstract class Util {
      * @function convert a char to a string
      */
     public static String toString(char c) {
-        StringBuilder s = new StringBuilder();
-        s.append(c);
-        return (s.toString());
+        return (String.valueOf(c));
     }
 
     /**
@@ -2032,8 +2026,10 @@ public abstract class Util {
      * @function add blanks to a String until it is of length N
      */
     public static String padStringWithZeros(String s, int n) {
-        while (s.length() < n)
-            s = "0" + s;
+        StringBuilder sBuilder = new StringBuilder(s);
+        while (sBuilder.length() < n)
+            sBuilder.insert(0, "0");
+        s = sBuilder.toString();
         return (s);
     }
 
@@ -2856,9 +2852,7 @@ public abstract class Util {
      * @UnusedParam> - i the character
      */
     public static String makeCharString(char i) {
-        StringBuilder s = new StringBuilder(2);
-        s.append(i);
-        return (s.toString());
+        return (String.valueOf(i));
     }
 
     /**
@@ -3538,10 +3532,10 @@ public abstract class Util {
      * NOTE - best used for positive data
      */
     public static String intString(int data, int RequiredPlaces) {
-        String out = Integer.toString(data);
+        StringBuilder out = new StringBuilder(Integer.toString(data));
         while (out.length() < RequiredPlaces)
-            out = "0" + out;
-        return (out);
+            out.insert(0, "0");
+        return (out.toString());
     }
 
     /**
@@ -4606,12 +4600,12 @@ public abstract class Util {
      * @return non-null formatted string
      */
     public static String formatInt(int in, int precision) {
-        String ret = Integer.toString(in);
+        StringBuilder ret = new StringBuilder(Integer.toString(in));
         if (ret.length() > precision)
             throw new IllegalArgumentException("Cannot write " + in + " in " + precision + " digits");
         while (ret.length() < precision)
-            ret = "0" + ret;
-        return (ret);
+            ret.insert(0, "0");
+        return (ret.toString());
     }
 
     /**
@@ -4720,11 +4714,10 @@ public abstract class Util {
         TheCalendar.setTime(in);
         int hour = TheCalendar.get(Calendar.HOUR_OF_DAY);
         int minute = TheCalendar.get(Calendar.MINUTE);
-        StringBuilder holder = new StringBuilder();
-        holder.append(Integer.toString(hour));
-        holder.append(":");
-        holder.append(d02(minute));
-        return (holder.toString());
+        String holder = Integer.toString(hour) +
+                ":" +
+                d02(minute);
+        return (holder);
     }
 
     /**
@@ -4758,13 +4751,12 @@ public abstract class Util {
         int hour = TheCalendar.get(Calendar.HOUR_OF_DAY);
         int minute = TheCalendar.get(Calendar.MINUTE);
         int seconds = TheCalendar.get(Calendar.SECOND);
-        StringBuilder holder = new StringBuilder();
-        holder.append(Integer.toString(hour));
-        holder.append(":");
-        holder.append(d02(minute));
-        holder.append(":");
-        holder.append(d02(seconds));
-        return (holder.toString());
+        String holder = Integer.toString(hour) +
+                ":" +
+                d02(minute) +
+                ":" +
+                d02(seconds);
+        return (holder);
     }
 
     /**
@@ -4964,11 +4956,10 @@ public abstract class Util {
         int index = s1.indexOf(ReplaceText, start);
         if (index == -1)
             return (s1.substring(start));
-        StringBuilder sb = new StringBuilder(s1.length());
-        sb.append(s1.substring(start, index));
-        sb.append(NewText);
-        sb.append(replaceInString(s1, ReplaceText, NewText, index + ReplaceText.length()));
-        return (sb.toString());
+        String sb = s1.substring(start, index) +
+                NewText +
+                replaceInString(s1, ReplaceText, NewText, index + ReplaceText.length());
+        return (sb);
     }
 
     /**
@@ -5949,7 +5940,7 @@ public abstract class Util {
     public static String formatPrice(String in) {
         // Numbers starting with "$" retrin the $ and are treated correctly
         String dollarSign = "";
-        String realText = in;
+        StringBuilder realText = new StringBuilder(in);
         if (in.startsWith("$")) {
             in = in.substring(1);
             dollarSign = "$";
@@ -5957,19 +5948,19 @@ public abstract class Util {
         if (!Util.isEmptyString(in)) {
             if (Util.isStringNumber(in)) {
                 double realVal = Double.parseDouble(in);
-                realText = Util.formatDouble(realVal, 2);
-                if (!realText.contains("."))
-                    realText += ".";
+                realText = new StringBuilder(Util.formatDouble(realVal, 2));
+                if (!realText.toString().contains("."))
+                    realText.append(".");
                 while (realText.indexOf(".") > (realText.length() - 3))
-                    realText += "0";
+                    realText.append("0");
             }
         }
         else {
-            realText = "0.00";
+            realText = new StringBuilder("0.00");
         }
         if (dollarSign.length() > 0)
-            realText = dollarSign + realText;
-        return (realText);
+            realText.insert(0, dollarSign);
+        return (realText.toString());
     }
 
     /**
@@ -6183,8 +6174,7 @@ public abstract class Util {
         if (in.length < 2)
             return (in);
         SortedSet holder = new TreeSet(c);
-        for (int i = 0; i < in.length; i++)
-            holder.add(in[i]);
+        Collections.addAll(holder, in);
         Object[] out = (Object[]) Array.newInstance(in.getClass().getComponentType(), holder.size());
         holder.toArray(out);
         return (out);

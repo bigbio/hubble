@@ -43,8 +43,7 @@ public class CometTheoreticalBinnedSet extends TheoreticalSpectrumSet {
 //            if (charge > 1)
 //                TestUtilities.breakHere();
 
-            for (int i = 0; i < spectrum.length; i++) {
-                PeptideIon peptideIon = spectrum[i];
+            for (PeptideIon peptideIon : spectrum) {
                 int binnedIndexInParent = peptideIon.getIndexInParent();
                 IonType type = peptideIon.getType();
 

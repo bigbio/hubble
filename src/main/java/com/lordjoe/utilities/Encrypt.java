@@ -197,9 +197,8 @@ public class Encrypt {
             return;
         }
         Encrypt test = new Encrypt();
-         for (int i = 0; i < args.length; i++) {
-             String arg = args[i];
-             System.out.println( encryptString(arg));
+         for (String arg : args) {
+             System.out.println(encryptString(arg));
 
          }
 

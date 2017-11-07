@@ -203,11 +203,11 @@ public abstract class XMLUtil {
 	*/
     public static NameValue findNameValue(String Name,NameValue[] attributes)
     {
-    	for (int i = 0; i < attributes.length; i++) {
-		    if (attributes[i].m_Name.equalsIgnoreCase(Name)) {
-			    return(attributes[i]);
-		    } 
-		}
+        for (NameValue attribute : attributes) {
+            if (attribute.m_Name.equalsIgnoreCase(Name)) {
+                return (attribute);
+            }
+        }
 		return(null);
 	}
 	
@@ -396,10 +396,8 @@ public abstract class XMLUtil {
       */
      public static boolean ignoreTagList(String[] ignored,String name,NameValue[] attributes)
      {
-         for (int i = 0; i < ignored.length; i++)
-         {
-             String s = ignored[i];
-             if(s.equalsIgnoreCase(name)) {
+         for (String s : ignored) {
+             if (s.equalsIgnoreCase(name)) {
                  handleAllTags(attributes);
                  return true;
              }
@@ -414,11 +412,9 @@ public abstract class XMLUtil {
      */
     public static void ignoreAttributeList(String[] ignored,NameValue[] attributes)
      {
-         for (int i = 0; i < ignored.length; i++)
-         {
-             String s = ignored[i];
-             handleAllAttributes(s,attributes);
-           }
+         for (String s : ignored) {
+             handleAllAttributes(s, attributes);
+         }
        }
 
     /**
@@ -428,19 +424,15 @@ public abstract class XMLUtil {
      */
     public static void handleAllAttributes(String tagName,NameValue[] attributes)
     {
-        for (int i = 0; i < attributes.length; i++)
-        {
-            NameValue attribute = attributes[i];
-            if(attribute.getName().equalsIgnoreCase(tagName))
+        for (NameValue attribute : attributes) {
+            if (attribute.getName().equalsIgnoreCase(tagName))
                 markAsHandled(attribute);
         }
     }
 
     public static void handleAllTags(NameValue[] attributes)
     {
-        for (int i = 0; i < attributes.length; i++)
-        {
-            NameValue attribute = attributes[i];
+        for (NameValue attribute : attributes) {
             markAsHandled(attribute);
         }
     }
@@ -489,11 +481,11 @@ public abstract class XMLUtil {
         int Start = sb.length();
         doIndent(sb,indent);
         String name = base.getNodeName();
-        sb.append("<" + name + " ");
+        sb.append("<").append(name).append(" ");
         handleNodeAttributes(base,sb,indent,sb.length() - Start);
         handleElements(base,sb,indent + 1);
         doIndent(sb,indent);
-        sb.append("</" + name + ">\n");
+        sb.append("</").append(name).append(">\n");
     }
     
     protected static void handleNodeAttributes(Element base,StringBuilder sb,int indent,int LineChars)
@@ -560,14 +552,14 @@ public abstract class XMLUtil {
                     case '\"' :
                     case '\'' :
                     case '\\' :
-					    ret.append("%" + Integer.toHexString((int)c));
+					    ret.append("%").append(Integer.toHexString((int) c));
 					    break;
 				    default:
 					    ret.append(c);
 			    }
 			}
 			else {
-			    ret.append("%" + Integer.toHexString((int)c));
+			    ret.append("%").append(Integer.toHexString((int) c));
 			}
 
 		}
@@ -622,18 +614,25 @@ public abstract class XMLUtil {
 	    int end = in.indexOf(';',index);
 	    
 	    String test = in.substring(index + 1,end);
-	    if(test.equals("amp"))
-	        sb.append('&');
-	    else if(test.equals("quot"))
-	        sb.append('\"');
-	    else if(test.equals("gt"))
-	        sb.append('>');
-	    else if(test.equals("lt"))
-	        sb.append('<');
-	    else if(test.equals("apos"))
-	        sb.append('\'');
-	    else
-	        throw new IllegalArgumentException("misunderstood XML Expression '" + test + "'");
+        switch (test) {
+            case "amp":
+                sb.append('&');
+                break;
+            case "quot":
+                sb.append('\"');
+                break;
+            case "gt":
+                sb.append('>');
+                break;
+            case "lt":
+                sb.append('<');
+                break;
+            case "apos":
+                sb.append('\'');
+                break;
+            default:
+                throw new IllegalArgumentException("misunderstood XML Expression '" + test + "'");
+        }
 	    return(end + 1);
 	}
 	
@@ -667,7 +666,7 @@ public abstract class XMLUtil {
 			    }
 			}
 			else {
-                ret.append("&#x" + Integer.toHexString((int)c) + ";");
+                ret.append("&#x").append(Integer.toHexString((int) c)).append(";");
 			}
 					
 		}
@@ -707,8 +706,7 @@ public abstract class XMLUtil {
     {
         Element[] Items = XMLUtil.getElementsWithName(doc,"PropertyValue");
         Hashtable ret = new Hashtable();
-        for(int i = 0; i < Items.length; i++)
-            addPropertyValue(Items[i],ret);
+        for (Element Item : Items) addPropertyValue(Item, ret);
         return(ret);
     }
      /**
@@ -744,7 +742,7 @@ public abstract class XMLUtil {
      * @return Formated XML String.
      */
     public static String formatXML(String xml) {
-        return formatXML(xml, new Integer(0));
+        return formatXML(xml, 0);
 	}
 	
    /**
@@ -757,8 +755,8 @@ public abstract class XMLUtil {
      * @return Formated XML String.
      */
     public static String formatXML(String xml, Integer initialIndentLevel) {
-        int indent = initialIndentLevel.intValue();
-        String outString = "";
+        int indent = initialIndentLevel;
+        StringBuilder outString = new StringBuilder();
         for(int i=0; i < xml.length(); ++i) {
             char c = xml.charAt(i);
             if(c == '<') {
@@ -767,42 +765,41 @@ public abstract class XMLUtil {
                     indent -= 1;
                 }
                 for(int j=0; j < indent; ++j) {
-                    outString += '\t';
+                    outString.append('\t');
                 }
-                outString += c;
+                outString.append(c);
                 if(xml.charAt(i+1) != '/') {
                     indent += 1;
                 }
             } else if(c == '\n') {
-                outString += c;
+                outString.append(c);
                 for(int j=0; j < indent; ++j) {
-                    outString += '\t';
+                    outString.append('\t');
                 }
             } else if(c == '>') {
-                outString += c;
-                outString += '\n';
+                outString.append(c);
+                outString.append('\n');
             } else {
-                outString += c;
+                outString.append(c);
             }
         }
-        return outString;
+        return outString.toString();
     }
     
     public static String exceptionToXML(Exception ex)
     {
-        StringBuilder ret = new StringBuilder(2048);
-        ret.append("<Error>\n");
-        ret.append("    <Exception ");
-        ret.append("  Class=\"");
-        ret.append(ex.getClass().getName());
-        ret.append("\" ");
-        ret.append(">\n");
-  //      ret.append(ex.toString());
+        String ret = "<Error>\n" +
+                "    <Exception " +
+                "  Class=\"" +
+                ex.getClass().getName() +
+                "\" " +
+                ">\n" +
+                "    </Exception>\n" +
+                "</Error>\n";
+        //      ret.append(ex.toString());
       //  ret.append(Developer.getStackTrace(ex));
-        ret.append("    </Exception>\n");
-        ret.append("</Error>\n");
-        
-        return(ret.toString());
+
+        return(ret);
     }
 //    /**
 //    * This returns the class specified either as a
@@ -865,23 +862,23 @@ public abstract class XMLUtil {
             System.out.println("Usage:\n\tXMLUtil <files>");
         } else {
             // Loop through files
-            for(int i=0; i < args.length; ++i) {
+            for (String arg : args) {
                 try {
-                    File f = new File(args[i]);
+                    File f = new File(arg);
                     FileInputStream fIn = new FileInputStream(f);
                     int pos = 0;
                     String xml = "";
                     // Loop through file data
-                    while(fIn.available() > 0) {
-                        byte []buf = new byte[fIn.available()];
+                    while (fIn.available() > 0) {
+                        byte[] buf = new byte[fIn.available()];
                         pos += fIn.read(buf, pos, fIn.available());
                         xml += new String(buf);
                     }
                     // Display formatted XML
-                    System.out.println(args[i] + ":");
+                    System.out.println(arg + ":");
                     System.out.println(formatXML(xml));
                 } catch (IOException e) {
-                    System.err.println("An I/O error has occured accessing " + args[i] + "\n" + e.getMessage());
+                    System.err.println("An I/O error has occured accessing " + arg + "\n" + e.getMessage());
                 }
             }
         }
@@ -901,7 +898,7 @@ public abstract class XMLUtil {
         while(index > -1) {
             int endIndex = XMLTarget.indexOf(">",index);
             String test = XMLTarget.substring(index,endIndex);
-            if(test.indexOf(CollectionName) > -1) {
+            if(test.contains(CollectionName)) {
                 String S1 = XMLTarget.substring(0,endIndex + 1);
                 String S2 = XMLTarget.substring(endIndex + 1);
                 return(S1 + XMLInsert + S2);
@@ -1057,10 +1054,10 @@ public abstract class XMLUtil {
      {
         String[] images = getElementImages(e);
         String TextUpper = text.toUpperCase();
-        for(int i = 0; i < images.length; i++) {
-            if(images[i].toUpperCase().indexOf(TextUpper) >= 0)
-                return(images[i]);
-        }
+         for (String image : images) {
+             if (image.toUpperCase().indexOf(TextUpper) >= 0)
+                 return (image);
+         }
         return(null); // not found
      }
     
@@ -1273,12 +1270,12 @@ public abstract class XMLUtil {
         // dummy tag
         sb.append("<head>\n");
         // add all tags
-        for(int i = 0; i < Tags.length; i++) {
-            String RealTag = toXMLString(Tags[i]);
+        for (String Tag : Tags) {
+            String RealTag = toXMLString(Tag);
             sb2.append(RealTag);
             sb2.append("\n");
-           if(testTagParse(RealTag)) {
-                sb.append(toXMLString(Tags[i]));
+            if (testTagParse(RealTag)) {
+                sb.append(toXMLString(Tag));
                 sb.append("\n");
             }
         }
@@ -1424,7 +1421,7 @@ public abstract class XMLUtil {
         }
         String NumberString = sb.toString();
         int value = Integer.parseInt(NumberString);
-        return(new Integer(value));
+        return(value);
     }
     
     @SuppressWarnings(value = "deprecated")
@@ -1656,11 +1653,10 @@ public abstract class XMLUtil {
                     throw new IllegalArgumentException("Bad param string '" + in + "'");
                 i++;
                 char c1 = in.charAt(i++);   
-                char c2 = in.charAt(i); 
-                StringBuilder decode = new StringBuilder(2);
-                decode.append(c1);
-                decode.append(c2);
-                int n = Integer.parseInt(decode.toString(), 16);
+                char c2 = in.charAt(i);
+                String decode = String.valueOf(c1) +
+                        c2;
+                int n = Integer.parseInt(decode, 16);
                 sb.append((char)n);
                 break;
             default:
@@ -1825,20 +1821,17 @@ public abstract class XMLUtil {
     {
         if(item == null)
             return "";
-        StringBuilder sb = new StringBuilder();
-        sb.append(Util.indentString(indent));
-        sb.append("<");
-        sb.append(tagName);
-        sb.append(">");
-
-        sb.append(item.toString());
-
-        sb.append("</");
-        sb.append(tagName);
-        sb.append(">\n");
+        String sb = Util.indentString(indent) +
+                "<" +
+                tagName +
+                ">" +
+                item.toString() +
+                "</" +
+                tagName +
+                ">\n";
 
 
-        return(sb.toString());
+        return(sb);
     }
 
     public static class IgnoreXMLTag implements ITagHandler

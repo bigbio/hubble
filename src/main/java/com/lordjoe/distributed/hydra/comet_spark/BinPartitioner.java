@@ -53,8 +53,8 @@ public class BinPartitioner extends Partitioner {
     }
 
     protected void populateKeyMap(MapOfLists<Integer, BinChargeKey> keys, Map<BinChargeKey, Long> usedBinsMap) {
-        int keysPerBin = 0;
-        int binSpectra = 0;
+        int keysPerBin;
+        int binSpectra;
         maxIndex = 0;
         long total = 0;
         List<KeyCount> holder = new ArrayList<KeyCount>();

@@ -103,14 +103,13 @@ public class CountedMap<T> implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("size:");
-        sb.append(size());
-        sb.append(" total:");
-        sb.append(getTotal());
-        sb.append(" duplicates:");
-        sb.append(getDuplicates());
-        return sb.toString();
+        String sb = "size:" +
+                size() +
+                " total:" +
+                getTotal() +
+                " duplicates:" +
+                getDuplicates();
+        return sb;
     }
 
     public List<CountedString> asCountedStrings() {

@@ -29,41 +29,28 @@ public class PeptideSchemaBean implements IDatabaseBean {
     /**
      * function to convert IPolypeptide to PeptideSchemaBeans
      */
-    public static final Function<IPolypeptide, PeptideSchemaBean> TO_BEAN = new Function<IPolypeptide, PeptideSchemaBean>() {
-        @Override
-        public PeptideSchemaBean call(final IPolypeptide pp) throws Exception {
-            return new PeptideSchemaBean(pp);
-        }
+    public static final Function<IPolypeptide, PeptideSchemaBean> TO_BEAN = (Function<IPolypeptide, PeptideSchemaBean>) pp -> new PeptideSchemaBean(pp);
+
+    /**
+     * function to convert PeptideSchemaBeans to IPolypeptide
+     */
+    public static final Function<Row, PeptideSchemaBean> FROM_ROW = (Function<Row, PeptideSchemaBean>) row -> {
+        PeptideSchemaBean ret = new PeptideSchemaBean();
+        double mass1 = row.getDouble(0);
+        ret.setMass(mass1);
+        String sequence1 = row.getString(3);
+        ret.setSequenceString(sequence1);
+        int scanMass = row.getInt(1);
+        ret.setMassBin(scanMass);
+        String protein = row.getString(2);
+        ret.setProteinsString(protein);
+        return ret;
     };
 
     /**
      * function to convert PeptideSchemaBeans to IPolypeptide
      */
-    public static final Function<Row, PeptideSchemaBean> FROM_ROW = new Function<Row, PeptideSchemaBean>() {
-        @Override
-        public PeptideSchemaBean call(final Row row) throws Exception {
-            PeptideSchemaBean ret = new PeptideSchemaBean();
-            double mass1 = row.getDouble(0);
-            ret.setMass(mass1);
-            String sequence1 = row.getString(3);
-            ret.setSequenceString(sequence1);
-            int scanMass = row.getInt(1);
-            ret.setMassBin(scanMass);
-            String protein = row.getString(2);
-            ret.setProteinsString(protein);
-            return ret;
-        }
-    };
-
-    /**
-     * function to convert PeptideSchemaBeans to IPolypeptide
-     */
-    public static final Function<PeptideSchemaBean, IPolypeptide> FROM_BEAN = new Function<PeptideSchemaBean, IPolypeptide>() {
-        @Override
-        public IPolypeptide call(final PeptideSchemaBean bean) throws Exception {
-            return bean.asPeptide();
-        }
-    };
+    public static final Function<PeptideSchemaBean, IPolypeptide> FROM_BEAN = (Function<PeptideSchemaBean, IPolypeptide>) bean -> bean.asPeptide();
 
 
 
@@ -143,15 +130,14 @@ public class PeptideSchemaBean implements IDatabaseBean {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getSequenceString());
-        sb.append(",");
-        sb.append(String.format("%10.4f", getMass()));
-        sb.append(",");
-        sb.append(Integer.toString(getMassBin()));
-        sb.append(",");
-        sb.append(getProteinsString());
+        String sb = getSequenceString() +
+                "," +
+                String.format("%10.4f", getMass()) +
+                "," +
+                Integer.toString(getMassBin()) +
+                "," +
+                getProteinsString();
 
-        return sb.toString();
+        return sb;
     }
 }

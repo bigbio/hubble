@@ -29,8 +29,7 @@ public class NameValue  implements Serializable {
     public static Map buildMap(NameValue[] items)
     {
         Map ret = new HashMap();
-        for(int i = 0; i < items.length; i++)
-            ret.put(items[i].m_Name,items[i].m_Value);
+        for (NameValue item : items) ret.put(item.m_Name, item.m_Value);
         return(ret);
     }
     

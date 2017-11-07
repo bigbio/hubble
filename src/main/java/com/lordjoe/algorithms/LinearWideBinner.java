@@ -55,11 +55,10 @@ public class LinearWideBinner extends LinearBinner implements IWideBinner {
          double v = getBinSize() / 2 ;// + getOverlapWidth();
          double minv = bnv - v;
          double maxv = bnv + v;
-         StringBuilder sb = new StringBuilder();
-         sb.append(formatBinValue(minv));
-         sb.append("-");
-         sb.append(formatBinValue(maxv));
-         return sb.toString();
+         String sb = formatBinValue(minv) +
+                 "-" +
+                 formatBinValue(maxv);
+         return sb;
      }
 
     /**

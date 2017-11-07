@@ -22,13 +22,10 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
     public static final int TEST_BIN2 = 7653;
 
 
-    public static final Comparator<IScoredScan> ID_COMPARISON = new Comparator<IScoredScan>() {
-        @Override
-        public int compare(IScoredScan o1, IScoredScan o2) {
-            if (o1.equals(o2))
-                return 0;
-            return o1.getId().compareTo(o2.getId());
-        }
+    public static final Comparator<IScoredScan> ID_COMPARISON = (o1, o2) -> {
+        if (o1.equals(o2))
+            return 0;
+        return o1.getId().compareTo(o2.getId());
     };
 
     public static final String DEFAULT_ALGORITHM = CometScoringAlgorithm.ALGORITHM_NAME;
@@ -1082,10 +1079,10 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
 
     public String getKey() {
         String id = getId();
-        String s = id + ":" + this.getCharge();
+        StringBuilder s = new StringBuilder(id + ":" + this.getCharge());
         while (s.length() < ID_LENGTH)
-            s = "0" + s; // this allows better alphabetical sort
-        return s;
+            s.insert(0, "0"); // this allows better alphabetical sort
+        return s.toString();
     }
 
     /**
@@ -1115,8 +1112,7 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
         getScoreStatistics().add(scoreStatistics);
 //         setNumberScoredPeptides(getNumberScoredPeptides() + added.getNumberScoredPeptides());
         ISpectralMatch[] sms = added.getSpectralMatches();
-        for (int i = 0; i < sms.length; i++) {
-            ISpectralMatch sm = sms[i];
+        for (ISpectralMatch sm : sms) {
             addSpectralMatch(sm);
         }
     }
@@ -1281,9 +1277,9 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
         final ISpectralMatch[] sm2 = scan.getSpectralMatches();
         if (sm1.length != sm2.length)
             return false;
-        for (int i = 0; i < sm2.length; i++) {
+        for (ISpectralMatch aSm2 : sm2) {
             ISpectralMatch m1 = sm1[0];
-            ISpectralMatch m2 = sm2[i];
+            ISpectralMatch m2 = aSm2;
             // really just look
             if (m2.getPeptide().equivalent(m1.getPeptide())) {
                 double score1 = m1.getScore();

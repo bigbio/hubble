@@ -254,12 +254,7 @@ public class SparkUtilities implements Serializable {
      * @return
      */
     public static <K, V> JavaPairRDD<K, V> mapToPairs(JavaRDD<Tuple2<K, V>> imp) {
-        return imp.mapToPair(new PairFunction<Tuple2<K, V>, K, V>() {
-            @Override
-            public Tuple2<K, V> call(final Tuple2<K, V> t) throws Exception {
-                return t;
-            }
-        });
+        return imp.mapToPair((PairFunction<Tuple2<K, V>, K, V>) t -> t);
     }
 
     /**
@@ -304,19 +299,13 @@ public class SparkUtilities implements Serializable {
      public static <K extends Serializable, V extends Serializable> JavaPairRDD<K, ArrayList<V>>   mapToKeyedList(JavaPairRDD<K, V> imp) {
          return imp.aggregateByKey(
                  new ArrayList<V>(),
-                 new Function2<ArrayList<V>, V, ArrayList<V>>() {
-                     @Override
-                     public ArrayList<V> call(ArrayList<V> vs, V v) throws Exception {
-                         vs.add(v);
-                         return vs;
-                     }
+                 (Function2<ArrayList<V>, V, ArrayList<V>>) (vs, v) -> {
+                     vs.add(v);
+                     return vs;
                  },
-                 new Function2<ArrayList<V>, ArrayList<V>, ArrayList<V>>() {
-                     @Override
-                     public ArrayList<V> call(ArrayList<V> vs, ArrayList<V> vs2) throws Exception {
-                         vs.addAll(vs2);
-                         return vs;
-                     }
+                 (Function2<ArrayList<V>, ArrayList<V>, ArrayList<V>>) (vs, vs2) -> {
+                     vs.addAll(vs2);
+                     return vs;
                  }
          );
      }
@@ -329,12 +318,7 @@ public class SparkUtilities implements Serializable {
       * @return
       */
      public static <V extends Serializable,K extends Serializable> JavaRDD<K>   castRDD(JavaRDD< V> imp,Class<? extends K> cls) {
-         return imp.map(new Function<V, K>() {
-             @Override
-             public K call(V v) throws Exception {
-                 return (K) v;
-             }
-         });
+         return imp.map((Function<V, K>) v -> (K) v);
      }
     /**
         * convert a JavaPairRDD into a new JavaPairRDD by casting the value
@@ -344,12 +328,7 @@ public class SparkUtilities implements Serializable {
         * @return
         */
        public static <Q extends Serializable,V extends Serializable,K extends Serializable> JavaPairRDD<Q,K>   castRDD(JavaPairRDD<Q, V> imp,Class<? extends K> cls) {
-           return imp.mapToPair(new PairFunction<Tuple2<Q, V>, Q, K>() {
-               @Override
-               public Tuple2<Q, K> call(Tuple2<Q, V> qvTuple2) throws Exception {
-                       return new Tuple2<Q, K>(qvTuple2._1(),(K)qvTuple2._2());
-               }
-           });
+           return imp.mapToPair((PairFunction<Tuple2<Q, V>, Q, K>) qvTuple2 -> new Tuple2<Q, K>(qvTuple2._1(),(K)qvTuple2._2()));
        }
 
 
@@ -378,7 +357,7 @@ public class SparkUtilities implements Serializable {
             SparkConf sparkConf = new SparkConf();
             Tuple2<String, String>[] all = sparkConf.getAll();
             for (Tuple2<String, String> prp : all) {
-                out.append(prp._1().toString() + "=" + prp._2());
+                out.append(prp._1()).append("=").append(prp._2());
             }
         }
         catch (IOException e) {
@@ -388,12 +367,7 @@ public class SparkUtilities implements Serializable {
     }
 
     public static void showSparkPropertiesInAnotherThread() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                showSparkProperties();
-            }
-        }).start();
+        new Thread(() -> showSparkProperties()).start();
     }
 
     /**
@@ -479,8 +453,7 @@ public class SparkUtilities implements Serializable {
         // Show spark properties
         Tuple2<String, String>[] all = sparkConf.getAll();
         System.err.println("Spark Conf Properties");
-        for (int i = 0; i < all.length; i++) {
-            Tuple2<String, String> prop = all[i];
+        for (Tuple2<String, String> prop : all) {
             System.err.println(prop._1() + "=" + prop._2());
         }
         //      threadContext.set(ret);
@@ -1128,7 +1101,7 @@ public class SparkUtilities implements Serializable {
 
         Map<K, Object> keyCounts = ret.countByKey();
         try {
-            out.append(message + "\n");
+            out.append(message).append("\n");
         }
         catch (IOException e) {
             throw new RuntimeException(e);
@@ -1153,7 +1126,7 @@ public class SparkUtilities implements Serializable {
             List<Integer> keys = new ArrayList<Integer>(hashes.keySet());
             Collections.sort(keys);
             for (Integer key : keys) {
-                out.append(Integer.toString(key) + "  =  " + hashes.get(key) + '\n');
+                out.append(Integer.toString(key)).append("  =  ").append(String.valueOf(hashes.get(key))).append(String.valueOf('\n'));
             }
         }
         catch (IOException e) {
@@ -1455,26 +1428,21 @@ public class SparkUtilities implements Serializable {
     @Nonnull
     <K extends java.io.Serializable, V extends java.io.Serializable> Iterable<Tuple2<K, V>> toTuples(@Nonnull Iterable<KeyValueObject<K, V>> inp) {
         final Iterator<KeyValueObject<K, V>> originalIterator = inp.iterator();
-        return new Iterable<Tuple2<K, V>>() {
+        return () -> new Iterator<Tuple2<K, V>>() {
             @Override
-            public Iterator<Tuple2<K, V>> iterator() {
-                return new Iterator<Tuple2<K, V>>() {
-                    @Override
-                    public boolean hasNext() {
-                        return originalIterator.hasNext();
-                    }
+            public boolean hasNext() {
+                return originalIterator.hasNext();
+            }
 
-                    @Override
-                    public Tuple2<K, V> next() {
-                        KeyValueObject<K, V> next = originalIterator.next();
-                        return new Tuple2(next.key, next.value);
-                    }
+            @Override
+            public Tuple2<K, V> next() {
+                KeyValueObject<K, V> next = originalIterator.next();
+                return new Tuple2(next.key, next.value);
+            }
 
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException("not supported");
-                    }
-                };
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("not supported");
             }
         };
     }
@@ -1491,26 +1459,21 @@ public class SparkUtilities implements Serializable {
     @Nonnull
     <K extends java.io.Serializable, V extends java.io.Serializable> Iterable<KeyValueObject<K, V>> toKeyValueObject(@Nonnull Iterable<Tuple2<K, V>> inp) {
         final Iterator<Tuple2<K, V>> originalIterator = inp.iterator();
-        return new Iterable<KeyValueObject<K, V>>() {
+        return () -> new Iterator<KeyValueObject<K, V>>() {
             @Override
-            public Iterator<KeyValueObject<K, V>> iterator() {
-                return new Iterator<KeyValueObject<K, V>>() {
-                    @Override
-                    public boolean hasNext() {
-                        return originalIterator.hasNext();
-                    }
+            public boolean hasNext() {
+                return originalIterator.hasNext();
+            }
 
-                    @Override
-                    public KeyValueObject<K, V> next() {
-                        Tuple2<K, V> next = originalIterator.next();
-                        return new KeyValueObject(next._1(), next._2());
-                    }
+            @Override
+            public KeyValueObject<K, V> next() {
+                Tuple2<K, V> next = originalIterator.next();
+                return new KeyValueObject(next._1(), next._2());
+            }
 
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException("not supported");
-                    }
-                };
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("not supported");
             }
         };
     }
@@ -1524,12 +1487,7 @@ public class SparkUtilities implements Serializable {
      * @return
      */
     public static <K extends Serializable> JavaPairRDD<Integer, K> indexByOrder(JavaRDD<K> values) {
-        values = values.sortBy(new Function<K, K>() {
-                                   @Override
-                                   public K call(final K v1) throws Exception {
-                                       return v1;
-                                   }
-                               }, true,
+        values = values.sortBy((Function<K, K>) v1 -> v1, true,
                 getDefaultNumberPartitions()
         );
         return values.mapToPair(new PairFunction<K, Integer, K>() {
@@ -1559,7 +1517,7 @@ public class SparkUtilities implements Serializable {
         sb.append("classpath = ");
         for (int i = 0; i < items.length; i++) {
             String item = items[i];
-            sb.append("   " + item);
+            sb.append("   ").append(item);
             if (i < items.length - 1)
                 sb.append(";\\\n");
             else
@@ -1571,11 +1529,9 @@ public class SparkUtilities implements Serializable {
                 "\n" +
                 "#\n" +
                 "# if specified this will be the main in the mainfest\n");
-        sb.append("mainclass=" + mainClass.getCanonicalName() + "\n");
+        sb.append("mainclass=").append(mainClass.getCanonicalName()).append("\n");
 
-        sb.append("#\n" +
-                "# if specified run the program using this user directory\n" +
-                "user_dir=" + System.getProperty("user.dir").replace("\\", "/") + "\n");
+        sb.append("#\n" + "# if specified run the program using this user directory\n" + "user_dir=").append(System.getProperty("user.dir").replace("\\", "/")).append("\n");
 
         sb.append("#\n" +
                 "# if specified the main will run with these arguments\n" +
@@ -1583,7 +1539,7 @@ public class SparkUtilities implements Serializable {
 
         for (int i = 0; i < args.length; i++) {
             String item = items[i];
-            sb.append(item + " ");
+            sb.append(item).append(" ");
         }
         sb.append("\n");
 
@@ -1779,12 +1735,7 @@ public class SparkUtilities implements Serializable {
      * @return
      */
     public static <K extends Serializable, R extends Serializable> JavaPairRDD<K, R> chooseOneValue(JavaPairRDD<K, R> inp) {
-        return inp.reduceByKey(new Function2<R, R, R>() {
-            @Override
-            public R call(final R v1, final R v2) throws Exception {
-                return v1;
-            }
-        });
+        return inp.reduceByKey((Function2<R, R, R>) (v1, v2) -> v1);
     }
 
     public static <K, V> JavaPairRDD<K, V> saveAsSequenceFile(String path, JavaPairRDD<K, V> inp) {

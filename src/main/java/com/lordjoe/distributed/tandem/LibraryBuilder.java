@@ -280,8 +280,7 @@ public class LibraryBuilder implements Serializable {
         String paramsFile = application.getDatabaseName() + ".sizes";
         PrintWriter out = SparkHydraUtilities.nameToPrintWriter(paramsFile, app);
         String[] lines = XTandemHadoopUtilities.sizesToStringList(counts);
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
+        for (String line : lines) {
             out.println(line);
         }
         out.close();
@@ -319,12 +318,9 @@ public class LibraryBuilder implements Serializable {
         JavaPairRDD<Integer, LibraryWriter.WriterObject> files = LibraryWriter.writeDatabase(pByMZ);
 
         // close all files as a side effect - return nothing
-        files = files.filter(new Function<Tuple2<Integer, LibraryWriter.WriterObject>, Boolean>() {
-            @Override
-            public Boolean call(final Tuple2<Integer, LibraryWriter.WriterObject> v1) throws Exception {
-                v1._2().close();
-                return false;
-            }
+        files = files.filter((Function<Tuple2<Integer, LibraryWriter.WriterObject>, Boolean>) v1 -> {
+            v1._2().close();
+            return false;
         });
 
         // because of the filter there is nothing there
@@ -364,13 +360,11 @@ public class LibraryBuilder implements Serializable {
             parquetFile.registerTempTable("peptides");
             DataFrame binCounts = sqlContext.sql("SELECT massBin,COUNT(massBin) FROM " + "peptides" + "  GROUP BY  massBin");
             final Map<Integer, Integer> ret = new HashMap<Integer, Integer>();
-            JavaRDD<Tuple2<Integer, Integer>> counts = binCounts.toJavaRDD().map(new Function<Row, Tuple2<Integer, Integer>>() {
-                public Tuple2<Integer, Integer> call(Row row) {
-                    int mass = row.getInt(0);
-                    int count = (int) row.getLong(1);
-                    ret.put(mass, count);
-                    return new Tuple2<Integer, Integer>(mass, count);
-                }
+            JavaRDD<Tuple2<Integer, Integer>> counts = binCounts.toJavaRDD().map((Function<Row, Tuple2<Integer, Integer>>) row -> {
+                int mass = row.getInt(0);
+                int count = (int) row.getLong(1);
+                ret.put(mass, count);
+                return new Tuple2<Integer, Integer>(mass, count);
             });
             for (Tuple2<Integer, Integer> countTuple : counts.collect()) {
                 ret.put(countTuple._1(), countTuple._2());

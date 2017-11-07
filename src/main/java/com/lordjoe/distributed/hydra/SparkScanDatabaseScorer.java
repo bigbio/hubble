@@ -183,12 +183,9 @@ public class SparkScanDatabaseScorer {
         JavaRDD<IMeasuredSpectrum> spectraToScore = scans.values();
 
         // drop bad ids
-        spectraToScore = spectraToScore.filter(new Function<IMeasuredSpectrum, Boolean>() {
-            @Override
-            public Boolean call(final IMeasuredSpectrum v1) throws Exception {
-                String id = v1.getId();
-                return id != null && id.length() > 0;
-            }
+        spectraToScore = spectraToScore.filter((Function<IMeasuredSpectrum, Boolean>) v1 -> {
+            String id = v1.getId();
+            return id != null && id.length() > 0;
         });
 
 
@@ -269,22 +266,19 @@ public class SparkScanDatabaseScorer {
         final ITandemScoringAlgorithm scorer = application.getScorer();
         final SpectrumCondition spectrumParameters = application.getSpectrumParameters();
         final double minMass = 150;
-        spectraToScore = spectraToScore.flatMap(new FlatMapFunction<IMeasuredSpectrum, IMeasuredSpectrum>() {
-            @Override
-            public Iterable<IMeasuredSpectrum> call(final IMeasuredSpectrum t) throws Exception {
-                List<IMeasuredSpectrum> holder = new ArrayList<IMeasuredSpectrum>();
-                if (t instanceof RawPeptideScan) {
-                    RawPeptideScan raw = (RawPeptideScan) t;
-                    IMeasuredSpectrum spec = spectrumParameters.normalizeSpectrum(raw, minMass);
-                    if(spec != null) {
-                        IMeasuredSpectrum conditioned = scorer.conditionSpectrum(spec, raw);
-                        if( conditioned != null)
-                            holder.add(conditioned);
-                    }
+        spectraToScore = spectraToScore.flatMap((FlatMapFunction<IMeasuredSpectrum, IMeasuredSpectrum>) t -> {
+            List<IMeasuredSpectrum> holder = new ArrayList<IMeasuredSpectrum>();
+            if (t instanceof RawPeptideScan) {
+                RawPeptideScan raw = (RawPeptideScan) t;
+                IMeasuredSpectrum spec = spectrumParameters.normalizeSpectrum(raw, minMass);
+                if(spec != null) {
+                    IMeasuredSpectrum conditioned = scorer.conditionSpectrum(spec, raw);
+                    if( conditioned != null)
+                        holder.add(conditioned);
                 }
-                   return holder;
-              }
-         });
+            }
+               return holder;
+          });
 
 
         System.out.println("number partitions " + spectraToScore.partitions().size());

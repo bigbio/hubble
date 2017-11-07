@@ -122,11 +122,10 @@ public class LinearBinner implements IBinner {
          double bnv = fromBin(pBin);
          double minv = bnv -  getBinSize() / 2;
          double maxv = bnv +  getBinSize() / 2;
-         StringBuilder sb = new StringBuilder();
-         sb.append(formatBinValue(minv));
-         sb.append("-");
-         sb.append(formatBinValue(maxv));
-         return sb.toString();
+         String sb = formatBinValue(minv) +
+                 "-" +
+                 formatBinValue(maxv);
+         return sb;
      }
 
     protected String formatBinValue(double value)  {

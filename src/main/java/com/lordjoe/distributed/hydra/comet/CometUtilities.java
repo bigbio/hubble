@@ -31,8 +31,7 @@ public class CometUtilities implements Serializable {
     public static void writeSpectra(final String pArg, final RawPeptideScan[] pSpectra) {
         try {
             PrintWriter pw = new PrintWriter(pArg + ".mgf");
-            for (int j = 0; j < pSpectra.length; j++) {
-                RawPeptideScan rs = pSpectra[j];
+            for (RawPeptideScan rs : pSpectra) {
                 rs.appendAsMGF(pw);
             }
             pw.close();
@@ -82,8 +81,7 @@ public class CometUtilities implements Serializable {
 
 
     public static void main(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i];
+        for (String arg : args) {
             RawPeptideScan[] spectra = readMzXML(arg);
             writeSpectra(arg, spectra);
 

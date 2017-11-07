@@ -41,7 +41,7 @@ public class ProteinReducer extends AbstractTandemFunction implements IReducerFu
             if (sb.length() > 0)
                 sb.append(";");
 
-            String str = val.toString();
+            String str = val;
             if (str.startsWith("DECOY"))
                 numberDecoy++;
             else
@@ -82,8 +82,8 @@ public class ProteinReducer extends AbstractTandemFunction implements IReducerFu
                 return;
         }
 
-        for (int i = 0; i < consumer.length; i++) {
-              consumer[i].consume(new KeyValueObject<String, String>(keytr, peptideString));
+        for (IKeyValueConsumer<String, String> aConsumer : consumer) {
+            aConsumer.consume(new KeyValueObject<String, String>(keytr, peptideString));
 
         }
 

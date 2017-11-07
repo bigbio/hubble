@@ -253,11 +253,7 @@ public class CometTestingUtilities {
             return;
         int index = 0;
         IPolypeptide pp = Polypeptide.fromString(split[index++]);
-        List<BinnedChargeIonIndex> list = ret.get(pp);
-        if (list == null) {
-            list = new ArrayList<BinnedChargeIonIndex>();
-            ret.put(pp, list);
-        }
+        List<BinnedChargeIonIndex> list = ret.computeIfAbsent(pp, k -> new ArrayList<BinnedChargeIonIndex>());
         int bin = Integer.parseInt(split[index++]);
         int pos = Integer.parseInt(split[index++]);
         int charge = Integer.parseInt(split[index++]);

@@ -137,13 +137,12 @@ public class CountedDistribution implements  IAccumulator<CountedDistribution> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Max value " + Long_Formatter.format(getMaxValue()) + " total " + Long_Formatter.format(getCount()));
+        sb.append("Max value ").append(Long_Formatter.format(getMaxValue())).append(" total ").append(Long_Formatter.format(getCount()));
         sb.append("\n");
         int index = 1;
-        for (int i = 0; i < bins.length; i++) {
-            int bin = bins[i];
+        for (int bin : bins) {
             if (bin > 0) {
-                sb.append(Long_Formatter.format(index) + "\t" + Long_Formatter.format(bin));
+                sb.append(Long_Formatter.format(index)).append("\t").append(Long_Formatter.format(bin));
                 sb.append("\n");
             }
             index *= 2;

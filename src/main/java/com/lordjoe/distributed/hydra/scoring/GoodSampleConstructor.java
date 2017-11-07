@@ -58,8 +58,7 @@ public class GoodSampleConstructor {
         PrintWriter mgfOut = new PrintWriter(new FileWriter(pOutMgfName));
         InputStream is = new FileInputStream(mgfFileName);
         MassSpecRun[] runs = XTandemUtilities.parseMgfFile(is, mgfFileName);
-        for (int i = 0; i < runs.length; i++) {
-            MassSpecRun run = runs[i];
+        for (MassSpecRun run : runs) {
             for (String spectralId : pSpectralIds) {
                 RawPeptideScan scan = run.getScan(spectralId);
                 if (scan != null) {

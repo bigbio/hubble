@@ -75,8 +75,7 @@ public class SparkMapReduce<KEYIN extends Serializable, VALUEIN extends Serializ
         setReduce(pRetucer);
         setPartitioner(pPartitioner);
 
-        for (int i = 0; i < pConsumer.length; i++) {
-            IKeyValueConsumer<KOUT, VOUT> cns = pConsumer[i];
+        for (IKeyValueConsumer<KOUT, VOUT> cns : pConsumer) {
             addConsumer(cns);
 
         }

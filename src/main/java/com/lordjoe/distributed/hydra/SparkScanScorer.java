@@ -206,12 +206,9 @@ public class SparkScanScorer {
             spectraToScore = SparkUtilities.persistAndCount("Spectra  to Score", spectraToScore, spectraCountRef);
 
         // drop bad ids
-        spectraToScore = spectraToScore.filter(new Function<IMeasuredSpectrum, Boolean>() {
-            @Override
-            public Boolean call(final IMeasuredSpectrum v1) throws Exception {
-                String id = v1.getId();
-                return id != null && id.length() > 0;
-            }
+        spectraToScore = spectraToScore.filter((Function<IMeasuredSpectrum, Boolean>) v1 -> {
+            String id = v1.getId();
+            return id != null && id.length() > 0;
         });
 
         if (isDebuggingCountMade())

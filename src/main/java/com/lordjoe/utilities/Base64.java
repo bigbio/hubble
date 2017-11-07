@@ -72,17 +72,20 @@ public class Base64 {
         if (data.length>1 && data[data.length-2] == '=') --len;
         byte[] out = new byte[len];     int shift = 0;   // # of excess bits stored in accum
         int accum = 0;   // excess bits
-        int index = 0;     for (int ix=0; ix<data.length; ix++) {
-            int value = codes[ data[ix] & 0xFF ];   // ignore high byte of char
-            if ( value >= 0 ) {                     // skip over non-code
+        int index = 0;
+        for (char aData : data) {
+            int value = codes[aData & 0xFF];   // ignore high byte of char
+            if (value >= 0) {                     // skip over non-code
                 accum <<= 6;            // bits shift up by 6 each time thru
                 shift += 6;             // loop, with new bits being put in
                 accum |= value;         // at the bottom.
-                if ( shift >= 8 ) {     // whenever there are 8 or more shifted in,
+                if (shift >= 8) {     // whenever there are 8 or more shifted in,
                     shift -= 8;         // write them out (from the top, leavin any
                     out[index++] =      // excess at the bottom for next iteration.
-                    (byte) ((accum >> shift) & 0xff);
-                }   }   }
+                            (byte) ((accum >> shift) & 0xff);
+                }
+            }
+        }
         if (index != out.length)
             throw new Error("miscalculated data length!");     return out;
     } //

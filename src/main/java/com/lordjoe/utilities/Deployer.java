@@ -157,7 +157,7 @@ public class Deployer {
                 continue;
             if (inExcludedJars(item))
                 continue;
-            if (item.indexOf(javaHome) > -1)
+            if (item.contains(javaHome))
                 continue;
             File itemFile = new File(item);
             if (m_TaskExcludeJar.contains(itemFile.getName()))
@@ -256,8 +256,7 @@ public class Deployer {
     }
 
     public void copyLibraries(File libDir, File[] libs) {
-        for (int i = 0; i < libs.length; i++) {
-            File lib = libs[i];
+        for (File lib : libs) {
             if (libDir.equals(lib.getParentFile()))
                 continue;
             File dst = new File(libDir, lib.getName());
@@ -360,11 +359,11 @@ public class Deployer {
         StringBuilder sb = new StringBuilder();
         sb.append("ECHO OFF\n");
         sb.append("set JAR_PATH=%HYDRA_HOME%/lib\n");
-        sb.append("set q4path=%JAR_PATH%/" + pathLibs[0].getName() + "\n");
+        sb.append("set q4path=%JAR_PATH%/").append(pathLibs[0].getName()).append("\n");
         for (int i = 1; i < pathLibs.length; i++) {
             File athLib = pathLibs[i];
             //noinspection StringConcatenationInsideStringBuilderAppend
-            sb.append("set q4path=%q4path%" + WINDOWS_PATH_SEPARATOR + "%JAR_PATH%/" + athLib.getName() + "\n");
+            sb.append("set q4path=%q4path%" + WINDOWS_PATH_SEPARATOR + "%JAR_PATH%/").append(athLib.getName()).append("\n");
         }
         sb.append("ECHO ON\n");
         buildCommandLine(mainClass, args, sb);
@@ -379,11 +378,11 @@ public class Deployer {
             pSb.append(/* "jre\\bin\\" + */ "java ");
         }
         //noinspection StringConcatenationInsideStringBuilderAppend
-        pSb.append(" -Xmx1024m -Xms128m -cp %q4path% " + mainClass.getName() + " ");
+        pSb.append(" -Xmx1024m -Xms128m -cp %q4path% ").append(mainClass.getName()).append(" ");
         //noinspection ForLoopReplaceableByForEach
         for (int i = 2; i < args.length; i++) {
             //noinspection StringConcatenationInsideStringBuilderAppend
-            pSb.append(" " + args[i]);
+            pSb.append(" ").append(args[i]);
         }
         pSb.append(" params=%1 %2 %3 %4 \n");
     }
@@ -415,16 +414,16 @@ public class Deployer {
         sb.append(SHELL_FILE_HEADER);
 
         sb.append("JAR_PATH=$HYDRA_HOME/lib\n");
-        sb.append("q4path=$JAR_PATH/" + pathLibs[0].getName() + "\n");
+        sb.append("q4path=$JAR_PATH/").append(pathLibs[0].getName()).append("\n");
         for (int i = 1; i < pathLibs.length; i++) {
             File athLib = pathLibs[i];
             //noinspection StringConcatenationInsideStringBuilderAppend
-            sb.append("q4path=$q4path" + LINUX_PATH_SEPARATOR + "$JAR_PATH/" + athLib.getName() + "\n");
+            sb.append("q4path=$q4path" + LINUX_PATH_SEPARATOR + "$JAR_PATH/").append(athLib.getName()).append("\n");
         }
         sb.append(SHELL_FILE_HEADER);
         String shl = buildShellCommandLine(mainClass, args);
         sb.append(LIST_JAVA_VERSION);
-        sb.append("echo executing\"" + shl + "\"\n");
+        sb.append("echo executing\"").append(shl).append("\"\n");
 
         sb.append(shl);
         return sb.toString();
@@ -436,10 +435,10 @@ public class Deployer {
 
         pSb.append("java ");
         pSb.append(" -Xmx400m -Xms64m ");
-        pSb.append(" -cp $q4path " + mainClass.getName() + " ");
+        pSb.append(" -cp $q4path ").append(mainClass.getName()).append(" ");
         for (int i = 2; i < args.length; i++) {
             //noinspection StringConcatenationInsideStringBuilderAppend
-            pSb.append(" " + args[i].replace('%', '$'));
+            pSb.append(" ").append(args[i].replace('%', '$'));
         }
         pSb.append(" $1 $2 $3 $4 $5 $6 $7 $8\n");
         return pSb.toString();

@@ -74,11 +74,10 @@ public class SpectrumQuery  implements IEquivalent<SpectrumQuery> {
          }
 
         boolean equivalent = true;
-        for (int i = 0; i < cpHits.size(); i++) {
-            SpectrumHit hit1 = cpHits.get(i);
+        for (SpectrumHit hit1 : cpHits) {
             for (SpectrumHit hit2 : cpoHits) {
-                equivalent &= Polypeptide.equivalentSpectrum(hit1.peptide,hit2.peptide);
-               }
+                equivalent &= Polypeptide.equivalentSpectrum(hit1.peptide, hit2.peptide);
+            }
         }
 
         return equivalent;

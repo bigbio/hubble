@@ -53,17 +53,14 @@ public class WordCountOperator {
 
         int count = 0;
         int badCount = 0;
-        Iterator<KeyValueObject<String, Integer>> iterator = results.iterator();
-        while (iterator.hasNext()) {
-            KeyValueObject<String, Integer> next = iterator.next();
+        for (KeyValueObject<String, Integer> next : results) {
             Integer realValue = countMap.get(next.key);
             count++;
             if (realValue != null) {
                 if (!realValue.toString().equals(next.value.toString())) {
                     badCount++;
                 }
-            }
-            else {
+            } else {
                 badCount++;
             }
 

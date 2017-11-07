@@ -3,6 +3,7 @@ package com.lordjoe.distributed.spark;
 
 import org.apache.spark.*;
 import org.apache.spark.api.java.*;
+import org.apache.spark.api.java.function.*;
 import org.apache.spark.storage.*;
 import scala.*;
 
@@ -216,12 +217,7 @@ public class LargeArrayGeneratedTest {
         boolean forceShuffle = true;
         initial = initial.coalesce(120, forceShuffle);
 
-        JavaRDD<DNAFragment> dnaData = initial.map(new org.apache.spark.api.java.function.Function<Boolean, DNAFragment>() {
-                @Override
-                 public DNAFragment call(final Boolean v1) throws Exception {
-                       return generateDNAFragment();
-                  }
-         });
+        JavaRDD<DNAFragment> dnaData = initial.map((org.apache.spark.api.java.function.Function<Boolean, DNAFragment>) v1 -> generateDNAFragment());
 
         dnaData = dnaData.persist(StorageLevel.DISK_ONLY());
         numberFragments = dnaData.count();

@@ -199,16 +199,13 @@ public class PeptideDatabase implements Serializable {
      * @return keys with peptides
      */
     public <T  extends IMeasuredSpectrum> JavaPairRDD<BinChargeKey, Tuple2<BinChargeKey, T>> filterKeysWithData(final JavaPairRDD<BinChargeKey, Tuple2<BinChargeKey, T>> pAllSpectrumPairs) {
-        return pAllSpectrumPairs.filter(new Function<Tuple2<BinChargeKey, Tuple2<BinChargeKey, T>>, java.lang.Boolean>() {
-            @Override
-            public Boolean call(final Tuple2<BinChargeKey, Tuple2<BinChargeKey, T>> v1) throws Exception {
-                BinChargeKey binChargeKey = v1._1();
-                boolean hasData = getKeyCounts(binChargeKey) > 0;
-                //noinspection RedundantIfStatement
-                if (!hasData)
-                    return false;
-                return true;    // allow break
-            }
+        return pAllSpectrumPairs.filter((Function<Tuple2<BinChargeKey, Tuple2<BinChargeKey, T>>, Boolean>) v1 -> {
+            BinChargeKey binChargeKey = v1._1();
+            boolean hasData = getKeyCounts(binChargeKey) > 0;
+            //noinspection RedundantIfStatement
+            if (!hasData)
+                return false;
+            return true;    // allow break
         });
     }
 }

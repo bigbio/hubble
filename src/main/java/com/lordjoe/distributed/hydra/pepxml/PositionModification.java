@@ -24,10 +24,9 @@ public class PositionModification {
     }
 
     public String toModString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        sb.append(String.format("%10.3f", massChange).trim());
-        sb.append("]");
-        return sb.toString();
+        String sb = "[" +
+                String.format("%10.3f", massChange).trim() +
+                "]";
+        return sb;
     }
 }

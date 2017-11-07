@@ -258,7 +258,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
             return false; // too low to score
 
         del /= peptideMass;
-        boolean ret = false;
+        boolean ret;
         //       XTandemUtilities.workUntil(2012,5,3);
         // Note looks backwards but this is what they do
         double plusLimit = getPlusLimit();
@@ -339,7 +339,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
             return 0; // not scoring this one
         if (!pConditionedScan.isValid())
             return 0;
-        double score = 0;
+        double score;
         String scanid = scan.getId();
         //        if (scanid.equals("7868"))
         //            XTandemUtilities.breakHere();
@@ -352,15 +352,14 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
 
         List<XCorrUsedData> used = new ArrayList<XCorrUsedData>();
 
-        for (int j = 0; j < pSpectrums.length; j++) {
-            ITheoreticalSpectrumSet tsSet = pSpectrums[j];
+        for (ITheoreticalSpectrumSet tsSet : pSpectrums) {
             // debugging test
             IPolypeptide peptide = tsSet.getPeptide();
             double matching = peptide.getMatchingMass();
 
             used.clear();
             if (scorer.isTheoreticalSpectrumScored(pConditionedScan, tsSet)) {
-                score = doXCorr((CometTheoreticalBinnedSet) tsSet,scorer, pCounter, pConditionedScan, used);
+                score = doXCorr((CometTheoreticalBinnedSet) tsSet, scorer, pCounter, pConditionedScan, used);
                 numberScoredSpectra++;
                 SpectralMatch sm = new SpectralMatch(
                         pp,
@@ -1101,7 +1100,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
         double highMZ = peaks[peaks.length - 1].getMassChargeRatio();
 
         //System.out.println("lowMZ "+lowMZ+" highMZ "+highMZ);
-        double diffMZ = 0;
+        double diffMZ;
 
         if (lowMZ == highMZ)
             diffMZ = 1f;
@@ -1173,8 +1172,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
 
         double windowWidth = (maxMz + 0.5) / NUMBER_WINDOWS;
         double[] maxWindow = new double[NUMBER_WINDOWS];
-        for (int i = 0; i < peaks.length; i++) {
-            ISpectrumPeak peak = peaks[i];
+        for (MutableSpectrumPeak peak : peaks) {
             double mz = peak.getMassChargeRatio();
             int nWindow = (int) (mz / windowWidth);
 
@@ -1185,8 +1183,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
 
 
         double minAffected = 0.05 * maxPeak;  // better be 5
-        for (int i = 0; i < peaks.length; i++) {
-            MutableSpectrumPeak peak = peaks[i];
+        for (MutableSpectrumPeak peak : peaks) {
             double mz = peak.getMassChargeRatio();
             int nWindow = (int) (mz / windowWidth);
 
@@ -1219,8 +1216,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
 
     public static void normalizePeaks(MutableSpectrumPeak[] myPeaks) {
         // Take the square root of the peak
-        for (int i = 0; i < myPeaks.length; i++) {
-            MutableSpectrumPeak myPeak = myPeaks[i];
+        for (MutableSpectrumPeak myPeak : myPeaks) {
             myPeak.setPeak((float) Math.sqrt(myPeak.getPeak()));
         }
 
@@ -1246,8 +1242,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
 
     public static double getMaximumIntensity(ISpectrumPeak[] peaks) {
         double ret = Double.MIN_VALUE;
-        for (int i = 0; i < peaks.length; i++) {
-            ISpectrumPeak peak = peaks[i];
+        for (ISpectrumPeak peak : peaks) {
             ret = Math.max(ret, peak.getPeak());
         }
         return ret;
@@ -1255,8 +1250,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
 
     protected void addHighestPeaks(final MutableMeasuredSpectrum pOut, final ISpectrumPeak[] pPeaks, final double pStart, final double pEnd) {
         List<ISpectrumPeak> holder = new ArrayList<ISpectrumPeak>();
-        for (int i = 0; i < pPeaks.length; i++) {
-            ISpectrumPeak peak = pPeaks[i];
+        for (ISpectrumPeak peak : pPeaks) {
             double mass = peak.getMassChargeRatio();
             if (Math.abs(mass - 850) < 2)
                 XTandemUtilities.breakHere();

@@ -185,12 +185,12 @@ public class MGFOldInputFormat extends FileInputFormat<String, String> {
 
         @Override
         public String createKey() {
-            return new String();
+            return "";
         }
 
         @Override
         public String createValue() {
-            return new String();
+            return "";
         }
 
         @Override

@@ -112,17 +112,12 @@ public class SparkContextGetter {
         SparkConf sparkConf = new SparkConf();
         Tuple2<String, String>[] all = sparkConf.getAll();
         for (Tuple2<String, String> prp : all) {
-            System.err.println(prp._1().toString() + "=" + prp._2());
+            System.err.println(prp._1() + "=" + prp._2());
         }
     }
 
     public static void showSparkPropertiesInAnotherThread() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                showSparkProperties();
-            }
-        }).start();
+        new Thread(() -> showSparkProperties()).start();
     }
 
     /**

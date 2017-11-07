@@ -120,7 +120,7 @@ public class SparkAccumulators implements ISparkAccumulators {
             Object value = accumulator.value();
             if (value instanceof IAccumulator) {
                 // let the value figure out how to make a report
-                out.append(accumulatorName + "\n");
+                out.append(accumulatorName).append("\n");
                 ((IAccumulator) value).buildReport(out);
                 out.append("\n");
             }

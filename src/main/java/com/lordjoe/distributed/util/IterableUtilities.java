@@ -16,9 +16,7 @@ public class IterableUtilities {
     public static <K> Iterable<K>  asIterable(K... inp)
     {
         List<K> holder = new ArrayList<K>();
-        for (int i = 0; i < inp.length; i++) {
-            holder.add(inp[i]);
-           }
+        Collections.addAll(holder, inp);
 
         return holder;
     }
@@ -32,19 +30,15 @@ public class IterableUtilities {
     public static <V extends Serializable> Iterable<V>  asIterableValues(final Iterable<KeyValueObject> itr )
     {
         final Iterator<KeyValueObject> itrx = itr.iterator();
-        Iterable<V> ret = new Iterable<V>() {
-            @Override public Iterator<V> iterator() {
-                return new Iterator<V>() {
-                     @Override public boolean hasNext() {
-                        return itrx.hasNext();
-                    }
-                    @Override public V next() {
-                        return (V)(itrx.next().value);
-                    }
-                     @Override public void remove() {
-                        throw new UnsupportedOperationException("Not Implemented");
-                    }
-                };
+        Iterable<V> ret = () -> new Iterator<V>() {
+             @Override public boolean hasNext() {
+                return itrx.hasNext();
+            }
+            @Override public V next() {
+                return (V)(itrx.next().value);
+            }
+             @Override public void remove() {
+                throw new UnsupportedOperationException("Not Implemented");
             }
         };
 

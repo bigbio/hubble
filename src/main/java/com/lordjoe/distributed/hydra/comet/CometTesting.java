@@ -140,9 +140,7 @@ public class CometTesting {
 
     public static void assertEquals(double expected, double value) {
         if (Math.abs(expected - value) > 0.0001) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Unexpected value - expected " + expected + " got " + value);
-            throw new IllegalStateException(sb.toString()); // ToDo change
+            throw new IllegalStateException("Unexpected value - expected " + expected + " got " + value); // ToDo change
         }
     }
 
@@ -369,9 +367,7 @@ public class CometTesting {
         Map<BinChargeKey, HashMap<String, IPolypeptide>> binChargeKeyHashMapMap = keyedPeptides.collectAsMap();
         List<HashMap<String, IPolypeptide>> collect1 = keyedPeptides.values().collect();
         for (HashMap<String, IPolypeptide> hms : collect1) {
-            for (IPolypeptide pp : hms.values()) {
-                holder.add(pp);
-            }
+            holder.addAll(hms.values());
         }
         return holder;
 

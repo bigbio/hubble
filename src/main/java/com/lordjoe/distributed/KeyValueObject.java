@@ -14,19 +14,14 @@ public class KeyValueObject<K extends Serializable, V extends Serializable> impl
     /**
      * compare by keys using String as a last resort comparator
      */
-    public static final Comparator<KeyValueObject> KEY_COMPARATOR = new Comparator<KeyValueObject>() {
-
-        @Override public int compare(final KeyValueObject o1, final KeyValueObject o2) {
-            Object key = o1.key;
-            if (key instanceof Comparable) {
-                return ((Comparable) key).compareTo(o2.key);
-            }
-            else {
-                return key.toString().compareTo(o2.key.toString());
-            }
+    public static final Comparator<KeyValueObject> KEY_COMPARATOR = (o1, o2) -> {
+        Object key = o1.key;
+        if (key instanceof Comparable) {
+            return ((Comparable) key).compareTo(o2.key);
         }
-
-
+        else {
+            return key.toString().compareTo(o2.key.toString());
+        }
     };
     public final K key;
     public final V value;

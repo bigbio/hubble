@@ -7,6 +7,8 @@ import com.lordjoe.distributed.hydra.scoring.*;
 import com.lordjoe.distributed.hydra.test.*;
 import com.lordjoe.distributed.spark.accumulators.*;
 import org.apache.spark.api.java.*;
+import org.apache.spark.api.java.function.*;
+import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.sql.*;
 import org.systemsbiology.xtandem.*;
 import com.lordjoe.distributed.hydra.comet.*;
@@ -144,32 +146,26 @@ public class SparkBinChargeMapper implements Serializable {
     public static <K extends Serializable> JavaPairRDD<K, HashMap<String, IPolypeptide>> mapToKeyedHash(JavaPairRDD<K, IPolypeptide> imp, final int maxSize) {
         return imp.aggregateByKey(
                 new HashMap<String, IPolypeptide>(),
-                new org.apache.spark.api.java.function.Function2<HashMap<String, IPolypeptide>, IPolypeptide, HashMap<String, IPolypeptide>>() {
-                    @Override
-                    public HashMap<String, IPolypeptide> call(HashMap<String, IPolypeptide> vs, IPolypeptide v) throws Exception {
-                        if (vs.size() >= maxSize)
-                            return vs; // stop adding if limit reached
-                        String key = v.toString();
-                        if (!vs.containsKey(key)) {
-                            vs.put(key, v);
-                        } else {
-                            // todo merge protiens
-                            IPolypeptide old = vs.get(key);
-                            IPolypeptide newPP = PolypeptideCombiner.mergeProteins(old, v);
-                            vs.put(key, newPP);
-                        }
-                        return vs;
+                (Function2<HashMap<String, IPolypeptide>, IPolypeptide, HashMap<String, IPolypeptide>>) (vs, v) -> {
+                    if (vs.size() >= maxSize)
+                        return vs; // stop adding if limit reached
+                    String key = v.toString();
+                    if (!vs.containsKey(key)) {
+                        vs.put(key, v);
+                    } else {
+                        // todo merge protiens
+                        IPolypeptide old = vs.get(key);
+                        IPolypeptide newPP = PolypeptideCombiner.mergeProteins(old, v);
+                        vs.put(key, newPP);
                     }
+                    return vs;
                 },
-                new org.apache.spark.api.java.function.Function2<HashMap<String, IPolypeptide>, HashMap<String, IPolypeptide>, HashMap<String, IPolypeptide>>() {
-                    @Override
-                    public HashMap<String, IPolypeptide> call(HashMap<String, IPolypeptide> vs, HashMap<String, IPolypeptide> vs2) throws Exception {
-                        if (vs.size() >= maxSize)
-                            return vs; // stop adding if limit reached
+                (org.apache.spark.api.java.function.Function2<HashMap<String, IPolypeptide>, HashMap<String, IPolypeptide>, HashMap<String, IPolypeptide>>) (vs, vs2) -> {
+                    if (vs.size() >= maxSize)
+                        return vs; // stop adding if limit reached
 
-                        vs.putAll(vs2);
-                        return vs;
-                    }
+                    vs.putAll(vs2);
+                    return vs;
                 }
         );
     }

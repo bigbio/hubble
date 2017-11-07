@@ -331,18 +331,15 @@ public class SparkMapReduceScoringHandler implements Serializable {
      */
     public JavaPairRDD<BinChargeKey, IPolypeptide > mapSplitFragmentsToBinHash(JavaRDD<IPolypeptide> inp,  final MapOfLists<Integer, BinChargeKey> splitKeys) {
         JavaPairRDD<BinChargeKey, HashMap<String, IPolypeptide>> mappedByhash = binMapper.mapSplitFragmentsToBinHash(inp, splitKeys);
-          JavaPairRDD<BinChargeKey, IPolypeptide> binnedPeptides = mappedByhash.flatMapToPair(new PairFlatMapFunction<Tuple2<BinChargeKey, HashMap<String, IPolypeptide>>, BinChargeKey, IPolypeptide>() {
-            @Override
-            public Iterable<Tuple2<BinChargeKey, IPolypeptide>> call(Tuple2<BinChargeKey, HashMap<String, IPolypeptide>> v) throws Exception {
-                List<Tuple2<BinChargeKey, IPolypeptide>> ret = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
-                HashMap<String, IPolypeptide> hm = v._2();
-                Collection<IPolypeptide> pps = hm.values();
-                for (IPolypeptide pp : pps) {
-                    ret.add(new Tuple2(v._1(), pp));
-                }
-                return ret;
-            }
-        });
+          JavaPairRDD<BinChargeKey, IPolypeptide> binnedPeptides = mappedByhash.flatMapToPair((PairFlatMapFunction<Tuple2<BinChargeKey, HashMap<String, IPolypeptide>>, BinChargeKey, IPolypeptide>) v -> {
+              List<Tuple2<BinChargeKey, IPolypeptide>> ret = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
+              HashMap<String, IPolypeptide> hm = v._2();
+              Collection<IPolypeptide> pps = hm.values();
+              for (IPolypeptide pp : pps) {
+                  ret.add(new Tuple2(v._1(), pp));
+              }
+              return ret;
+          });
         return binnedPeptides;
     }
     /**
@@ -361,17 +358,14 @@ public class SparkMapReduceScoringHandler implements Serializable {
      */
     public JavaPairRDD<BinChargeKey, IPolypeptide> mapFragmentsToBin(JavaRDD<IPolypeptide> inp,final Set<Integer> usedBins) {
         JavaPairRDD<BinChargeKey, HashMap<String, IPolypeptide>> mappedByhash = binMapper.mapFragmentsToBinHash(inp, usedBins, CometScoringAlgorithm.getMaximumPeptideListSize());
-        JavaPairRDD<BinChargeKey, IPolypeptide> binnedPeptides = mappedByhash.flatMapToPair(new PairFlatMapFunction<Tuple2<BinChargeKey, HashMap<String, IPolypeptide>>, BinChargeKey, IPolypeptide>() {
-            @Override
-            public Iterable<Tuple2<BinChargeKey, IPolypeptide>> call(Tuple2<BinChargeKey, HashMap<String, IPolypeptide>> v) throws Exception {
-                List<Tuple2<BinChargeKey, IPolypeptide>> ret = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
-                HashMap<String, IPolypeptide> hm = v._2();
-                Collection<IPolypeptide> pps = hm.values();
-                for (IPolypeptide pp : pps) {
-                    ret.add(new Tuple2(v._1(), pp));
-                }
-                 return ret;
+        JavaPairRDD<BinChargeKey, IPolypeptide> binnedPeptides = mappedByhash.flatMapToPair((PairFlatMapFunction<Tuple2<BinChargeKey, HashMap<String, IPolypeptide>>, BinChargeKey, IPolypeptide>) v -> {
+            List<Tuple2<BinChargeKey, IPolypeptide>> ret = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
+            HashMap<String, IPolypeptide> hm = v._2();
+            Collection<IPolypeptide> pps = hm.values();
+            for (IPolypeptide pp : pps) {
+                ret.add(new Tuple2(v._1(), pp));
             }
+             return ret;
         });
         return binnedPeptides;
     }
@@ -614,11 +608,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
 //    }
 
     private IScoredScan getMappedScore(IMeasuredSpectrum scan, final Map<String, IScoredScan> pScores) {
-        IScoredScan ret = pScores.get(scan.getId());
-        if (ret == null) {
-            ret = new ScoredScan(null);
-            pScores.put(scan.getId(), ret);
-        }
+        IScoredScan ret = pScores.computeIfAbsent(scan.getId(), k -> new ScoredScan(null));
         return ret;
     }
 

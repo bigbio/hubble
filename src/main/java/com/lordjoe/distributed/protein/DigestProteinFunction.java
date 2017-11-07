@@ -62,9 +62,7 @@ public class DigestProteinFunction extends AbstractLoggingFlatMapFunction<IProte
 
         boolean isDecoy = prot.isDecoy();
 
-        for (int i = 0; i < pps.length; i++) {
-            IPolypeptide pp = pps[i];
-
+        for (IPolypeptide pp : pps) {
             if (!pp.isValid())
                 continue;
 
@@ -78,11 +76,7 @@ public class DigestProteinFunction extends AbstractLoggingFlatMapFunction<IProte
             if (!isDecoy || generateModifiedDecoys) {
                 //  generate modified peptides and add to the output
                 IModifiedPeptide[] modifications = ModifiedPolypeptide.buildModifications(pp, peptideModifications);
-                for (int m = 0; m < modifications.length; m++) {
-                    IModifiedPeptide modification = modifications[m];
-                    holder.add(modification);
-
-                }
+                Collections.addAll(holder, modifications);
             }
 
         }

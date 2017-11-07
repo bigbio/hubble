@@ -637,8 +637,7 @@ public class DatasetCometScanScorer {
             }
             else {   // split the key
                 BinChargeKey[] keys = splitKey(key, binsize, maxSize);
-                for (int i = 0; i < keys.length; i++) {
-                    BinChargeKey binChargeKey = keys[i];
+                for (BinChargeKey binChargeKey : keys) {
                     ret.putItem(binChargeKey.getMzInt(), binChargeKey);
                 }
             }
@@ -871,22 +870,12 @@ public class DatasetCometScanScorer {
 
 
         JavaPairRDD<BinChargeKey, Tuple2<CometScoredScan, IPolypeptide>> join = keyedSpectra.join(keyedPeptides);
-        JavaPairRDD<IPolypeptide, CometScoredScan> toscore = join.values().mapToPair(new PairFunction<Tuple2<CometScoredScan, IPolypeptide>, IPolypeptide, CometScoredScan>() {
-            @Override
-            public Tuple2<IPolypeptide, CometScoredScan> call(Tuple2<CometScoredScan, IPolypeptide> v1) throws Exception {
-                return new Tuple2<IPolypeptide, CometScoredScan>(v1._2(), v1._1());
-            }
-        });
+        JavaPairRDD<IPolypeptide, CometScoredScan> toscore = join.values().mapToPair((PairFunction<Tuple2<CometScoredScan, IPolypeptide>, IPolypeptide, CometScoredScan>) v1 -> new Tuple2<IPolypeptide, CometScoredScan>(v1._2(), v1._1()));
         // throw new UnsupportedOperationException("Fix This"); // ToDo
         JavaRDD<IScoredScan> bestScores = null; // handler.scoreCometBinPairPolypeptide(toscore);
 
         // this just does a cast
-        JavaRDD<CometScoringResult> bestScoreResults = bestScores.map(new Function<IScoredScan, CometScoringResult>() {
-            @Override
-            public CometScoringResult call(IScoredScan o) throws Exception {
-                return (CometScoringResult)o;
-            }
-        });
+        JavaRDD<CometScoringResult> bestScoreResults = bestScores.map((Function<IScoredScan, CometScoringResult>) o -> (CometScoringResult)o);
         Encoder<CometScoringResult> evidence = Encoders.bean(CometScoringResult.class);
         Dataset<CometScoringResult> scoreSet  = sqlCtx.createDataset( bestScoreResults.rdd(), evidence);
 

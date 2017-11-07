@@ -51,12 +51,7 @@ public class SimpleLoadTest {
          JavaRDD<String> words = lines.flatMap(new WordsMapFunction());
 
 
-         JavaPairRDD<String, Integer> ones = words.mapToPair(new PairFunction<String, String, Integer>() {
-             @Override
-             public Tuple2<String, Integer> call(String s) {
-                 return new Tuple2<String, Integer>(s, 1);
-             }
-         });
+         JavaPairRDD<String, Integer> ones = words.mapToPair((PairFunction<String, String, Integer>) s -> new Tuple2<String, Integer>(s, 1));
 
           JavaPairRDD<String, Integer> sorted = ones.sortByKey();
          JavaRDD<WordNumber> answer = sorted.mapPartitions(new WordCountFlatMapFunction());

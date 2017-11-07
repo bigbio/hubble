@@ -86,9 +86,9 @@ public class SparkFileSaver {
             Arrays.sort(contents);
             if (header != null)
                 out.write(header.getBytes("UTF-8"));
-            for (int i = 0; i < contents.length; i++) {
-                if (contents[i].isFile()) {
-                    InputStream in = srcFS.open(contents[i].getPath());
+            for (FileStatus content : contents) {
+                if (content.isFile()) {
+                    InputStream in = srcFS.open(content.getPath());
                     try {
                         IOUtils.copyBytes(in, out, conf, false);
                     } finally {

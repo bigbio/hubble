@@ -31,12 +31,8 @@ public class PolypeptideCombiner {
         IProteinPosition[] pp1 = pV1.getProteinPositions();
         IProteinPosition[] pp2 = pV2.getProteinPositions();
         Set<IProteinPosition> holder = new HashSet<IProteinPosition>();
-        for (int i = 0; i < pp1.length; i++) {
-            holder.add(pp1[i]);
-           }
-        for (int i = 0; i < pp2.length; i++) {
-              holder.add(pp2[i]);
-             }
+        Collections.addAll(holder, pp1);
+        Collections.addAll(holder, pp2);
          IProteinPosition[] pps = new IProteinPosition[holder.size()];
         holder.toArray(pps);
         ((Polypeptide)pV1).setContainedInProteins(pps);

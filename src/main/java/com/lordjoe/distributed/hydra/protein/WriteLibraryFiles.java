@@ -15,24 +15,9 @@ public class WriteLibraryFiles {
     public static final int NUMBER_PARTITIONS = 500;
     public static JavaPairRDD<Integer,WriteLibraryFiles> asLibraryFiles(JavaPairRDD<Integer,IPolypeptide> byMZ)
     {
-         return byMZ.combineByKey(new Function<IPolypeptide, WriteLibraryFiles>() {
-             @Override
-             public WriteLibraryFiles call(final IPolypeptide v1) throws Exception {
-                 return null;
-             }
-         },
-                 new Function2<WriteLibraryFiles, IPolypeptide, WriteLibraryFiles>() {
-                     @Override
-                     public WriteLibraryFiles call(final WriteLibraryFiles v1, final IPolypeptide v2) throws Exception {
-                         return null;
-                     }
-                 }
-                 ,new Function2<WriteLibraryFiles, WriteLibraryFiles, WriteLibraryFiles>() {
-                     @Override
-                     public WriteLibraryFiles call(final WriteLibraryFiles v1, final WriteLibraryFiles v2) throws Exception {
-                         return null;
-                     }
-                 } ,
+         return byMZ.combineByKey((Function<IPolypeptide, WriteLibraryFiles>) v1 -> null,
+                 (Function2<WriteLibraryFiles, IPolypeptide, WriteLibraryFiles>) (v1, v2) -> null
+                 , (Function2<WriteLibraryFiles, WriteLibraryFiles, WriteLibraryFiles>) (v1, v2) -> null,
                  new Partitioner() {
                      @Override
                      public int numPartitions() {

@@ -34,12 +34,7 @@ public class RDDGenerator {
                 values[i] = 0;
             JavaRDD<Byte> itemList = sc.parallelize(Arrays.asList(values));
             itemList = itemList.coalesce(partitions, true);
-            return itemList.map(new Function<Byte, T>() {
-                @Override
-                public T call(final Byte v1) throws Exception {
-                    return generator.generateObject();
-                }
-            });
+            return itemList.map((Function<Byte, T>) v1 -> generator.generateObject());
         }
         else { // large case - sise is within 1000 and not over 2 trillion - use flatmap
             final int listSize = 1 + (int) (size / MAXIMUM_LIST_SIZE);
@@ -48,15 +43,12 @@ public class RDDGenerator {
                 values[i] = 0;
             JavaRDD<Byte> itemList = sc.parallelize(Arrays.asList(values));
             itemList = itemList.coalesce(partitions, true);
-            return itemList.flatMap(new FlatMapFunction<Byte, T>() {
-                @Override
-                public Iterable<T> call(final Byte t) throws Exception {
-                    List<T> holder = new ArrayList<T>();
-                    for (int i = 0; i < listSize; i++) {
-                        holder.add(generator.generateObject());
-                    }
-                    return holder;
+            return itemList.flatMap((FlatMapFunction<Byte, T>) t -> {
+                List<T> holder = new ArrayList<T>();
+                for (int i = 0; i < listSize; i++) {
+                    holder.add(generator.generateObject());
                 }
+                return holder;
             });
 
         }

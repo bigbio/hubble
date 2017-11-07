@@ -142,24 +142,24 @@ public class NotScoredBins implements IAccumulator<NotScoredBins> {
             for (NotScoredStatistics notScoredStatistics : usage) {
                 totalUnscored += notScoredStatistics.notScoredSpectra;
             }
-            out.append("Total Unscored = " + totalUnscored);
+            out.append("Total Unscored = ").append(String.valueOf(totalUnscored));
             out.append("\n");
             NotScoredStatistics memoryAndBinSize1 = usage.get(0);
-            out.append("max " + memoryAndBinSize1.toString());
+            out.append("max ").append(memoryAndBinSize1.toString());
             out.append("\n");
             NotScoredStatistics ns75 = usage.get(pct75);
             if (ns75 != memoryAndBinSize1) {
-                out.append("0.75 " + ns75.toString());
+                out.append("0.75 ").append(ns75.toString());
                 out.append("\n");
             }
             NotScoredStatistics ns50 = usage.get(pct50);
             if (ns50 != memoryAndBinSize1) {
-                out.append("0.50 " + ns75.toString());
+                out.append("0.50 ").append(ns75.toString());
                 out.append("\n");
             }
             NotScoredStatistics ns25 = usage.get(pct25);
             if (ns50 != memoryAndBinSize1) {
-                out.append("0.25 " + ns25.toString());
+                out.append("0.25 ").append(ns25.toString());
                 out.append("\n");
             }
 

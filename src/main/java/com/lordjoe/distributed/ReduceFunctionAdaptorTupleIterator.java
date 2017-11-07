@@ -60,16 +60,8 @@ public class ReduceFunctionAdaptorTupleIterator<K extends Serializable, V extend
             }
         };
 
-        final Iterable<V> vals = new Iterable<V>() {
-            @Override public Iterator<V> iterator() {
-                return itx;
-            }
-        };
-        final IKeyValueConsumer<KOUT, VOUT> consumer = new IKeyValueConsumer<KOUT, VOUT>() {
-            @Override public void consume(final KeyValueObject<KOUT, VOUT> kv) {
-                holder.add(kv);
-            }
-        };
+        final Iterable<V> vals = () -> itx;
+        final IKeyValueConsumer<KOUT, VOUT> consumer = kv -> holder.add(kv);
         K key = (K) first._1();
         reducer.handleValues(key, vals, consumer);
          return holder;

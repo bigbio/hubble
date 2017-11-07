@@ -165,20 +165,10 @@ public final class JavaBigDataWordCount {
             JavaRDD<String> variants = words.flatMap(new JavaBigDataWordCount.CaseVariationFunction());
 
             // same as Java word count - we actually expect all counts to be 1
-            JavaPairRDD<String, Integer> ones = variants.mapToPair(new PairFunction<String, String, Integer>() {
-                @Override
-                public Tuple2<String, Integer> call(String s) {
-                    return new Tuple2<String, Integer>(s, 1);
-                }
-            });
+            JavaPairRDD<String, Integer> ones = variants.mapToPair((PairFunction<String, String, Integer>) s -> new Tuple2<String, Integer>(s, 1));
 
             // same as Java word count - we actually expect all counts to be 1
-            JavaPairRDD<String, Integer> counts = ones.reduceByKey(new Function2<Integer, Integer, Integer>() {
-                @Override
-                public Integer call(Integer i1, Integer i2) {
-                    return i1 + i2;
-                }
-            });
+            JavaPairRDD<String, Integer> counts = ones.reduceByKey((Function2<Integer, Integer, Integer>) (i1, i2) -> i1 + i2);
             List<Tuple2<String, Integer>> output = counts.sortByKey().collect();
             long endMSec = System.currentTimeMillis();   // when did we finish
 
