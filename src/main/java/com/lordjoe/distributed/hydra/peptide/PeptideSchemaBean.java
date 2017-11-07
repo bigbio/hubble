@@ -52,8 +52,6 @@ public class PeptideSchemaBean implements IDatabaseBean {
      */
     public static final Function<PeptideSchemaBean, IPolypeptide> FROM_BEAN = (Function<PeptideSchemaBean, IPolypeptide>) bean -> bean.asPeptide();
 
-
-
     private String sequenceString;
     private double mass;
     private int massBin;
