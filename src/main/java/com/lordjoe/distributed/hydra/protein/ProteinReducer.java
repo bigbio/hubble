@@ -86,7 +86,7 @@ public class ProteinReducer extends AbstractTandemFunction implements IReducerFu
 
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < consumer.length; i++) {
-            consumer[i].consume(new KeyValueObject<String, String>(keytr, peptideString));
+            consumer[i].consume(new KeyValueObject<>(keytr, peptideString));
         }
 
 

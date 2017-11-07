@@ -16,17 +16,17 @@ public interface IStringSerializer<T> {
      * @param src source string
      * @return possibly null T
      */
-      public T fromString(@Nonnull String src);
+    T fromString(@Nonnull String src);
 
 
-      public String serialize(@Nonnull T src);
+      String serialize(@Nonnull T src);
 
     /**
      * if this was Java this would be a default out.append(serialize(src); out.append("\n");
      * @param src  source ouject
      * @param out  sink - all exceptions convert to runtimes
      */
-      public void append(@Nonnull T src,@Nonnull Appendable out);
+    void append(@Nonnull T src, @Nonnull Appendable out);
 
     /**
      *
@@ -34,5 +34,5 @@ public interface IStringSerializer<T> {
      * @param rdr reader
      * @return  possibly null T - also set the value of line to the current position
      */
-      public T fromReader(@Nonnull LineNumberReader rdr);
+    T fromReader(@Nonnull LineNumberReader rdr);
 }

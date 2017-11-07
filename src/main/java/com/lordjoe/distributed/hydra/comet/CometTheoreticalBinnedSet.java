@@ -33,7 +33,7 @@ public class CometTheoreticalBinnedSet extends TheoreticalSpectrumSet {
 
 
     private List<BinnedChargeIonIndex> buildBinnedList(CometScoringAlgorithm comet, int maxCharge, Scorer scorer) {
-        final List<BinnedChargeIonIndex> binnedChargeIonIndexes = new ArrayList<BinnedChargeIonIndex>();
+        final List<BinnedChargeIonIndex> binnedChargeIonIndexes = new ArrayList<>();
         int maxFragmentCharge = Math.min(maxCharge, comet.getMaxFragmentCharge());
 
         for (int charge = 1; charge <= maxFragmentCharge; charge++) {      // was < max charge

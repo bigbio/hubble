@@ -6,7 +6,6 @@ import com.lordjoe.distributed.hydra.test.*;
 import com.lordjoe.distributed.spark.JavaSparkListener;
 import com.lordjoe.distributed.spark.*;
 import com.lordjoe.distributed.spark.accumulators.*;
-import com.lordjoe.distributed.spark.accumulators.CountedItem;
 import com.lordjoe.distributed.test.*;
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.FileSystem;
@@ -149,7 +148,7 @@ public class SparkUtilities implements Serializable {
       * @return
      */
     public static <I, O> JavaRDD<O>  asConcreteRDD(JavaRDD<I> inp, Class<O> out) {
-        return inp.map(new CastFunction<I,O>(out)) ;
+        return inp.map(new CastFunction<>(out)) ;
     }
 
     /**
@@ -273,7 +272,7 @@ public class SparkUtilities implements Serializable {
     private static class Tuple2Tuple2PairFunction<K extends Serializable, V extends Serializable> extends AbstractLoggingPairFunction<Tuple2<K, V>, K, Tuple2<K, V>> {
         @Override
         public Tuple2<K, Tuple2<K, V>> doCall(final Tuple2<K, V> t) throws Exception {
-            return new Tuple2<K, Tuple2<K, V>>(t._1(), t);
+            return new Tuple2<>(t._1(), t);
         }
     }
 
@@ -298,7 +297,7 @@ public class SparkUtilities implements Serializable {
       */
      public static <K extends Serializable, V extends Serializable> JavaPairRDD<K, ArrayList<V>>   mapToKeyedList(JavaPairRDD<K, V> imp) {
          return imp.aggregateByKey(
-                 new ArrayList<V>(),
+                 new ArrayList<>(),
                  (Function2<ArrayList<V>, V, ArrayList<V>>) (vs, v) -> {
                      vs.add(v);
                      return vs;
@@ -328,14 +327,14 @@ public class SparkUtilities implements Serializable {
         * @return
         */
        public static <Q extends Serializable,V extends Serializable,K extends Serializable> JavaPairRDD<Q,K>   castRDD(JavaPairRDD<Q, V> imp,Class<? extends K> cls) {
-           return imp.mapToPair((PairFunction<Tuple2<Q, V>, Q, K>) qvTuple2 -> new Tuple2<Q, K>(qvTuple2._1(),(K)qvTuple2._2()));
+           return imp.mapToPair((PairFunction<Tuple2<Q, V>, Q, K>) qvTuple2 -> new Tuple2<>(qvTuple2._1(), (K) qvTuple2._2()));
        }
 
 
     private static class TupleToKeyPlusTuple<K extends Serializable, V extends Serializable> extends AbstractLoggingPairFunction<Tuple2<K, V>, K, Tuple2<K, V>> {
         @Override
         public Tuple2<K, Tuple2<K, V>> doCall(final Tuple2<K, V> t) throws Exception {
-            return new Tuple2<K, Tuple2<K, V>>(t._1(), t);
+            return new Tuple2<>(t._1(), t);
         }
     }
 
@@ -655,7 +654,7 @@ public class SparkUtilities implements Serializable {
     @SuppressWarnings("UnusedDeclaration")
     public static JavaRDD<String> fromInputStream(@Nonnull InputStream is, @Nonnull JavaSparkContext sc) {
         try {
-            List<String> lst = new ArrayList<String>();
+            List<String> lst = new ArrayList<>();
             BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
             String line = rdr.readLine();
             while (line != null) {
@@ -682,11 +681,11 @@ public class SparkUtilities implements Serializable {
      */
     public static JavaRDD<KeyValueObject<String, String>> keysFromInputStream(@Nonnull String key, @Nonnull InputStream is, @Nonnull JavaSparkContext sc) {
         try {
-            List<KeyValueObject<String, String>> lst = new ArrayList<KeyValueObject<String, String>>();
+            List<KeyValueObject<String, String>> lst = new ArrayList<>();
             BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
             String line = rdr.readLine();
             while (line != null) {
-                lst.add(new KeyValueObject<String, String>(key, line));
+                lst.add(new KeyValueObject<>(key, line));
                 line = rdr.readLine();
             }
             return sc.parallelize(lst);
@@ -768,7 +767,7 @@ public class SparkUtilities implements Serializable {
         PairFunction<KeyValueObject<K, V>, K, V> pf = new AbstractLoggingPairFunction<KeyValueObject<K, V>, K, V>() {
             @Override
             public Tuple2<K, V> doCall(KeyValueObject<K, V> kv) {
-                return new Tuple2<K, V>(kv.key, kv.value);
+                return new Tuple2<>(kv.key, kv.value);
             }
         };
         return inp.mapToPair(pf);
@@ -1113,7 +1112,7 @@ public class SparkUtilities implements Serializable {
 
 
     public static <K, V> Map<Integer, Long> getKeyHashes(JavaPairRDD<K, V> kvx) {
-        JavaRDD<Integer> hashes = kvx.keys().map(new KeyToHash<K>());
+        JavaRDD<Integer> hashes = kvx.keys().map(new KeyToHash<>());
 
         Map<Integer, Long> counts = hashes.countByValue();
         return counts;
@@ -1123,7 +1122,7 @@ public class SparkUtilities implements Serializable {
     public static <K, V> void showKeyHashes(JavaPairRDD<K, V> kvx, Appendable out) {
         try {
             Map<Integer, Long> hashes = getKeyHashes(kvx);
-            List<Integer> keys = new ArrayList<Integer>(hashes.keySet());
+            List<Integer> keys = new ArrayList<>(hashes.keySet());
             Collections.sort(keys);
             for (Integer key : keys) {
                 out.append(Integer.toString(key)).append("  =  ").append(String.valueOf(hashes.get(key))).append(String.valueOf('\n'));
@@ -1260,7 +1259,7 @@ public class SparkUtilities implements Serializable {
     <T> JavaRDD<T> fromIterable(@Nonnull final java.lang.Iterable<T> inp) {
         JavaSparkContext ctx = SparkUtilities.getCurrentContext();
 
-        List<T> holder = new ArrayList<T>();
+        List<T> holder = new ArrayList<>();
         for (T k : inp) {
             holder.add(k);
         }
@@ -1495,7 +1494,7 @@ public class SparkUtilities implements Serializable {
 
             @Override
             public Tuple2<Integer, K> call(final K t) throws Exception {
-                return new Tuple2<Integer, K>(index++, t);
+                return new Tuple2<>(index++, t);
             }
         });
     }
@@ -1641,7 +1640,7 @@ public class SparkUtilities implements Serializable {
 
     public static <K, V> void showCounts(JavaPairRDD<K, V> binPairs) {
         Map<K, Object> counts = binPairs.countByKey();
-        List<CountedItem> holder = new ArrayList<CountedItem>();
+        List<CountedItem> holder = new ArrayList<>();
         for (K key : counts.keySet()) {
             Object countObj = counts.get(key);
             String keyStr = key.toString();
@@ -1770,7 +1769,7 @@ public class SparkUtilities implements Serializable {
 
     public static <K,V> Map<K,V>  mapFromTupleList(List<Tuple2<K, V>> inp)
     {
-        HashMap<K,V> ret = new HashMap<K, V>() ;
+        HashMap<K,V> ret = new HashMap<>() ;
         for (Tuple2<K, V> kvTuple2 : inp) {
             ret.put(kvTuple2._1(),kvTuple2._2());
         }

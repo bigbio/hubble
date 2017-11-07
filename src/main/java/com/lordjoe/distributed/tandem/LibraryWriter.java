@@ -1,7 +1,6 @@
 package com.lordjoe.distributed.tandem;
 
 import com.lordjoe.distributed.output.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.*;
 import org.systemsbiology.hadoop.*;

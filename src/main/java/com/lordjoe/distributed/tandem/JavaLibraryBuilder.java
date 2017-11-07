@@ -23,14 +23,14 @@ public class JavaLibraryBuilder {
     public static List<KeyValueObject<String, String>> parseFastaFile(String fasta) {
         try {
             LineNumberReader rdr = new LineNumberReader(new FileReader(fasta));
-            List<KeyValueObject<String, String>> holder = new ArrayList<KeyValueObject<String, String>>();
+            List<KeyValueObject<String, String>> holder = new ArrayList<>();
             String key = null;
            String line = rdr.readLine();
             StringBuilder sb = new StringBuilder();
             while (line != null) {
                 if (line.startsWith(">")) {
                     if (key != null && sb.length() > 0) {
-                        holder.add(new KeyValueObject<String, String>(key, sb.toString()));
+                        holder.add(new KeyValueObject<>(key, sb.toString()));
                         key = null;
                     }
                     sb.setLength(0);
@@ -47,7 +47,7 @@ public class JavaLibraryBuilder {
             }
 
             if (key != null && key.length() > 0 && sb.length() > 0) {
-                holder.add(new KeyValueObject<String, String>(key, sb.toString()));
+                holder.add(new KeyValueObject<>(key, sb.toString()));
             }
 
             return holder;

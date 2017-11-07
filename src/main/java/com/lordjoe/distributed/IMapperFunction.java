@@ -14,7 +14,7 @@ public interface IMapperFunction<KEYIN extends Serializable,VALUEIN extends Seri
        * @param value  input value
        * @return iterator over mapped key values
        */
-      public @Nonnull Iterable<KeyValueObject<KOUT,VOUT>> mapValues(@Nonnull KEYIN keyin,@Nonnull VALUEIN valuein);
+      @Nonnull Iterable<KeyValueObject<KOUT,VOUT>> mapValues(@Nonnull KEYIN keyin, @Nonnull VALUEIN valuein);
 
 
 

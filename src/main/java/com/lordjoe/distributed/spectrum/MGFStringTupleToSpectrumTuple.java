@@ -1,6 +1,5 @@
 package com.lordjoe.distributed.spectrum;
 
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.systemsbiology.xtandem.*;
 import scala.*;
 
@@ -40,7 +39,7 @@ public class MGFStringTupleToSpectrumTuple extends AbstractLoggingPairFlatMapFun
      */
     @Override
     public Iterable<Tuple2<String, IMeasuredSpectrum>> doCall(final Tuple2<String, String> kv) throws Exception {
-        List<Tuple2<String, IMeasuredSpectrum>> ret = new ArrayList<Tuple2<String, IMeasuredSpectrum>>();
+        List<Tuple2<String, IMeasuredSpectrum>> ret = new ArrayList<>();
 
         String s = kv._2(); // .toString();   // _2 is really a StringBuffer
         LineNumberReader inp = new LineNumberReader(new StringReader(s));
@@ -64,10 +63,10 @@ public class MGFStringTupleToSpectrumTuple extends AbstractLoggingPairFlatMapFun
      //       IMeasuredSpectrum conditioned = scorer.conditionSpectrum(spec, raw);
      //       IMeasuredSpectrum normalized = spectrumParameters.normalizeSpectrum(conditioned, minMass);
 
-            ret.add(new Tuple2<String, IMeasuredSpectrum>(kv._1(), spec));
+            ret.add(new Tuple2<>(kv._1(), spec));
         }
         else {
-            ret.add(new Tuple2<String, IMeasuredSpectrum>(kv._1(), spectrum));
+            ret.add(new Tuple2<>(kv._1(), spectrum));
 
         }
         return ret;

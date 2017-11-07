@@ -21,7 +21,7 @@ public class DataSetUtilities {
      * @return
      */
     public static <K, T> Map<K, T> obtainMap(List<KeyValue<K, T>> values) {
-        Map<K, T> ret = new HashMap<K, T>();
+        Map<K, T> ret = new HashMap<>();
         for (KeyValue<K, T> value : values) {
             ret.put(value.getKey(), value.getValue());
         }
@@ -36,9 +36,9 @@ public class DataSetUtilities {
      * @return
      */
     public static <K, T> List<KeyValue<K, T>> obtainValues(Map<K, T> values) {
-        List<KeyValue<K, T>> ret = new ArrayList<KeyValue<K, T>>() ;
+        List<KeyValue<K, T>> ret = new ArrayList<>() ;
         for (K value : values.keySet()) {
-            ret.add(new KeyValue<K, T>(value,values.get(value)));
+            ret.add(new KeyValue<>(value, values.get(value)));
         }
         return ret;
     }

@@ -45,7 +45,7 @@ public class SparkConsolidator implements Serializable {
 
         scans = sortByIndex(scans);
 
-        List<String> header = new ArrayList<String>();
+        List<String> header = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         writer.appendHeader(sb, getApplication());
         header.add(sb.toString());
@@ -53,7 +53,7 @@ public class SparkConsolidator implements Serializable {
         //header.add(out.toString());
         //JavaRDD<String> headerRDD = SparkUtilities.getCurrentContext().parallelize(header);
 
-        List<String> footer = new ArrayList<String>();
+        List<String> footer = new ArrayList<>();
         writer.appendFooter(sb, getApplication());
         footer.add(sb.toString());
         sb.setLength(0);

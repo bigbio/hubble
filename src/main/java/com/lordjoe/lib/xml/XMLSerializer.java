@@ -78,8 +78,8 @@ public class XMLSerializer extends HandlerBase
 
     public XMLSerializer()
     {
-        m_EntityStack = new ArrayList<EntityItem>();
-        m_TagStack = new ArrayList<String>();
+        m_EntityStack = new ArrayList<>();
+        m_TagStack = new ArrayList<>();
       //  TransportMapping.initTables();
     }
 
@@ -189,11 +189,7 @@ public class XMLSerializer extends HandlerBase
             if (cause == null)
                 cause = ex;
             throw new XMLSerializerException(cause,theObj.m_TagStack,theObj.m_EntityStack);
-        }
-        catch(IOException ex) {
-            throw new XMLSerializerException(ex,theObj.m_TagStack,theObj.m_EntityStack);
-        }
-        catch(Exception ex) {
+        } catch(Exception ex) {
             throw new XMLSerializerException(ex,theObj.m_TagStack,theObj.m_EntityStack);
         }
     }
@@ -783,7 +779,7 @@ public class XMLSerializer extends HandlerBase
     protected Vector<Class> findMatchingInterfaces(Class objClass, String interfaceFilter) {
         // find the matching interfaces
         Class []allInterfaces = objClass.getInterfaces();
-        Vector<Class> interfaces = new Vector<Class>();
+        Vector<Class> interfaces = new Vector<>();
         //noinspection ForLoopReplaceableByForEach
         for(int i = 0; i < allInterfaces.length; ++i) {
             //DBG.msg(this, "Interface: " + allInterfaces[i].getUrl());

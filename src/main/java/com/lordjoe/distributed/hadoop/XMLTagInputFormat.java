@@ -115,7 +115,7 @@ public class XMLTagInputFormat extends FileInputFormat<String, String> {
      */
     protected List<FileStatus> listStatusx(JobContext job
     ) throws IOException {
-        List<FileStatus> result = new ArrayList<FileStatus>();
+        List<FileStatus> result = new ArrayList<>();
         Path[] xdirs = getInputPaths(job);
         Path[] dirs = new Path[xdirs.length];
         for (int i = 0; i < xdirs.length; i++) {
@@ -131,11 +131,11 @@ public class XMLTagInputFormat extends FileInputFormat<String, String> {
             throw new IOException("No input paths specified in job");
         }
 
-        List<IOException> errors = new ArrayList<IOException>();
+        List<IOException> errors = new ArrayList<>();
 
         // creates a MultiPathFilter with the hiddenFileFilter and the
         // user provided one (if any).
-        List<PathFilter> filters = new ArrayList<PathFilter>();
+        List<PathFilter> filters = new ArrayList<>();
         PathFilter jobFilter = getInputPathFilter(job);
         if (jobFilter != null) {
             filters.add(jobFilter);
@@ -202,7 +202,7 @@ public class XMLTagInputFormat extends FileInputFormat<String, String> {
         long desiredMappers = job.getConfiguration().getLong("org.systemsbiology.jxtandem.DesiredXMLInputMappers", 0);
 
         // generate splits
-        List<InputSplit> splits = new ArrayList<InputSplit>();
+        List<InputSplit> splits = new ArrayList<>();
         List<FileStatus> fileStatuses = listStatus(job);
         boolean forceNumberMappers = fileStatuses.size() == 1;
         for (FileStatus file : fileStatuses) {

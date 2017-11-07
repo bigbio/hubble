@@ -27,25 +27,18 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
-import org.apache.spark.api.java.function.ReduceFunction;
-import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.*;
 import org.systemsbiology.xtandem.IMeasuredSpectrum;
-import org.systemsbiology.xtandem.RawPeptideScan;
 import org.systemsbiology.xtandem.XTandemMain;
 import org.systemsbiology.xtandem.hadoop.XTandemHadoopUtilities;
 import org.systemsbiology.xtandem.ionization.ITheoreticalSpectrumSet;
 import org.systemsbiology.xtandem.peptide.IPolypeptide;
 import org.systemsbiology.xtandem.pepxml.PepXMLWriter;
 import org.systemsbiology.xtandem.scoring.IScoredScan;
-import scala.Function1;
 import scala.Tuple2;
-import scala.reflect.ClassTag;
-import scala.runtime.AbstractFunction1;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -232,7 +225,7 @@ public class DatasetCometScanScorer {
         Map<BinChargeKey, Object> spectraCountsMap = keyedSpectra.countByKey();
         Map<BinChargeKey, Object> peptideCounts = keyedPeptides.countByKey();
         List<BinChargeKey> keys = new ArrayList(peptideCounts.keySet());
-        List<PairCounter> pairs = new ArrayList<PairCounter>();
+        List<PairCounter> pairs = new ArrayList<>();
 
         long specCount = 0;
         long peptideCount = 0;
@@ -628,7 +621,7 @@ public class DatasetCometScanScorer {
     }
 
     protected static MapOfLists<Integer, BinChargeKey> computeBinSplit(Map<BinChargeKey, Long> usedBinsMap) {
-        MapOfLists<Integer, BinChargeKey> ret = new MapOfLists<Integer, BinChargeKey>();
+        MapOfLists<Integer, BinChargeKey> ret = new MapOfLists<>();
         int maxSize = getMaxBinSpectra();
         for (BinChargeKey key : usedBinsMap.keySet()) {
             long binsize = usedBinsMap.get(key);
@@ -870,7 +863,7 @@ public class DatasetCometScanScorer {
 
 
         JavaPairRDD<BinChargeKey, Tuple2<CometScoredScan, IPolypeptide>> join = keyedSpectra.join(keyedPeptides);
-        JavaPairRDD<IPolypeptide, CometScoredScan> toscore = join.values().mapToPair((PairFunction<Tuple2<CometScoredScan, IPolypeptide>, IPolypeptide, CometScoredScan>) v1 -> new Tuple2<IPolypeptide, CometScoredScan>(v1._2(), v1._1()));
+        JavaPairRDD<IPolypeptide, CometScoredScan> toscore = join.values().mapToPair((PairFunction<Tuple2<CometScoredScan, IPolypeptide>, IPolypeptide, CometScoredScan>) v1 -> new Tuple2<>(v1._2(), v1._1()));
         // throw new UnsupportedOperationException("Fix This"); // ToDo
         JavaRDD<IScoredScan> bestScores = null; // handler.scoreCometBinPairPolypeptide(toscore);
 
@@ -907,7 +900,7 @@ public class DatasetCometScanScorer {
         //      BiomlReporter writer = new BiomlReporter(application);
         //   SparkConsolidator consolidator = new SparkConsolidator(writer, application);
 
-        List<CometScoringResult>  bar = new ArrayList<CometScoringResult>() ;
+        List<CometScoringResult>  bar = new ArrayList<>() ;
         JavaRDD<CometScoringResult> fakeRDD = SparkUtilities.getCurrentContext().parallelize(bar);
 
 
@@ -939,7 +932,7 @@ public class DatasetCometScanScorer {
      public static void showBinningData(final long pTotalSpectra,MapOfLists<Integer, BinChargeKey> keys,Map<BinChargeKey, Long> usedBinsMap,int pMaxSpectraInBin,int pMaxKeysInBin ) {
           PrintWriter savedAccumulators = SparkUtilities.getHadoopPrintWriter("BinningData.txt");
           savedAccumulators.println("TotalSpectra " + Long_Formatter.format(pTotalSpectra) + "\tMaxSpectraInBin " + pMaxSpectraInBin + "\tMaxKeysInBin " + pMaxKeysInBin);
-         List<Integer>   keysSorted = new ArrayList<Integer>(keys.keySet());
+         List<Integer>   keysSorted = new ArrayList<>(keys.keySet());
          Collections.sort(keysSorted);
          for (Integer key : keysSorted) {
              savedAccumulators.print( key + "\t" );
@@ -949,7 +942,7 @@ public class DatasetCometScanScorer {
              savedAccumulators.println( );
          }
          savedAccumulators.println("=========================================");
-         List<BinChargeKey> bins =  new ArrayList<BinChargeKey>(usedBinsMap.keySet());
+         List<BinChargeKey> bins = new ArrayList<>(usedBinsMap.keySet());
          Collections.sort(bins);
          for (BinChargeKey key : bins) {
              String s = key + "\t" + usedBinsMap.get(key);
@@ -981,7 +974,7 @@ public class DatasetCometScanScorer {
                 List<BinChargeKey> binChargeKeys = splitKeys.get(mzI);
                 int keyIndex = Math.abs(index++) % binChargeKeys.size();
                 BinChargeKey newKey = binChargeKeys.get(keyIndex);
-                return new Tuple2<BinChargeKey, CometScoredScan>(newKey, spectrum);
+                return new Tuple2<>(newKey, spectrum);
             }
         });
     }
@@ -1012,7 +1005,7 @@ public class DatasetCometScanScorer {
      */
     private static Map<BinChargeKey, Long> getUsedBins(JavaPairRDD<BinChargeKey, CometScoredScan> keyedSpectra) {
         Map<BinChargeKey, Object> intermediate = keyedSpectra.countByKey();
-        Map<BinChargeKey, Long> ret = new HashMap<BinChargeKey, Long>();
+        Map<BinChargeKey, Long> ret = new HashMap<>();
         for (BinChargeKey key : intermediate.keySet()) {
             Long item = (Long) intermediate.get(key);
             ret.put(key, item);

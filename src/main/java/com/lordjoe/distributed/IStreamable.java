@@ -18,6 +18,6 @@ public interface IStreamable<T> {
       *
       * @return the element iterator for this stream
       */
-     public Iterator<T> iterator();
+    Iterator<T> iterator();
 
 }

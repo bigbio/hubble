@@ -23,8 +23,8 @@ public class NullStringMapper implements IMapperFunction<String,String, String, 
      * @return iterator over mapped key values
      */
     @Nonnull @Override public Iterable<KeyValueObject<String, String>> mapValues(@Nonnull final String key,@Nonnull final String line) {
-           List<KeyValueObject<String, String>> holder = new ArrayList<KeyValueObject<String, String>>();
-           holder.add(new KeyValueObject<String, String>(key,line));
+           List<KeyValueObject<String, String>> holder = new ArrayList<>();
+           holder.add(new KeyValueObject<>(key, line));
              return holder;
     }
 

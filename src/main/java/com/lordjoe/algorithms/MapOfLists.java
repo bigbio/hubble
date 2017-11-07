@@ -10,7 +10,7 @@ import java.util.*;
  * @param <V>  value type
  */
 public class MapOfLists<K,V> implements Serializable {
-    private Map<K, List<V>> items = new HashMap<K, List<V>>();
+    private Map<K, List<V>> items = new HashMap<>();
 
     public MapOfLists() {
     }
@@ -37,7 +37,7 @@ public class MapOfLists<K,V> implements Serializable {
             items.get(key).add(value);
         }
         else {
-            List<V>  added = new ArrayList<V>();
+            List<V>  added = new ArrayList<>();
             added.add(value);
             items.put(key,added);
         }
@@ -47,7 +47,7 @@ public class MapOfLists<K,V> implements Serializable {
              items.get(key).addAll(value);
          }
          else {
-             List<V>  added = new ArrayList<V>();
+             List<V>  added = new ArrayList<>();
              added.addAll(value);
              items.put(key,added);
          }

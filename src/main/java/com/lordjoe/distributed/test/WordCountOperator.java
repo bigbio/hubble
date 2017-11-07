@@ -2,7 +2,6 @@ package com.lordjoe.distributed.test;
 
 import com.lordjoe.distributed.*;
 import com.lordjoe.distributed.util.*;
-import com.lordjoe.distributed.wordcount.*;
 
 import java.io.*;
 import java.util.*;
@@ -25,10 +24,10 @@ public class WordCountOperator {
     public static List<KeyValueObject<String, Integer>> getRealCounts() {
         final InputStream is = WordCountOperator.class.getResourceAsStream(BOOK_COUNTS);
         String[] strings = JavaMapReduceUtilities.readStreamLines(is);
-        List<KeyValueObject<String, Integer>> holder = new ArrayList<KeyValueObject<String, Integer>>();
+        List<KeyValueObject<String, Integer>> holder = new ArrayList<>();
         for (String string : strings) {
             String[] items = string.split(":");
-            holder.add(new KeyValueObject<String, Integer>(items[0], Integer.parseInt(items[1])));
+            holder.add(new KeyValueObject<>(items[0], Integer.parseInt(items[1])));
         }
 
         return holder;
@@ -46,7 +45,7 @@ public class WordCountOperator {
         List<KeyValueObject<String, Integer>> real = getRealCounts();
         Collections.sort(real);
 
-        Map<String, Integer> countMap = new HashMap<String, Integer>();
+        Map<String, Integer> countMap = new HashMap<>();
         for (KeyValueObject s : real) {
             countMap.put((String) s.key, (Integer) s.value);
         }

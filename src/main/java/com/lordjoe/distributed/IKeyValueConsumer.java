@@ -9,6 +9,6 @@ import java.io.*;
  */
 public interface IKeyValueConsumer<K extends Serializable,V extends Serializable> {
 
-    public void consume(KeyValueObject<K,V> kv);
+    void consume(KeyValueObject<K, V> kv);
 
 }

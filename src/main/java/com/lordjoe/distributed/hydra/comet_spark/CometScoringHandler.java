@@ -5,7 +5,6 @@ import com.lordjoe.distributed.hydra.comet.*;
 import com.lordjoe.distributed.hydra.fragment.*;
 import com.lordjoe.distributed.hydra.scoring.*;
 import com.lordjoe.distributed.hydra.test.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import com.lordjoe.utilities.ElapsedTimer;
 import org.apache.spark.*;
 import org.apache.spark.api.java.*;
@@ -92,7 +91,7 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
 
         @Override
         public Iterable<IScoredScan> doCall(Tuple2<CometScoredScan, ArrayList<IPolypeptide>> inp) throws Exception {
-            List<IScoredScan> ret = new ArrayList<IScoredScan>();
+            List<IScoredScan> ret = new ArrayList<>();
             CometScoredScan scan = inp._1();
             ArrayList<IPolypeptide> peptides = inp._2();
 
@@ -103,7 +102,7 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
             // ===============================
 
 
-            List<CometTheoreticalBinnedSet> holder = new ArrayList<CometTheoreticalBinnedSet>();
+            List<CometTheoreticalBinnedSet> holder = new ArrayList<>();
             for (IPolypeptide peptide : peptides) {
                 CometTheoreticalBinnedSet ts = (CometTheoreticalBinnedSet) scorer.generateSpectrum(peptide);
                 if (scorer.isTheoreticalSpectrumScored(scan, ts)) {
@@ -170,13 +169,13 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
 
         @Override
         public Iterable<IScoredScan> doCall(Tuple2<BinChargeKey, Tuple2<Iterable<CometScoredScan>, Iterable<HashMap<String, IPolypeptide>>>> inp) throws Exception {
-            List<IScoredScan> ret = new ArrayList<IScoredScan>();
+            List<IScoredScan> ret = new ArrayList<>();
             Iterable<CometScoredScan> scans = inp._2()._1();
             Iterable<HashMap<String, IPolypeptide>> peptidesHashes = inp._2()._2();
 
-            List<CometTheoreticalBinnedSet> holder = new ArrayList<CometTheoreticalBinnedSet>();
+            List<CometTheoreticalBinnedSet> holder = new ArrayList<>();
             for (HashMap<String, IPolypeptide> peptideHash : peptidesHashes) {
-                ArrayList<IPolypeptide> peptides = new ArrayList<IPolypeptide>(peptideHash.values());
+                ArrayList<IPolypeptide> peptides = new ArrayList<>(peptideHash.values());
                 if (peptides.size() > 0) {
                     for (IPolypeptide peptide : peptides) {
                         CometTheoreticalBinnedSet ts = (CometTheoreticalBinnedSet) scorer.generateSpectrum(peptide);
@@ -261,7 +260,7 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
 
         @Override
         public Iterable<IScoredScan> doCall(Tuple2<BinChargeKey, Tuple2<Iterable<CometScoredScan>, Iterable<CometTheoreticalBinnedSet>>> inp) throws Exception {
-            List<IScoredScan> ret = new ArrayList<IScoredScan>();
+            List<IScoredScan> ret = new ArrayList<>();
             Iterable<CometScoredScan> scans = inp._2()._1();
             Iterable<CometTheoreticalBinnedSet> holder = inp._2()._2();
 
@@ -353,7 +352,7 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
 
         @Override
         public Iterable<IScoredScan> doCall(Tuple2<CometScoredScan, ArrayList<CometTheoreticalBinnedSet>> inp) throws Exception {
-            List<IScoredScan> ret = new ArrayList<IScoredScan>();
+            List<IScoredScan> ret = new ArrayList<>();
             CometScoredScan scan = inp._1();
             ArrayList<CometTheoreticalBinnedSet> holder = inp._2();
 
@@ -387,7 +386,7 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
         @Override
         public Tuple2<String, CometScoringResult> call(K o) throws Exception {
             CometScoringResult cs = (CometScoringResult) o;
-            return new Tuple2<String, CometScoringResult>(o.getId(), cs);
+            return new Tuple2<>(o.getId(), cs);
         }
     }
 
@@ -453,7 +452,7 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
             ScoreSpectrumAndPeptide extends AbstractLoggingFlatMapFunction<Tuple2<ITheoreticalSpectrumSet, CometScoredScan>, CometScoringResult> {
         @Override
         public Iterable<CometScoringResult> doCall(Tuple2<ITheoreticalSpectrumSet, CometScoredScan> toScore) throws Exception {
-            List<CometScoringResult> ret = new ArrayList<CometScoringResult>();
+            List<CometScoringResult> ret = new ArrayList<>();
             CometScoredScan scoring = toScore._2();
             ITheoreticalSpectrumSet ts = toScore._1();
 
@@ -569,12 +568,12 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
         //  map to a pair dropping bins
         // this is all we need to score
         JavaPairRDD<CometScoredScan, ArrayList<IPolypeptide>> values = binPairs.values().flatMapToPair((PairFlatMapFunction<Tuple2<CometScoredScan, HashMap<String, IPolypeptide>>, CometScoredScan, ArrayList<IPolypeptide>>) tp -> {
-            ArrayList<Tuple2<CometScoredScan, ArrayList<IPolypeptide>>> holder = new ArrayList<Tuple2<CometScoredScan, ArrayList<IPolypeptide>>>();
+            ArrayList<Tuple2<CometScoredScan, ArrayList<IPolypeptide>>> holder = new ArrayList<>();
             CometScoredScan spectrum = tp._1();
             HashMap<String, IPolypeptide> polypeptides = tp._2();
-            ArrayList<IPolypeptide> peptides = new ArrayList<IPolypeptide>(polypeptides.values());
+            ArrayList<IPolypeptide> peptides = new ArrayList<>(polypeptides.values());
             if (polypeptides.size() > 0)
-                holder.add(new Tuple2<CometScoredScan, ArrayList<IPolypeptide>>(spectrum, peptides));
+                holder.add(new Tuple2<>(spectrum, peptides));
 
             return holder;
         });
@@ -611,11 +610,11 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
         //  map to a pair dropping bins
         // this is all we need to score
         JavaPairRDD<CometScoredScan, ArrayList<IPolypeptide>> values = binPairs.values().flatMapToPair((PairFlatMapFunction<Tuple2<CometScoredScan, ArrayList<IPolypeptide>>, CometScoredScan, ArrayList<IPolypeptide>>) tp -> {
-            ArrayList<Tuple2<CometScoredScan, ArrayList<IPolypeptide>>> holder = new ArrayList<Tuple2<CometScoredScan, ArrayList<IPolypeptide>>>();
+            ArrayList<Tuple2<CometScoredScan, ArrayList<IPolypeptide>>> holder = new ArrayList<>();
             CometScoredScan spectrum = tp._1();
             ArrayList<IPolypeptide> polypeptides = tp._2();
             if (polypeptides.size() > 0)
-                holder.add(new Tuple2<CometScoredScan, ArrayList<IPolypeptide>>(spectrum, polypeptides));
+                holder.add(new Tuple2<>(spectrum, polypeptides));
 
             return holder;
         });
@@ -631,11 +630,11 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
         //  map to a pair dropping bins
         // this is all we need to score
         JavaPairRDD<CometScoredScan, ArrayList<CometTheoreticalBinnedSet>> values = binPairs.values().flatMapToPair((PairFlatMapFunction<Tuple2<CometScoredScan, ArrayList<CometTheoreticalBinnedSet>>, CometScoredScan, ArrayList<CometTheoreticalBinnedSet>>) tp -> {
-            ArrayList<Tuple2<CometScoredScan, ArrayList<CometTheoreticalBinnedSet>>> holder = new ArrayList<Tuple2<CometScoredScan, ArrayList<CometTheoreticalBinnedSet>>>();
+            ArrayList<Tuple2<CometScoredScan, ArrayList<CometTheoreticalBinnedSet>>> holder = new ArrayList<>();
             CometScoredScan spectrum = tp._1();
             ArrayList<CometTheoreticalBinnedSet> polypeptides = tp._2();
             if (polypeptides.size() > 0)
-                holder.add(new Tuple2<CometScoredScan, ArrayList<CometTheoreticalBinnedSet>>(spectrum, polypeptides));
+                holder.add(new Tuple2<>(spectrum, polypeptides));
 
             return holder;
         });
@@ -656,7 +655,7 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
 
         @Override
         public Iterable<Tuple2<String, Tuple2<ITheoreticalSpectrumSet, T>>> doCall(final Tuple2<BinChargeKey, Tuple2<ITheoreticalSpectrumSet, T>> t) throws Exception {
-            List<Tuple2<String, Tuple2<ITheoreticalSpectrumSet, T>>> holder = new ArrayList<Tuple2<String, Tuple2<ITheoreticalSpectrumSet, T>>>();
+            List<Tuple2<String, Tuple2<ITheoreticalSpectrumSet, T>>> holder = new ArrayList<>();
 
             Tuple2<ITheoreticalSpectrumSet, T> pair = t._2();
             IMeasuredSpectrum spec = pair._2();
@@ -678,7 +677,7 @@ public class CometScoringHandler extends SparkMapReduceScoringHandler {
             }
 
             String id = spec.getId();
-            holder.add(new Tuple2<String, Tuple2<ITheoreticalSpectrumSet, T>>(id, pair));
+            holder.add(new Tuple2<>(id, pair));
             return holder;
 
         }

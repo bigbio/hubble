@@ -35,8 +35,6 @@ public class StringCombiner {
         }
     }
 
-    ;
-
     public static final Function2<String, String, String> ENDER = (Function2<String, String, String>) (v1, v2) -> v1 + "," + v2;
 
 }

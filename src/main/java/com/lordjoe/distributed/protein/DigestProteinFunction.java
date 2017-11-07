@@ -1,7 +1,6 @@
 package com.lordjoe.distributed.protein;
 
 import com.lordjoe.distributed.hydra.test.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.systemsbiology.xtandem.*;
 import org.systemsbiology.xtandem.peptide.*;
 import org.systemsbiology.xtandem.scoring.*;
@@ -38,7 +37,7 @@ public class DigestProteinFunction extends AbstractLoggingFlatMapFunction<IProte
     }
 
     public List<IPolypeptide> digestWithModifications(List<IProtein> prots) {
-        List<IPolypeptide> holder = new ArrayList<IPolypeptide>();
+        List<IPolypeptide> holder = new ArrayList<>();
         for (IProtein prot : prots) {
             holder.addAll(digestWithModifications(prot, digester, peptideModifications, isGenerateDecoysForModifiedPeptides()));
           }

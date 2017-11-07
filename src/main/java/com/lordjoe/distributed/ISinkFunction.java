@@ -13,12 +13,12 @@ public interface ISinkFunction<K extends Serializable,V extends Serializable> {
     /**
      * null sink does nothing
      */
-    public static final ISinkFunction  NULL_FUNCTION = (p, vals) -> {
+    ISinkFunction  NULL_FUNCTION = (p, vals) -> {
       };
     /**
      * null sink does nothing
      */
-    public static final ISinkFunction  PRINT_FUNCTION = (p, vals) -> {
+    ISinkFunction  PRINT_FUNCTION = (p, vals) -> {
         for (Object val : vals) {
             KeyValueObject kv = (KeyValueObject)val;
             System.out.println(kv.key + ":" + kv.value);
@@ -29,5 +29,5 @@ public interface ISinkFunction<K extends Serializable,V extends Serializable> {
      * @param p
      * @return
      */
-    public void generateOutput(Path p,Iterable<KeyValueObject<K,V>> vals);
+    void generateOutput(Path p, Iterable<KeyValueObject<K, V>> vals);
 }

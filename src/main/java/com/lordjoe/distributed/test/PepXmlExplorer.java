@@ -59,8 +59,8 @@ public class PepXmlExplorer {
     public static void main(String[] args) throws Exception {
         File inp = new File(args[0]);
         LineNumberReader rdr = new LineNumberReader(new FileReader(inp));
-        List<String>   queries = new ArrayList<String>();
-        List<String>   goodqueries = new ArrayList<String>();
+        List<String>   queries = new ArrayList<>();
+        List<String>   goodqueries = new ArrayList<>();
         getSpectraQueries(  rdr, queries);
         for (String query : queries) {
             if(query.contains("E-005"))

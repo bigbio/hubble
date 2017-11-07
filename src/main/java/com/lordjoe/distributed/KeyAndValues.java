@@ -19,9 +19,9 @@ public class KeyAndValues<K extends Serializable, V extends Serializable > imple
 
     public static <K extends Serializable,V extends Serializable> JavaPairRDD<K,KeyAndValues<K,V>> combineByKey(JavaPairRDD<K, Tuple2<K, V>>  toCombine) {
         //noinspection UnnecessaryLocalVariable
-        JavaPairRDD<K, KeyAndValues<K, V>> reducedSets = toCombine.combineByKey(new CombineStartKeyAndValues<K, V>(),
-                 new CombineContinueKeyAndValues<K, V>(),
-                 new CombineMergeKeyAndValues<K, V>()
+        JavaPairRDD<K, KeyAndValues<K, V>> reducedSets = toCombine.combineByKey(new CombineStartKeyAndValues<>(),
+                new CombineContinueKeyAndValues<>(),
+                new CombineMergeKeyAndValues<>()
          );
 //
 //         JavaPairRDD<K, Iterable<V>> ret = reducedSets.mapToPair(new PairFunction<Tuple2<K, KeyAndValues<K, V>>, K, Iterable<V>>() {
@@ -33,7 +33,7 @@ public class KeyAndValues<K extends Serializable, V extends Serializable > imple
         return reducedSets;
     }
     public final K key;
-      private final List<V> values = new ArrayList<V>();
+      private final List<V> values = new ArrayList<>();
 
       public KeyAndValues(final K pKey, V... added) {
           key = pKey;

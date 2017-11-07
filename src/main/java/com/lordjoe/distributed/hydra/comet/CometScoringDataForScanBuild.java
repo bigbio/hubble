@@ -16,7 +16,7 @@ public class CometScoringDataForScanBuild {
 
     //  private static CometScoringDataForScanBuild preallocatedData = new CometScoringDataForScanBuild();
 
-    private static final /* transient */ Stack<CometScoringDataForScanBuild> pool = new Stack<CometScoringDataForScanBuild>();
+    private static final /* transient */ Stack<CometScoringDataForScanBuild> pool = new Stack<>();
 
 
     private static transient Integer allocationIdentifier;

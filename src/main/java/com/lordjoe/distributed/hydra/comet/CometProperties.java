@@ -30,7 +30,7 @@ public class CometProperties {
         public abstract void handleProperty(XTandemMain holder, String value);
     }
 
-    private static Map<String, PropertyHandler> gHandlers = new HashMap<String, PropertyHandler>();
+    private static Map<String, PropertyHandler> gHandlers = new HashMap<>();
 
     private static void putHandler(String id, PropertyHandler handler) {
         if (gHandlers.containsKey(id))

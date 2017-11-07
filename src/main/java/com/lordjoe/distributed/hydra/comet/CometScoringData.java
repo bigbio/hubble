@@ -65,14 +65,14 @@ public class CometScoringData {
 
         synchronized (CometScoringData.class) {
             if (gPreallocatedData == null) {
-                gPreallocatedData = new ThreadLocal<SoftReference<CometScoringData>>();
+                gPreallocatedData = new ThreadLocal<>();
             }
         }
         SoftReference<CometScoringData> cometScoringDataSoftReference = gPreallocatedData.get();
         if(cometScoringDataSoftReference == null || cometScoringDataSoftReference.get() == null)
         {
             CometScoringData value = new CometScoringData();
-            cometScoringDataSoftReference =  new SoftReference<CometScoringData>(value);
+            cometScoringDataSoftReference = new SoftReference<>(value);
             gPreallocatedData.set(cometScoringDataSoftReference);
         }
         CometScoringData ret =  cometScoringDataSoftReference.get();

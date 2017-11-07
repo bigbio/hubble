@@ -46,8 +46,8 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
     private String m_Version = CometScoringAlgorithm.DEFAULT_VERSION;
     private String m_Algorithm = DEFAULT_ALGORITHM;
     private boolean normalizationDone;
-    private Map<Integer, Double> fastScoringMap = new HashMap<Integer, Double>();     // not final for dataset - slewis
-    private Map<Integer, Double> fastScoringMapNL = new HashMap<Integer, Double>();    // not final for dataset - slewis
+    private Map<Integer, Double> fastScoringMap = new HashMap<>();     // not final for dataset - slewis
+    private Map<Integer, Double> fastScoringMapNL = new HashMap<>();    // not final for dataset - slewis
     private boolean initialized = false;
     private transient CometScoringDataForScanBuild tempData;
 
@@ -453,7 +453,7 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
     public List<SpectrumBinnedScore> getFastScoringData() {
 //        CometScoringDataForScanBuild scoringData = CometScoringDataForScanBuild.getScoringData();
 //        final Map<Integer, Float> fastScoringMap = this.fastScoringMap
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         for (Integer key : fastScoringMap.keySet()) {
             holder.add(new SpectrumBinnedScore(key, fastScoringMap.get(key)));
         }
@@ -462,7 +462,7 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
     }
 
     public List<SpectrumBinnedScore> getWeights() {
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         final CometScoringDataForScanBuild scoringData = tempData;
 
         float[] weights = scoringData.getWeights();
@@ -476,7 +476,7 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
     }
 
     public List<SpectrumBinnedScore> getTmpFastXcorrData() {
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         final CometScoringDataForScanBuild scoringData = tempData;
         float[] weights = scoringData.getTmpFastXcorrData();
         int length = weights.length;
@@ -489,7 +489,7 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
     }
 
     public List<SpectrumBinnedScore> getFastScoringDataArray() {
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         final CometScoringDataForScanBuild scoringData = tempData;
         float[] weights = scoringData.getScoringFastXcorrData();
         int length = weights.length;
@@ -502,7 +502,7 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
     }
 
     public List<SpectrumBinnedScore> getTmpFastXcorrData2() {
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         final CometScoringDataForScanBuild scoringData = tempData;
         float[] weights = scoringData.getTmpFastXcorrData2();
         int length = weights.length;
@@ -518,7 +518,7 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
     public List<SpectrumBinnedScore> getNLScoringData() {
 //        final CometScoringDataForScanBuild scoringData = CometScoringDataForScanBuild.getScoringData();
 //        final Map<Integer, Float> fastScoringMapNL = scoringData.getFastScoringMapNL();
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         for (Integer key : fastScoringMapNL.keySet()) {
             holder.add(new SpectrumBinnedScore(key, fastScoringMapNL.get(key)));
         }

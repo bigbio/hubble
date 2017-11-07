@@ -9,7 +9,6 @@ import com.lordjoe.distributed.hydra.protein.*;
 import com.lordjoe.distributed.hydra.scoring.*;
 import com.lordjoe.distributed.hydra.test.*;
 import com.lordjoe.distributed.protein.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import com.lordjoe.distributed.spectrum.*;
 import com.lordjoe.utilities.*;
 import org.apache.hadoop.conf.*;
@@ -270,7 +269,7 @@ public class LibraryBuilder implements Serializable {
 
     protected void saveDatabaseSizes(final String pDbName, final Map<Integer, Object> pDbSizes) {
 
-        Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> counts = new HashMap<>();
         for (Integer key : pDbSizes.keySet()) {
             String s = pDbSizes.get(key).toString();
             int count = Integer.parseInt(s);
@@ -359,12 +358,12 @@ public class LibraryBuilder implements Serializable {
             //Parquet files can also be registered as tables and then used in SQL statements.
             parquetFile.registerTempTable("peptides");
             DataFrame binCounts = sqlContext.sql("SELECT massBin,COUNT(massBin) FROM " + "peptides" + "  GROUP BY  massBin");
-            final Map<Integer, Integer> ret = new HashMap<Integer, Integer>();
+            final Map<Integer, Integer> ret = new HashMap<>();
             JavaRDD<Tuple2<Integer, Integer>> counts = binCounts.toJavaRDD().map((Function<Row, Tuple2<Integer, Integer>>) row -> {
                 int mass = row.getInt(0);
                 int count = (int) row.getLong(1);
                 ret.put(mass, count);
-                return new Tuple2<Integer, Integer>(mass, count);
+                return new Tuple2<>(mass, count);
             });
             for (Tuple2<Integer, Integer> countTuple : counts.collect()) {
                 ret.put(countTuple._1(), countTuple._2());
@@ -441,7 +440,7 @@ public class LibraryBuilder implements Serializable {
 
         @Override
         public Tuple2<String, IPolypeptide> doCall(final IPolypeptide t) throws Exception {
-            return new Tuple2<String, IPolypeptide>(t.toString(), t);
+            return new Tuple2<>(t.toString(), t);
         }
     }
 

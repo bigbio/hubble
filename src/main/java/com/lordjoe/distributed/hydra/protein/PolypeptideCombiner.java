@@ -2,7 +2,6 @@ package com.lordjoe.distributed.hydra.protein;
 
 import com.lordjoe.distributed.hydra.test.*;
 import com.lordjoe.distributed.spark.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.apache.spark.api.java.*;
 import org.systemsbiology.xtandem.peptide.*;
 
@@ -30,7 +29,7 @@ public class PolypeptideCombiner {
     public static IPolypeptide mergeProteins(final IPolypeptide pV1, final IPolypeptide pV2) {
         IProteinPosition[] pp1 = pV1.getProteinPositions();
         IProteinPosition[] pp2 = pV2.getProteinPositions();
-        Set<IProteinPosition> holder = new HashSet<IProteinPosition>();
+        Set<IProteinPosition> holder = new HashSet<>();
         Collections.addAll(holder, pp1);
         Collections.addAll(holder, pp2);
          IProteinPosition[] pps = new IProteinPosition[holder.size()];

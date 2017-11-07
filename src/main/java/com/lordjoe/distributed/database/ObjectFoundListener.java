@@ -17,6 +17,6 @@ public interface ObjectFoundListener<T> extends Serializable {
      * for debugging thiis may just find interesting cases
      * @param found
      */
-    public void onObjectFound(T found);
+    void onObjectFound(T found);
 
 }

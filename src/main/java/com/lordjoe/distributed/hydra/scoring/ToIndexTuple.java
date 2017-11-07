@@ -12,6 +12,6 @@ import scala.*;
 public class ToIndexTuple <T extends IScoredScan> implements PairFunction<T, String, T> {
     @Override
     public Tuple2<String, T> call(final T t) throws Exception {
-        return new Tuple2<String, T>(t.getId(), t);
+        return new Tuple2<>(t.getId(), t);
     }
 }

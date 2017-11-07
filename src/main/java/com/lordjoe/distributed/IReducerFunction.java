@@ -14,6 +14,6 @@ public interface IReducerFunction<K extends Serializable,V   extends Serializabl
       * @param value  input value
       * @return iterator over mapped key values
       */
-     public @Nonnull  void handleValues( @Nonnull K key,@Nonnull Iterable<V> values,IKeyValueConsumer<KOUT,VOUT>... consumer);
+     @Nonnull  void handleValues(@Nonnull K key, @Nonnull Iterable<V> values, IKeyValueConsumer<KOUT, VOUT>... consumer);
 
 }

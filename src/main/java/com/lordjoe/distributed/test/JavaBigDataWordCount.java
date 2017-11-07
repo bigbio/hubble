@@ -72,7 +72,7 @@ public final class JavaBigDataWordCount {
 
         public Iterable<String> call(String s) {
             s = regularizeString(s); // drop non-letters
-            List<String> holder = new ArrayList<String>();
+            List<String> holder = new ArrayList<>();
             for (int i = 0; i < s.length() - 2; i += maxLength) {
                 holder.add(s.substring(i, Math.min(s.length(), i + maxLength)));
             }
@@ -87,7 +87,7 @@ public final class JavaBigDataWordCount {
     public static class CaseVariationFunction implements FlatMapFunction<String, String> {
         public Iterable<String> call(String s) {
             // HELP - I dont think a List will work for long inputs given WHAT else can I use
-            List<String> holder = new ArrayList<String>();  // holds variants
+            List<String> holder = new ArrayList<>();  // holds variants
             holder.add(s);
             makeVariations(s.toCharArray(), holder, 0);  // do real work filling in holder
             return holder;
@@ -165,7 +165,7 @@ public final class JavaBigDataWordCount {
             JavaRDD<String> variants = words.flatMap(new JavaBigDataWordCount.CaseVariationFunction());
 
             // same as Java word count - we actually expect all counts to be 1
-            JavaPairRDD<String, Integer> ones = variants.mapToPair((PairFunction<String, String, Integer>) s -> new Tuple2<String, Integer>(s, 1));
+            JavaPairRDD<String, Integer> ones = variants.mapToPair((PairFunction<String, String, Integer>) s -> new Tuple2<>(s, 1));
 
             // same as Java word count - we actually expect all counts to be 1
             JavaPairRDD<String, Integer> counts = ones.reduceByKey((Function2<Integer, Integer, Integer>) (i1, i2) -> i1 + i2);

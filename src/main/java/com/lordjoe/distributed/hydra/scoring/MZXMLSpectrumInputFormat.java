@@ -140,7 +140,7 @@ public class MZXMLSpectrumInputFormat extends FileInputFormat<String, IMeasuredS
         desiredMappers = 0;
 
         // generate splits
-        List<InputSplit> splits = new ArrayList<InputSplit>();
+        List<InputSplit> splits = new ArrayList<>();
         List<FileStatus> fileStatuses = listStatus(job);
         boolean forceNumberMappers = fileStatuses.size() == 1;
         for (FileStatus file : fileStatuses) {
@@ -200,7 +200,7 @@ public class MZXMLSpectrumInputFormat extends FileInputFormat<String, IMeasuredS
     }
 
     private static long totalRecordsOverall;
-    private static Map<String,Long>  idToLocation = new HashMap<String, Long>();
+    private static Map<String,Long>  idToLocation = new HashMap<>();
 
     protected static void registerIdAndLocation(String id,long location) {
         if(!idToLocation.containsKey(id))    {
@@ -376,7 +376,7 @@ public class MZXMLSpectrumInputFormat extends FileInputFormat<String, IMeasuredS
             m_Sb.setLength(0);
             m_Sb.append(startText);
 
-            String s =  m_Sb.toString();;
+            String s =  m_Sb.toString();
             index = s.indexOf(endTag);
             if (index == -1)
                 return false; // need more read

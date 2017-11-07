@@ -15,7 +15,7 @@ public class IterableUtilities {
 
     public static <K> Iterable<K>  asIterable(K... inp)
     {
-        List<K> holder = new ArrayList<K>();
+        List<K> holder = new ArrayList<>();
         Collections.addAll(holder, inp);
 
         return holder;

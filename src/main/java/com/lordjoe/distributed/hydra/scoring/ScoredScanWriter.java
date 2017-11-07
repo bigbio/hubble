@@ -17,14 +17,14 @@ public interface ScoredScanWriter extends Serializable {
      * @param out where to append
      * @param app appliaction data
      */
-    public void appendHeader( Appendable out,XTandemMain app) ;
+    void appendHeader(Appendable out, XTandemMain app) ;
 
     /**
      * write the end of a file
      * @param out where to append
      * @param app appliaction data
      */
-    public void appendFooter( Appendable out,XTandemMain app) ;
+    void appendFooter(Appendable out, XTandemMain app) ;
 
 
     /**
@@ -33,6 +33,6 @@ public interface ScoredScanWriter extends Serializable {
      * @param app appliaction data
      * @param scan one scan
      */
-    public void appendScan( Appendable out,XTandemMain app,IScoredScan scan) ;
+    void appendScan(Appendable out, XTandemMain app, IScoredScan scan) ;
 
 }

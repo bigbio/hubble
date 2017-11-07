@@ -257,7 +257,7 @@ public class CometTestData {
 
     };
 
-    public static final Set<String> PARAM_KEY_SET = new HashSet<String>(Arrays.asList(TEST_PARAM_NAMES));
+    public static final Set<String> PARAM_KEY_SET = new HashSet<>(Arrays.asList(TEST_PARAM_NAMES));
 
     // These parameters have a value of 0
     public static final String[] ZERO_TEST_PARAM_NAMES = {
@@ -2171,7 +2171,7 @@ public class CometTestData {
 
 
     static List<SpectrumBinnedScore> buildCometBinnedScores() {
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         String[] lines = CORRELATION_DATA_FROM_COMET_EG0.trim().split("\n");
         for (String line : lines) {
             holder.add(new SpectrumBinnedScore(line));
@@ -2221,7 +2221,7 @@ public class CometTestData {
                     "2\tY\t41495\t26.8257";
 
     public static List<XCorrUsedData> buildXCorrUsedData() {
-        List<XCorrUsedData> holder = new ArrayList<XCorrUsedData>();
+        List<XCorrUsedData> holder = new ArrayList<>();
         String[] lines = USED_EG0_CROSSCORRELATION_DATA.trim().split("\n");
         for (String line : lines) {
             holder.add(new XCorrUsedData(line));

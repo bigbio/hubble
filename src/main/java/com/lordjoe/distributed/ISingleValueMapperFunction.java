@@ -15,7 +15,7 @@ public interface ISingleValueMapperFunction<KEYIN extends Serializable,VALUEIN e
        * @param value  input value
        * @return iterator over mapped key values
        */
-      public @Nonnull  KeyValueObject<KOUT,VOUT>  mapValues(@Nonnull KEYIN keyin, @Nonnull VALUEIN valuein);
+      @Nonnull  KeyValueObject<KOUT,VOUT>  mapValues(@Nonnull KEYIN keyin, @Nonnull VALUEIN valuein);
 
 
 

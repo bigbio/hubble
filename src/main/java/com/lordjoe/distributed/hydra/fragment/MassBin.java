@@ -61,7 +61,7 @@ public class MassBin implements Serializable, Comparable<MassBin> {
             BinSectionKey[] ret = {};
             return ret;
         }
-        List<BinSectionKey> holder = new ArrayList<BinSectionKey>();
+        List<BinSectionKey> holder = new ArrayList<>();
         for (int sectionStart = 0; sectionStart < count; sectionStart += MAX_SECTION_COUNTS) {
             BinSectionKey oneSection = new BinSectionKey(bin, baseMass, sectionStart, sectionStart + MAX_SECTION_COUNTS);
             holder.add(oneSection);

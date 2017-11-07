@@ -8,7 +8,6 @@ import com.lordjoe.distributed.hydra.comet.*;
 import com.lordjoe.distributed.hydra.fragment.*;
 import com.lordjoe.distributed.hydra.test.*;
 import com.lordjoe.distributed.spark.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import com.lordjoe.distributed.tandem.*;
 import com.lordjoe.utilities.*;
 import org.apache.hadoop.conf.*;
@@ -46,7 +45,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
     private transient ITandemScoringAlgorithm algorithm;
     private transient List<IPolypeptide> currentPeptides;
     private transient BinChargeKey currentKey;
-    private Map<IPolypeptide, ITheoreticalSpectrumSet> currentTheoreticalSpectra = new HashMap<IPolypeptide, ITheoreticalSpectrumSet>();
+    private Map<IPolypeptide, ITheoreticalSpectrumSet> currentTheoreticalSpectra = new HashMap<>();
     private PeptideDatabase peptideDatabase;
 
     /**
@@ -212,14 +211,14 @@ public class SparkMapReduceScoringHandler implements Serializable {
 
         @Override
         public Iterable<Tuple2<BinChargeKey, T>> doCall(final T spec) throws Exception {
-             List<Tuple2<BinChargeKey, T>> holder = new ArrayList<Tuple2<BinChargeKey, T>>();
+             List<Tuple2<BinChargeKey, T>> holder = new ArrayList<>();
 
             Set<BinChargeKey> keys = BinChargeMapper.keysFromSpectrum(spec);
 
             for (BinChargeKey key : keys) {
                 List<BinChargeKey> binChargeKeys = splitKeys.get(key.getMzInt());
                 for (BinChargeKey binChargeKey : binChargeKeys) {
-                    holder.add(new Tuple2<BinChargeKey, T>(binChargeKey, spec));
+                    holder.add(new Tuple2<>(binChargeKey, spec));
                }
             }
              return holder;
@@ -332,7 +331,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
     public JavaPairRDD<BinChargeKey, IPolypeptide > mapSplitFragmentsToBinHash(JavaRDD<IPolypeptide> inp,  final MapOfLists<Integer, BinChargeKey> splitKeys) {
         JavaPairRDD<BinChargeKey, HashMap<String, IPolypeptide>> mappedByhash = binMapper.mapSplitFragmentsToBinHash(inp, splitKeys);
           JavaPairRDD<BinChargeKey, IPolypeptide> binnedPeptides = mappedByhash.flatMapToPair((PairFlatMapFunction<Tuple2<BinChargeKey, HashMap<String, IPolypeptide>>, BinChargeKey, IPolypeptide>) v -> {
-              List<Tuple2<BinChargeKey, IPolypeptide>> ret = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
+              List<Tuple2<BinChargeKey, IPolypeptide>> ret = new ArrayList<>();
               HashMap<String, IPolypeptide> hm = v._2();
               Collection<IPolypeptide> pps = hm.values();
               for (IPolypeptide pp : pps) {
@@ -359,7 +358,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
     public JavaPairRDD<BinChargeKey, IPolypeptide> mapFragmentsToBin(JavaRDD<IPolypeptide> inp,final Set<Integer> usedBins) {
         JavaPairRDD<BinChargeKey, HashMap<String, IPolypeptide>> mappedByhash = binMapper.mapFragmentsToBinHash(inp, usedBins, CometScoringAlgorithm.getMaximumPeptideListSize());
         JavaPairRDD<BinChargeKey, IPolypeptide> binnedPeptides = mappedByhash.flatMapToPair((PairFlatMapFunction<Tuple2<BinChargeKey, HashMap<String, IPolypeptide>>, BinChargeKey, IPolypeptide>) v -> {
-            List<Tuple2<BinChargeKey, IPolypeptide>> ret = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
+            List<Tuple2<BinChargeKey, IPolypeptide>> ret = new ArrayList<>();
             HashMap<String, IPolypeptide> hm = v._2();
             Collection<IPolypeptide> pps = hm.values();
             for (IPolypeptide pp : pps) {
@@ -378,7 +377,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
     private static class MapToSpectrumIDKey extends AbstractLoggingPairFunction<Tuple2<IMeasuredSpectrum, IPolypeptide>, String, Tuple2<IMeasuredSpectrum, IPolypeptide>> {
         @Override
         public Tuple2<String, Tuple2<org.systemsbiology.xtandem.IMeasuredSpectrum, IPolypeptide>> doCall(final Tuple2<org.systemsbiology.xtandem.IMeasuredSpectrum, org.systemsbiology.xtandem.peptide.IPolypeptide> t) throws Exception {
-            return new Tuple2<String, Tuple2<IMeasuredSpectrum, IPolypeptide>>(t._1().getId(), t);
+            return new Tuple2<>(t._1().getId(), t);
         }
     }
 
@@ -590,7 +589,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
     }
 
     protected List<IPolypeptide> buildPeptides(final BinChargeKey pCurrentKey) {
-        List<IPolypeptide> ret = new ArrayList<IPolypeptide>();
+        List<IPolypeptide> ret = new ArrayList<>();
         currentTheoreticalSpectra.clear();
         return peptideDatabase.getPeptidesWithKey(pCurrentKey);
     }
@@ -764,7 +763,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
 
             }
 
-            return new Tuple2<String, IScoredScan>(id, t);
+            return new Tuple2<>(id, t);
         }
     }
 
@@ -846,9 +845,9 @@ public class SparkMapReduceScoringHandler implements Serializable {
     public static class ScoredScansToIds extends AbstractLoggingPairFlatMapFunction<Map<String, IScoredScan>, String, IScoredScan> {
         @Override
         public Iterable<Tuple2<String, IScoredScan>> doCall(final Map<String, IScoredScan> t) throws Exception {
-            List<Tuple2<String, IScoredScan>> ret = new ArrayList<Tuple2<String, IScoredScan>>();
+            List<Tuple2<String, IScoredScan>> ret = new ArrayList<>();
             for (String s : t.keySet()) {
-                ret.add(new Tuple2<String, IScoredScan>(s, t.get(s)));
+                ret.add(new Tuple2<>(s, t.get(s)));
             }
             return ret;
         }
@@ -872,7 +871,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
          */
         @Override
         public Iterable<IScoredScan> doCall(final Tuple2<IPolypeptide, IMeasuredSpectrum> t) throws Exception {
-            List<IScoredScan> holder = new ArrayList<IScoredScan>();
+            List<IScoredScan> holder = new ArrayList<>();
 
 
             IMeasuredSpectrum spec = t._2();
@@ -909,7 +908,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
 
         @Override
         public Iterable<IScoredScan> doCall(final Iterator<Tuple2<BinChargeKey, Tuple2<IMeasuredSpectrum, IPolypeptide>>> t) throws Exception {
-            List<IScoredScan> holder = new ArrayList<IScoredScan>();
+            List<IScoredScan> holder = new ArrayList<>();
 
             while (t.hasNext()) {
                 Tuple2<BinChargeKey, Tuple2<IMeasuredSpectrum, IPolypeptide>> vx = t.next();
@@ -943,14 +942,14 @@ public class SparkMapReduceScoringHandler implements Serializable {
     public static class MapBinChargeTupleToSpectrumIDTuple<T extends IMeasuredSpectrum> extends AbstractLoggingPairFlatMapFunction<Tuple2<BinChargeKey, Tuple2<IPolypeptide, T>>, String, Tuple2<IPolypeptide, T>> {
         @Override
         public Iterable<Tuple2<String, Tuple2<IPolypeptide, T>>> doCall(final Tuple2<BinChargeKey, Tuple2<IPolypeptide, T>> t) throws Exception {
-            List<Tuple2<String, Tuple2<IPolypeptide, T>>> holder = new ArrayList<Tuple2<String, Tuple2<IPolypeptide, T>>>();
+            List<Tuple2<String, Tuple2<IPolypeptide, T>>> holder = new ArrayList<>();
 
             Tuple2<IPolypeptide, T> pair = t._2();
             IMeasuredSpectrum spec = pair._2();
             IPolypeptide pp = pair._1();
 
             String id = spec.getId();
-            holder.add(new Tuple2<String, Tuple2<IPolypeptide, T>>(id, pair));
+            holder.add(new Tuple2<>(id, pair));
             return holder;
 
         }
@@ -960,7 +959,7 @@ public class SparkMapReduceScoringHandler implements Serializable {
         @Override
         public Iterable<IScoredScan> doCall(final Iterator<Tuple2<String, Tuple2<IPolypeptide, IMeasuredSpectrum>>> t) throws Exception {
             IScoredScan cummulativeScore = null;
-            List<IScoredScan> holder = new ArrayList<IScoredScan>();
+            List<IScoredScan> holder = new ArrayList<>();
             String cummunativeId;
             while (t.hasNext()) {
                 Tuple2<IPolypeptide, IMeasuredSpectrum> toScore = t.next()._2();

@@ -231,15 +231,10 @@ public abstract class FileUtilities {
 
             return thedigest;
         }
-        catch (NoSuchAlgorithmException e) {
+        catch (NoSuchAlgorithmException | IOException e) {
             throw new RuntimeException(e);
 
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-
-        }
-        finally {
+        } finally {
             guaranteeClosed(in);
         }
     }
@@ -945,7 +940,7 @@ public abstract class FileUtilities {
     public static String[] readNLines(InputStream f, int maxLines) {
         try {
             LineNumberReader rdr = new LineNumberReader(new InputStreamReader(f));
-            List<String> holder = new ArrayList<String>();
+            List<String> holder = new ArrayList<>();
             String line = rdr.readLine();
             int nLines = 0;
             while (line != null) {
@@ -1238,7 +1233,7 @@ public abstract class FileUtilities {
         String[] BuildClasses = FileUtilities.getAllFilesWithExtension(BuildBase, "class");
         java.util.List holder = new ArrayList();
         for (String BuildClass : BuildClasses) {
-            if (BuildClass.indexOf("$") == -1)
+            if (!BuildClass.contains("$"))
                 holder.add(BuildClass.substring(BuildLength).replace('/', '.'));
         }
         String[] ret = Util.collectionToStringArray(holder);
@@ -1618,7 +1613,7 @@ public abstract class FileUtilities {
         Files = pTestFile.list();
         if (Files == null)
             return null;
-        List<File> holder = new ArrayList<File>();
+        List<File> holder = new ArrayList<>();
         for (String file : Files) {
             File testDir = new File(pTestFile, file);
             if (!testDir.isDirectory())
@@ -1652,7 +1647,7 @@ public abstract class FileUtilities {
              pTestFile, String
              name) {
         File[] thislevel = {pTestFile};
-        List<File> nextLevel = new ArrayList<File>();
+        List<File> nextLevel = new ArrayList<>();
         File ret = findSubDirectoryBreadthFirst(thislevel, nextLevel, name);
         if (ret != null)
             return ret;
@@ -2217,11 +2212,7 @@ public abstract class FileUtilities {
             Image TheActualImage = Toolkit.getDefaultToolkit().createImage(baos.toByteArray());
             Icon TheImage = new ImageIcon(TheActualImage);
             return (TheImage);
-        }
-        catch (IOException e) {
-            return (null);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             //  return(SecurityUtilities.secureGetResourceIcon(target,name) );
             return (null);
         }
@@ -2493,10 +2484,7 @@ public abstract class FileUtilities {
             file = new FileOutputStream(name);
             return new PrintWriter(new BufferedOutputStream(file));
         }
-        catch (SecurityException ee) {
-            return (null);
-        }
-        catch (IOException ee) {
+        catch (SecurityException | IOException ee) {
             return (null);
         }
     }
@@ -2518,10 +2506,7 @@ public abstract class FileUtilities {
             file = new FileOutputStream(name);
             return new PrintWriter(new BufferedOutputStream(file));
         }
-        catch (SecurityException ee) {
-            return (null);
-        }
-        catch (IOException ee) {
+        catch (SecurityException | IOException ee) {
             return (null);
         }
     }
@@ -2541,10 +2526,7 @@ public abstract class FileUtilities {
             file = new FileOutputStream(name, true);
             return new PrintWriter(new BufferedOutputStream(file));
         }
-        catch (SecurityException ee) {
-            return (null);
-        }
-        catch (IOException ee) {
+        catch (SecurityException | IOException ee) {
             return (null);
         }
     }
@@ -3626,10 +3608,7 @@ public abstract class FileUtilities {
             in.close();
             return (ret);
         }
-        catch (ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
-        }
-        catch (IOException ex) {
+        catch (ClassNotFoundException | IOException ex) {
             throw new RuntimeException(ex);
         }
 
@@ -3673,10 +3652,7 @@ public abstract class FileUtilities {
             in.close();
             return (ret);
         }
-        catch (ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
-        }
-        catch (IOException ex) {
+        catch (ClassNotFoundException | IOException ex) {
             throw new RuntimeException(ex);
         }
 
@@ -4018,7 +3994,7 @@ public abstract class FileUtilities {
     public static void flattenDirectory(File theDir, boolean rename) {
         File[] allFiles = getAllFiles(theDir);
         boolean nameIsUnigue = false;
-        Set<String> nameSeen = new HashSet<String>();
+        Set<String> nameSeen = new HashSet<>();
         for (File allFile : allFiles) {
             String name = allFile.getName();
             if (nameSeen.contains(name))

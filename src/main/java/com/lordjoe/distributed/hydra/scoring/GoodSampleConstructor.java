@@ -99,7 +99,7 @@ public class GoodSampleConstructor {
 
         @Override
         public void handleProtein(final String annotation, final String sequence,String url) {
-            Set<String> removed = new HashSet<String>();
+            Set<String> removed = new HashSet<>();
             for (String peptide : m_peptides) {
                 if (sequence.contains(peptide)) {
                     Protein protein = Protein.getProtein(annotation, annotation, sequence, url);
@@ -150,10 +150,10 @@ public class GoodSampleConstructor {
 
         showBestHits(sortedHits, keepBest);
 
-        Set<String> peptides = new HashSet<String>();
-        Set<String> spectralIds = new HashSet<String>();
-        Set<IProtein> proteins = new HashSet<IProtein>();
-        Map<String, IMeasuredSpectrum> spectra = new HashMap<String, IMeasuredSpectrum>();
+        Set<String> peptides = new HashSet<>();
+        Set<String> spectralIds = new HashSet<>();
+        Set<IProtein> proteins = new HashSet<>();
+        Map<String, IMeasuredSpectrum> spectra = new HashMap<>();
 
         for (ProteinPepxmlParser.SpectrumHit sortedHit : sortedHits) {
             spectralIds.add(sortedHit.id);
@@ -189,10 +189,10 @@ public class GoodSampleConstructor {
 
         showBestScans(scans, keepBest);
 
-        Set<String> peptides = new HashSet<String>();
-        Set<String> spectralIds = new HashSet<String>();
-        Set<IProtein> proteins = new HashSet<IProtein>();
-        Map<String, IMeasuredSpectrum> spectra = new HashMap<String, IMeasuredSpectrum>();
+        Set<String> peptides = new HashSet<>();
+        Set<String> spectralIds = new HashSet<>();
+        Set<IProtein> proteins = new HashSet<>();
+        Map<String, IMeasuredSpectrum> spectra = new HashMap<>();
 
         for (ScoredScan sortedHit : scans) {
             ISpectralMatch bestMatch = sortedHit.getBestMatch();
@@ -254,7 +254,7 @@ public class GoodSampleConstructor {
 
     public static List<String>   readPeptidesFromPepXML(String file)
     {
-        List<String> holder = new ArrayList<String>();
+        List<String> holder = new ArrayList<>();
 
          try {
             LineNumberReader rdr = new LineNumberReader(new FileReader(file)) ;
@@ -282,8 +282,8 @@ public class GoodSampleConstructor {
             String fastaFileName = args[index++];
             String outProteinName = args[index++];
 
-            Set<IProtein> proteins = new HashSet<IProtein>();
-            Set<String> peptides = new HashSet<String>();
+            Set<IProtein> proteins = new HashSet<>();
+            Set<String> peptides = new HashSet<>();
 
 
             for (; index < args.length; index++) {

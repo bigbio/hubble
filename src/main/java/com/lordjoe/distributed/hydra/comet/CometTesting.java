@@ -45,9 +45,9 @@ public class CometTesting {
         int index = Integer.parseInt(id);
         List<UsedSpectrum> allSpectra = cometScoredSpectra.get(index);
         // make a copy so we can remove the good spectra and leave the bad
-        List<UsedSpectrum> notMatching = new ArrayList<UsedSpectrum>(allSpectra);
+        List<UsedSpectrum> notMatching = new ArrayList<>(allSpectra);
         // both algorithms scored these
-        List<UsedSpectrum> matching = new ArrayList<UsedSpectrum>();
+        List<UsedSpectrum> matching = new ArrayList<>();
 
         // for each peptide
         for (IPolypeptide pp : scoredPeptides) {
@@ -314,7 +314,7 @@ public class CometTesting {
      * @param resourceToCompare
      */
     public static void validateArray(float[] testData, String resourceToCompare) {
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         for (int i = 0; i < testData.length; i++) {
             float v = testData[i];
             if (Math.abs(v) > 0.001)
@@ -342,7 +342,7 @@ public class CometTesting {
      * @param cometPeaks
      */
     public static Map<Integer, SpectrumBinnedScore> asMap(List<SpectrumBinnedScore> cometPeaks) {
-        Map<Integer, SpectrumBinnedScore> ret = new HashMap<Integer, SpectrumBinnedScore>();
+        Map<Integer, SpectrumBinnedScore> ret = new HashMap<>();
         for (SpectrumBinnedScore cometPeak : cometPeaks) {
             ret.put(cometPeak.bin, cometPeak);
         }
@@ -361,7 +361,7 @@ public class CometTesting {
         Properties sparkProperties = SparkUtilities.getSparkProperties();
         JavaPairRDD<BinChargeKey, HashMap<String, IPolypeptide>> keyedPeptides = SparkCometScanScorer.getBinChargePeptideHash(sparkProperties, usedBins, handler);
 
-        List<IPolypeptide> holder = new ArrayList<IPolypeptide>();
+        List<IPolypeptide> holder = new ArrayList<>();
 
         keyedPeptides = SparkUtilities.persist(keyedPeptides);
         Map<BinChargeKey, HashMap<String, IPolypeptide>> binChargeKeyHashMapMap = keyedPeptides.collectAsMap();
@@ -461,7 +461,7 @@ public class CometTesting {
 
     private static  List<Integer> buildList()
     {
-        List<Integer> holder = new ArrayList<Integer>();
+        List<Integer> holder = new ArrayList<>();
         String[] split = INTERESTING_PRPTIDE_BINS.split("\n");
         for (String s : split) {
             String[] split1 = s.split("\t");
@@ -486,8 +486,8 @@ public class CometTesting {
         return;
         if(binnedIndex.size() != INTERESTING_INDICES.size())
             throw new IllegalStateException("problem"); // todo fix
-        List<Integer>  myIndices = new ArrayList<Integer>();
-        List<Integer>  theirIndices = new ArrayList<Integer>();
+        List<Integer>  myIndices = new ArrayList<>();
+        List<Integer>  theirIndices = new ArrayList<>();
         for (BinnedChargeIonIndex bc : binnedIndex) {
             myIndices.add( bc.index);
              if(!INTERESTING_INDICES.contains(bc.index))

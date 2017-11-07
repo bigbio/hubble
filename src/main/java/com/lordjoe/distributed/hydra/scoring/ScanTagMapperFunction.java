@@ -43,7 +43,7 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
     }
 
     //  private final Map<Integer, List<Path>> m_DatabaseFiles = new HashMap<Integer, List<Path>>();
-    private Map<Integer, Integer> m_DatabaseSizes = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> m_DatabaseSizes = new HashMap<>();
     private int m_MaxScoredPeptides;
     private SpectrumCondition m_Condition;
     private int m_TotalScansProcessed;
@@ -139,7 +139,7 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
     @Nonnull
     @Override
     public Iterable<KeyValueObject<String, IMeasuredSpectrum>> mapValues(@Nonnull final String fileName, @Nonnull IMeasuredSpectrum ascan) {
-        List<KeyValueObject<String, IMeasuredSpectrum>> ret = new ArrayList<KeyValueObject<String, IMeasuredSpectrum>>();
+        List<KeyValueObject<String, IMeasuredSpectrum>> ret = new ArrayList<>();
         long startTime = System.currentTimeMillis();
         // ignore level 1 scans
         // if (textv.get("msLevel=\"1\""))
@@ -294,7 +294,7 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
         if (numberSeparateReducers == 1) {
 
             //   System.err.println("Sending mass " + mass + " for id " + id );
-            holder.add(new KeyValueObject<String, IMeasuredSpectrum>(keyStr, value));
+            holder.add(new KeyValueObject<>(keyStr, value));
             m_KeyWriteCount++;
         }
         else {
@@ -307,7 +307,7 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
             String key = keyStr + ":" + start + ":" + end;
             start += maxScored;
             numberEntries -= maxScored;
-            holder.add(new KeyValueObject<String, IMeasuredSpectrum>(keyStr, value));
+            holder.add(new KeyValueObject<>(keyStr, value));
             m_KeyWriteCount++;
             //  }
         }
@@ -357,7 +357,7 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
         if (numberEntries < maxScored) {    // few entries score in one task
 
             //   System.err.println("Sending mass " + mass + " for id " + id );
-            holder.add(new KeyValueObject<String, IMeasuredSpectrum>(keyStr, value));
+            holder.add(new KeyValueObject<>(keyStr, value));
             m_KeyWriteCount++;
         }
         else {
@@ -367,7 +367,7 @@ public class ScanTagMapperFunction extends AbstractTandemFunction implements IMa
                 String key = keyStr + ":" + start + ":" + (start + maxScored);
                 start += maxScored;
                 numberEntries -= maxScored;
-                holder.add(new KeyValueObject<String, IMeasuredSpectrum>(key, value));
+                holder.add(new KeyValueObject<>(key, value));
                 m_KeyWriteCount++;
             }
         }

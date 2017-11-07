@@ -15,7 +15,7 @@ public interface IBinner {
      * @return either a valid bin number or -1 if  isOverflowBinned() is false and the
      *     data is outside the range handled
      */
-    public int asBin(double value);
+    int asBin(double value);
 
     /**
      * Describe the assigned bin
@@ -23,7 +23,7 @@ public interface IBinner {
      * @return either a valid bin number or  null if  isOverflowBinned() is false and the
      *     data is outside the range handled
      */
-    public String asBinString(double value);
+    String asBinString(double value);
 
     /**
      *
@@ -31,7 +31,7 @@ public interface IBinner {
      * @return a number which when sent to asBin will return bin
      * @throws IllegalArgumentException if no such bin is possible
      */
-    public double fromBin(int bin) throws IllegalArgumentException;
+    double fromBin(int bin) throws IllegalArgumentException;
 
 
     /**
@@ -39,34 +39,34 @@ public interface IBinner {
      * getMinBin() depending in isOverflowBinned()
      * @return  as above
      */
-    public double getMinValue();
+    double getMinValue();
 
     /**
      * maximim value handed - values below this may be binned as -1 or
      * getMaxBin() depending in isOverflowBinned()
      * @return  as above
      */
-     public double getMaxValue();
+    double getMaxValue();
 
 
     /**
      * minimum bin value - this is almost always 0
      * @return  as above
      */
-    public int getMinBin();
+    int getMinBin();
 
     /**
      * maximim bin value - bins are alway6s LESS than this
      * an array of size getMaxBin() - getMinBin() will hold all legal bins
      * @return  as above
      */
-    public int getMaxBin();
+    int getMaxBin();
 
     /**
       * return the total number bins  usually this is the same as getMaxBin
       * @return
       */
-     public int getNumberBins();
+    int getNumberBins();
 
 
     /**
@@ -75,11 +75,11 @@ public interface IBinner {
      *  -1
      * @return
      */
-    public boolean isOverflowBinned();
+    boolean isOverflowBinned();
 
     /**
      * return this binner but with bins offset by half a bin
      * @return
      */
-    public IBinner offSetHalf();
+    IBinner offSetHalf();
 }

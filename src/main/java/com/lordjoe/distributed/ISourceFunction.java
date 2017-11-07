@@ -14,5 +14,5 @@ public interface ISourceFunction<K> {
      * @param p
      * @return
      */
-    public Iterable<K> readInput(Path p);
+    Iterable<K> readInput(Path p);
 }

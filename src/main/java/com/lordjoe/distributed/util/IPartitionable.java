@@ -11,6 +11,6 @@ public interface IPartitionable {
      * others will be partitioned by hash value
      * @return
      */
-    public int getPartition();
+    int getPartition();
 
 }

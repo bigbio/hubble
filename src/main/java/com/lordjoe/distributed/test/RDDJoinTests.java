@@ -41,9 +41,9 @@ public class RDDJoinTests {
 
          @Override
          public Iterable<Tuple2<Integer, MediumSizedObject>> call(final Integer key) throws Exception {
-             List<Tuple2<Integer, MediumSizedObject>> ret = new ArrayList<Tuple2<Integer, MediumSizedObject>>();
+             List<Tuple2<Integer, MediumSizedObject>> ret = new ArrayList<>();
              for (int i = 0; i < itemsPerKeys; i++) {
-                 ret.add(new Tuple2<Integer, MediumSizedObject>(key, new MediumSizedObject()));
+                 ret.add(new Tuple2<>(key, new MediumSizedObject()));
              }
              return ret;
          }
@@ -102,7 +102,7 @@ public class RDDJoinTests {
          numberDoubles = Integer.parseInt(args[1]);
 
         System.err.println("number keys " + numberKeys + " items per Key " + itemsPerKeys  + " Object size " + numberDoubles * Double.SIZE);
-         List<Integer> keys = new ArrayList<Integer>(numberKeys); // make a list of keys
+         List<Integer> keys = new ArrayList<>(numberKeys); // make a list of keys
         for (int i = 0; i < numberKeys; i++) {
             keys.add(i);
         }

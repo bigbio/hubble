@@ -31,7 +31,7 @@ public class PathUtilities {
         @Nonnull
         @Override
         public String[] readTextLines(@Nonnull final String path) {
-            List<String> holder = new ArrayList<String>();
+            List<String> holder = new ArrayList<>();
             try {
                 LineNumberReader rdr = new LineNumberReader(new FileReader(path)) ;
                 String line = rdr.readLine();

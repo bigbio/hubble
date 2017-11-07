@@ -1,12 +1,6 @@
 package com.lordjoe.distributed.hydra.comet_spark;
 
-import com.lordjoe.algorithms.CountedDistribution;
-import com.lordjoe.distributed.hydra.SparkXTandemMain;
 import com.lordjoe.distributed.hydra.comet.*;
-import com.lordjoe.distributed.hydra.fragment.BinChargeKey;
-import com.lordjoe.distributed.spark.accumulators.*;
-import com.lordjoe.testing.MemoryTracker;
-import org.apache.spark.Accumulator;
 import org.systemsbiology.xtandem.IMeasuredSpectrum;
 import org.systemsbiology.xtandem.XTandemMain;
 import org.systemsbiology.xtandem.ionization.IonUseCounter;
@@ -48,7 +42,7 @@ public class ScoreSpectrumAndPeptide extends AbstractLoggingFlatMapFunction<Tupl
 
         IPolypeptide peptide = inp._1();
         CometScoredScan scan = inp._2();
-        List<IScoredScan> ret = new ArrayList<IScoredScan>();
+        List<IScoredScan> ret = new ArrayList<>();
 
 
         CometTheoreticalBinnedSet ts = (CometTheoreticalBinnedSet) scorer.generateSpectrum(peptide);

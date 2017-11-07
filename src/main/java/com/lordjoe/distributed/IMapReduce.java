@@ -16,7 +16,7 @@ public interface IMapReduce<KEYIN extends Serializable,VIN extends Serializable,
      * @param source some source of data - might be a hadoop directory or a Spark RDD - this will be cast internally
      * @param otherData
      */
-     public void mapReduceSource( @Nonnull Object source,Object... otherData);
+    void mapReduceSource(@Nonnull Object source, Object... otherData);
 
 
     /**
@@ -24,13 +24,13 @@ public interface IMapReduce<KEYIN extends Serializable,VIN extends Serializable,
      *
      * @param source some other engine - usually this will be cast to a specific type
      */
-    public void chain( @Nonnull IMapReduce<?,?,KEYIN,VIN>  source);
+    void chain(@Nonnull IMapReduce<?, ?, KEYIN, VIN> source);
 
 
     /**
      * the last step in mapReduce - returns the output as an iterable
      * @return
      */
-    public @Nonnull Iterable<KeyValueObject<KEYOUT, VOUT>> collect();
+    @Nonnull Iterable<KeyValueObject<KEYOUT, VOUT>> collect();
 
 }

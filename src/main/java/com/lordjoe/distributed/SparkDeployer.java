@@ -223,8 +223,8 @@ public class SparkDeployer {
     public static File[] filterClassPath(String[] pathItems, String javaHome) {
         readExcludedProperties();
 
-        List<File> holder = new ArrayList<File>();
-        List<String> pathholder = new ArrayList<String>();
+        List<File> holder = new ArrayList<>();
+        List<String> pathholder = new ArrayList<>();
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < pathItems.length; i++) {
             String item = pathItems[i];
@@ -334,7 +334,7 @@ public class SparkDeployer {
     public static final String GLOBAL_DIR = "E:\\ThirdParty";
 
     public static File[] filterClassPathDirectories(String[] pathItems, String javaHome) {
-        List<File> holder = new ArrayList<File>();
+        List<File> holder = new ArrayList<>();
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < pathItems.length; i++) {
             String item = pathItems[i];
@@ -470,10 +470,7 @@ public class SparkDeployer {
             return (false);
             // failure
         }
-        catch (IOException ex) {
-            return (false); // browser disallows
-        }
-        catch (SecurityException ex) {
+        catch (IOException | SecurityException ex) {
             return (false); // browser disallows
         }
     }
@@ -487,7 +484,7 @@ public class SparkDeployer {
                 parentFile.mkdirs();
 
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(deployDir));
-            Set<String> existing = new HashSet<String>();
+            Set<String> existing = new HashSet<>();
 
             String javaHome = System.getProperty("java.home");
             String classpath = System.getProperty("java.class.path");
@@ -551,7 +548,7 @@ public class SparkDeployer {
             }
             //noinspection UnusedDeclaration,MismatchedReadAndWriteOfArray
             File[] pathLibs = filterClassPath(pathItems, javaHome);
-            Set<String> holder = new HashSet<String>();
+            Set<String> holder = new HashSet<>();
             //noinspection ForLoopReplaceableByForEach
             for (int i = 0; i < loadedPackages.length; i++) {
                 String replace = loadedPackages[i].replace(".", "/");

@@ -83,7 +83,7 @@ public class ProteinReducer extends AbstractTandemFunction implements IReducerFu
         }
 
         for (IKeyValueConsumer<String, String> aConsumer : consumer) {
-            aConsumer.consume(new KeyValueObject<String, String>(keytr, peptideString));
+            aConsumer.consume(new KeyValueObject<>(keytr, peptideString));
 
         }
 

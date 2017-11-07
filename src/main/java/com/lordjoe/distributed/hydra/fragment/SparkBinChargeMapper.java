@@ -5,11 +5,8 @@ import com.lordjoe.distributed.*;
 import com.lordjoe.distributed.hydra.protein.*;
 import com.lordjoe.distributed.hydra.scoring.*;
 import com.lordjoe.distributed.hydra.test.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.apache.spark.api.java.*;
-import org.apache.spark.api.java.function.*;
 import org.apache.spark.api.java.function.Function2;
-import org.apache.spark.sql.*;
 import org.systemsbiology.xtandem.*;
 import com.lordjoe.distributed.hydra.comet.*;
 import org.systemsbiology.xtandem.ionization.*;
@@ -145,7 +142,7 @@ public class SparkBinChargeMapper implements Serializable {
      */
     public static <K extends Serializable> JavaPairRDD<K, HashMap<String, IPolypeptide>> mapToKeyedHash(JavaPairRDD<K, IPolypeptide> imp, final int maxSize) {
         return imp.aggregateByKey(
-                new HashMap<String, IPolypeptide>(),
+                new HashMap<>(),
                 (Function2<HashMap<String, IPolypeptide>, IPolypeptide, HashMap<String, IPolypeptide>>) (vs, v) -> {
                     if (vs.size() >= maxSize)
                         return vs; // stop adding if limit reached
@@ -187,10 +184,10 @@ public class SparkBinChargeMapper implements Serializable {
             if (TestUtilities.isInterestingPeptide(pp))
                 TestUtilities.breakHere();
 
-            List<Tuple2<BinChargeKey, IPolypeptide>> holder = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
+            List<Tuple2<BinChargeKey, IPolypeptide>> holder = new ArrayList<>();
             for (int charge = 1; charge <= Scorer.MAX_CHARGE; charge++) {
                 BinChargeKey key = BinChargeMapper.oneKeyFromChargeMz(charge, matchingMass / charge);
-                holder.add(new Tuple2<BinChargeKey, IPolypeptide>(key, pp));
+                holder.add(new Tuple2<>(key, pp));
             }
             if (holder.isEmpty())
                 throw new IllegalStateException("problem"); // ToDo change
@@ -220,14 +217,14 @@ public class SparkBinChargeMapper implements Serializable {
         @Override
         public Iterable<Tuple2<BinChargeKey, IPolypeptide>> doCall(final IPolypeptide pp) throws Exception {
             //    double matchingMass = pp.getMatchingMass();
-            List<Tuple2<BinChargeKey, IPolypeptide>> holder = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
+            List<Tuple2<BinChargeKey, IPolypeptide>> holder = new ArrayList<>();
 
             BinChargeKey key = BinChargeMapper.keyFromPeptide(pp);
 
 
             // if we don't use the bin don't get the peptide
             if (usedBins != null && usedBins.contains(key.getMzInt())) {
-                holder.add(new Tuple2<BinChargeKey, IPolypeptide>(key, pp));
+                holder.add(new Tuple2<>(key, pp));
             }
 
             return holder;
@@ -250,7 +247,7 @@ public class SparkBinChargeMapper implements Serializable {
         @Override
         public Iterable<Tuple2<BinChargeKey, IPolypeptide>> doCall(final IPolypeptide pp) throws Exception {
             //    double matchingMass = pp.getMatchingMass();
-            List<Tuple2<BinChargeKey, IPolypeptide>> holder = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
+            List<Tuple2<BinChargeKey, IPolypeptide>> holder = new ArrayList<>();
 
             BinChargeKey key = BinChargeMapper.keyFromPeptide(pp);
 
@@ -260,7 +257,7 @@ public class SparkBinChargeMapper implements Serializable {
             if (binChargeKeys != null ) {
                 // else peptide may map to multiple keya
                 for (BinChargeKey binChargeKey : binChargeKeys) {
-                    holder.add(new Tuple2<BinChargeKey, IPolypeptide>(binChargeKey, pp));
+                    holder.add(new Tuple2<>(binChargeKey, pp));
 
                 }
             }
@@ -286,7 +283,7 @@ public class SparkBinChargeMapper implements Serializable {
         @Override
         public Iterable<Tuple2<BinChargeKey, CometTheoreticalBinnedSet>> doCall(final IPolypeptide pp) throws Exception {
             //    double matchingMass = pp.getMatchingMass();
-            List<Tuple2<BinChargeKey, CometTheoreticalBinnedSet>> holder = new ArrayList<Tuple2<BinChargeKey, CometTheoreticalBinnedSet>>();
+            List<Tuple2<BinChargeKey, CometTheoreticalBinnedSet>> holder = new ArrayList<>();
 
             BinChargeKey key = BinChargeMapper.keyFromPeptide(pp);
 
@@ -298,7 +295,7 @@ public class SparkBinChargeMapper implements Serializable {
 
             // if we don't use the bin don't get the peptide
             if (usedBins != null && usedBins.contains(key.getMzInt())) {
-                holder.add(new Tuple2<BinChargeKey, CometTheoreticalBinnedSet>(key, ts));
+                holder.add(new Tuple2<>(key, ts));
             }
 
             return holder;
@@ -326,11 +323,11 @@ public class SparkBinChargeMapper implements Serializable {
 
             Scorer scorer = application.getScoreRunner();
 
-            List<Tuple2<BinChargeKey, ITheoreticalSpectrumSet>> holder = new ArrayList<Tuple2<BinChargeKey, ITheoreticalSpectrumSet>>();
+            List<Tuple2<BinChargeKey, ITheoreticalSpectrumSet>> holder = new ArrayList<>();
             BinChargeKey key = BinChargeMapper.oneKeyFromChargeMz(1, matchingMass);
             ITheoreticalSpectrumSet ts = scorer.generateSpectrum(pp);
 
-            holder.add(new Tuple2<BinChargeKey, ITheoreticalSpectrumSet>(key, ts));
+            holder.add(new Tuple2<>(key, ts));
             return holder;
         }
     }
@@ -344,12 +341,12 @@ public class SparkBinChargeMapper implements Serializable {
 //            if (TestUtilities.isInterestingSpectrum(spec))
 //                TestUtilities.breakHere();
 
-            List<Tuple2<BinChargeKey, T>> holder = new ArrayList<Tuple2<BinChargeKey, T>>();
+            List<Tuple2<BinChargeKey, T>> holder = new ArrayList<>();
 
             Set<BinChargeKey> keys = BinChargeMapper.keysFromSpectrum(spec);
 
             for (BinChargeKey key : keys) {
-                holder.add(new Tuple2<BinChargeKey, T>(key, spec));
+                holder.add(new Tuple2<>(key, spec));
             }
             if (holder.isEmpty())
                 throw new IllegalStateException("problem"); // ToDo change
@@ -371,10 +368,10 @@ public class SparkBinChargeMapper implements Serializable {
          */
         @Override
         public Iterable<Tuple2<BinChargeKey, Tuple2<BinChargeKey, T>>> doCall(final T spec) throws Exception {
-            List<Tuple2<BinChargeKey, Tuple2<BinChargeKey, T>>> holder = new ArrayList<Tuple2<BinChargeKey, Tuple2<BinChargeKey, T>>>();
+            List<Tuple2<BinChargeKey, Tuple2<BinChargeKey, T>>> holder = new ArrayList<>();
             Set<BinChargeKey> keys = BinChargeMapper.keysFromSpectrum(spec);
             for (BinChargeKey key : keys) {
-                holder.add(new Tuple2<BinChargeKey, Tuple2<BinChargeKey, T>>(key, new Tuple2<BinChargeKey, T>(key, spec)));
+                holder.add(new Tuple2<>(key, new Tuple2<>(key, spec)));
             }
             if (holder.isEmpty())
                 throw new IllegalStateException("problem"); // ToDo change

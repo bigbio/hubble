@@ -1488,7 +1488,7 @@ public abstract class Util {
      * @return
      */
     public static <T> T[] commonElements(T[] item0, T[]... items) {
-        Set<T> holder = new HashSet<T>(Arrays.asList(item0));
+        Set<T> holder = new HashSet<>(Arrays.asList(item0));
         for (T[] item : items) {
             List more = Arrays.asList(item);
             holder.retainAll(more);
@@ -2095,14 +2095,8 @@ public abstract class Util {
             Enum[] ret = (Enum[]) method.invoke(null);
             return ret;
         }
-        catch (NoSuchMethodException e) {
+        catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e); // should never happen
-        }
-        catch (IllegalAccessException e) {
-            throw new RuntimeException(e);   // should never happen
-        }
-        catch (InvocationTargetException e) {
-            throw new RuntimeException(e);  // should never happen
         }
     }
 
@@ -3205,7 +3199,7 @@ public abstract class Util {
         int item = 0;
         if (size > 1)
             item = randomInt(size);
-        List<T> TheList = new ArrayList<T>(in);
+        List<T> TheList = new ArrayList<>(in);
         T ret = TheList.get(item);
         //noinspection UnusedAssignment
         TheList = null;
@@ -6624,15 +6618,7 @@ public abstract class Util {
             Method values = cls.getMethod("values");
             return (Enum[]) values.invoke(null);
         }
-        catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("Class " + cls +
-                    " is not acting link an enum");
-        }
-        catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("Class " + cls +
-                    " is not acting link an enum");
-        }
-        catch (InvocationTargetException e) {
+        catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new IllegalArgumentException("Class " + cls +
                     " is not acting link an enum");
         }

@@ -106,7 +106,7 @@ public class ProteinMapper extends AbstractTandemFunction  implements  IMapperFu
     @Override
     public Iterable<KeyValueObject<String, String>> mapValues(@Nonnull final String annotation, @Nonnull final String sequence) {
 
-        List<KeyValueObject<String, String>> holder = new ArrayList<KeyValueObject<String, String>>();
+        List<KeyValueObject<String, String>> holder = new ArrayList<>();
 
 
         IPeptideDigester digester = getDigester();
@@ -162,7 +162,7 @@ public class ProteinMapper extends AbstractTandemFunction  implements  IMapperFu
         long numberFragments = getAndIncrementFragmentIndex();
 
         String str = pp.toString();
-        holder.add(new KeyValueObject<String, String>(str, pp.toString()));
+        holder.add(new KeyValueObject<>(str, pp.toString()));
     }
 
 }

@@ -23,7 +23,7 @@ public class CometScoringResult implements IScoredScan, IAddable<IScoredScan>, I
     private IMeasuredSpectrum m_Raw;
     private boolean matchesSorted;
  //   private final Set<IPolypeptide> usedPeptides = new HashSet<IPolypeptide>();
-    private  List<PeptideMatchScore> matches = new ArrayList<PeptideMatchScore>();
+    private  List<PeptideMatchScore> matches = new ArrayList<>();
     //    private final IonUseScore m_IonUse = new IonUseCounter();
 //    //    private List<ISpectralMatch> m_Matches;
 //    private final HyperScoreStatistics m_HyperScores = new HyperScoreStatistics();
@@ -122,7 +122,7 @@ public class CometScoringResult implements IScoredScan, IAddable<IScoredScan>, I
 //                    return Double.compare(o2.score, o1.score);
 //                }
 //            });
-            List<PeptideMatchScore> savedMatches = new ArrayList<PeptideMatchScore>(matches.subList(0, MAX_RETURNED_MATCHES));
+            List<PeptideMatchScore> savedMatches = new ArrayList<>(matches.subList(0, MAX_RETURNED_MATCHES));
             matches.clear();
             matches.addAll(savedMatches);
         }
@@ -599,7 +599,7 @@ public class CometScoringResult implements IScoredScan, IAddable<IScoredScan>, I
         if (matches.isEmpty())
             return ISpectralMatch.EMPTY_ARRAY;
         guaranteeMatchesSorted();
-        List<ISpectralMatch> holder = new ArrayList<ISpectralMatch>();
+        List<ISpectralMatch> holder = new ArrayList<>();
         for (PeptideMatchScore match : matches) {
             final ISpectralMatch sm = buildMatch(match);
             holder.add(sm);

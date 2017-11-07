@@ -69,7 +69,7 @@ public class MzXMLSampler {
     }
 
     public static void main(String[] args) throws Exception {
-        Set<Integer> ids = new HashSet<Integer>() ;
+        Set<Integer> ids = new HashSet<>() ;
         for (int i = 0; i < 100; i++) {
             ids.add(20 * i);
          }

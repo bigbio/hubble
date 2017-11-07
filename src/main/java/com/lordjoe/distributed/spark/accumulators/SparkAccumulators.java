@@ -57,12 +57,12 @@ public class SparkAccumulators implements ISparkAccumulators {
     /**
      * holds accumulators by name
      */
-    private final Map<String, Accumulator<Long>> accumulators = new HashMap<String, Accumulator<Long>>();
-    private final Map<String, Accumulator<MachineUseAccumulator>> functionaccumulators = new HashMap<String, Accumulator<MachineUseAccumulator>>();
+    private final Map<String, Accumulator<Long>> accumulators = new HashMap<>();
+    private final Map<String, Accumulator<MachineUseAccumulator>> functionaccumulators = new HashMap<>();
     // not sure what these are used for but thay are allowed
-    private final Map<String, Accumulator> specialaccumulators = new HashMap<String, Accumulator>();
+    private final Map<String, Accumulator> specialaccumulators = new HashMap<>();
     //    private Accumulator<Set<String>> machines;
-    private transient Set<String> deliveredMessages = new HashSet<String>();
+    private transient Set<String> deliveredMessages = new HashSet<>();
 
     /**
      * append lines for all accumulators to an appendable
@@ -228,7 +228,7 @@ public class SparkAccumulators implements ISparkAccumulators {
      * @return
      */
     public List<String> getAccumulatorNames() {
-        List<String> keys = new ArrayList<String>(accumulators.keySet());
+        List<String> keys = new ArrayList<>(accumulators.keySet());
         Collections.sort(keys);  // alphapetize
         return keys;
     }
@@ -239,7 +239,7 @@ public class SparkAccumulators implements ISparkAccumulators {
      * @return
      */
     public List<String> getFunctionAccumulatorNames() {
-        List<String> keys = new ArrayList<String>(functionaccumulators.keySet());
+        List<String> keys = new ArrayList<>(functionaccumulators.keySet());
         Collections.sort(keys);  // alphabetize
         return keys;
     }
@@ -250,7 +250,7 @@ public class SparkAccumulators implements ISparkAccumulators {
      * @return
      */
     public List<String> getSpecialAccumulatorNames() {
-        List<String> keys = new ArrayList<String>(specialaccumulators.keySet());
+        List<String> keys = new ArrayList<>(specialaccumulators.keySet());
         Collections.sort(keys);  // alphabetize
         return keys;
     }

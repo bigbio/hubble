@@ -179,7 +179,7 @@ public class SparkContextGetter {
     @SuppressWarnings("UnusedDeclaration")
     public static JavaRDD<String> fromInputStream(@Nonnull InputStream is, @Nonnull JavaSparkContext sc) {
         try {
-            List<String> lst = new ArrayList<String>();
+            List<String> lst = new ArrayList<>();
             BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
             String line = rdr.readLine();
             while (line != null) {

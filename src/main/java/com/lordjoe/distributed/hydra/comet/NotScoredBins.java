@@ -1,6 +1,5 @@
 package com.lordjoe.distributed.hydra.comet;
 
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.apache.spark.*;
 
 import java.io.*;
@@ -69,7 +68,7 @@ public class NotScoredBins implements IAccumulator<NotScoredBins> {
     }
 
 
-    private final List<NotScoredStatistics> usage = new ArrayList<NotScoredStatistics>();
+    private final List<NotScoredStatistics> usage = new ArrayList<>();
 
     /**
      * Use static method empty

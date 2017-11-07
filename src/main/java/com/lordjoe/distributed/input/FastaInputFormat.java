@@ -103,7 +103,7 @@ public class FastaInputFormat  extends FileInputFormat<String, String> implement
 
         //   maxSize = SPLIT_BLOCK_SIZE; // force more mappers
         // generate splits
-        List<InputSplit> splits = new ArrayList<InputSplit>();
+        List<InputSplit> splits = new ArrayList<>();
 
         Path[] paths = getInputPaths(job);
         //noinspection ForLoopReplaceableByForEach

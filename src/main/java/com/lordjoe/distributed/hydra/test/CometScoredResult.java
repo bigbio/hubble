@@ -26,7 +26,6 @@ public class CometScoredResult  {
         peptide = split[index++];
         mass = new Double(split[index++]);
         score = new Double(split[index++]);
-        ;
     }
 
     @Override

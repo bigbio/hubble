@@ -96,7 +96,7 @@ public class SingleFastaInputFormat extends FileInputFormat<String, String> {
 
     protected List<InputSplit> getFileSplits(JobContext job, FileStatus file) {
         try {
-            List<InputSplit> holder = new ArrayList<InputSplit>();
+            List<InputSplit> holder = new ArrayList<>();
             Path path = file.getPath();
             FileSystem fs = path.getFileSystem(job.getConfiguration());
             FSDataInputStream fileIn = fs.open(path);
@@ -176,7 +176,7 @@ public class SingleFastaInputFormat extends FileInputFormat<String, String> {
 
         //   maxSize = SPLIT_BLOCK_SIZE; // force more mappers
         // generate splits
-        List<InputSplit> splits = new ArrayList<InputSplit>();
+        List<InputSplit> splits = new ArrayList<>();
 
         Path[] paths = getInputPaths(job);
         for (int i = 0; i < paths.length; i++) {

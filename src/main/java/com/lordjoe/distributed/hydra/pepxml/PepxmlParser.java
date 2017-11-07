@@ -2,9 +2,7 @@ package com.lordjoe.distributed.hydra.pepxml;
 
 import com.lordjoe.lib.xml.XMLUtil;
 import org.systemsbiology.xtandem.IEquivalent;
-import org.systemsbiology.xtandem.fdr.IDiscoveryDataHolder;
 import org.systemsbiology.xtandem.fdr.ISpectrumDataFilter;
-import org.systemsbiology.xtandem.fdr.SpectrumData;
 import org.systemsbiology.xtandem.peptide.*;
 
 import java.io.*;
@@ -21,7 +19,7 @@ import java.util.*;
  */
 public class PepxmlParser implements IEquivalent<PepxmlParser> {
 
-    private final Map<String, SpectrumQuery> queries = new HashMap<String, SpectrumQuery>();
+    private final Map<String, SpectrumQuery> queries = new HashMap<>();
 
     private String scan_id;
 
@@ -106,7 +104,7 @@ public class PepxmlParser implements IEquivalent<PepxmlParser> {
     }
 
     protected String[] readSearchHitLines(String line, LineNumberReader rdr, @SuppressWarnings("UnusedParameters") ISpectrumDataFilter... filters) {
-        List<String> holder = new ArrayList<String>();
+        List<String> holder = new ArrayList<>();
 
         try {
             while (line != null) {
@@ -141,7 +139,7 @@ public class PepxmlParser implements IEquivalent<PepxmlParser> {
                 return;
         }
         String id = scan_id;
-        List<PositionModification> modifications = new ArrayList<PositionModification>();
+        List<PositionModification> modifications = new ArrayList<>();
 
         if ("".equals(id))
             throw new UnsupportedOperationException("Fix This"); // ToDo
@@ -318,7 +316,7 @@ public class PepxmlParser implements IEquivalent<PepxmlParser> {
 
 
     public static void main(String[] args) throws Exception {
-        List<PepxmlParser> items = new ArrayList<PepxmlParser>();
+        List<PepxmlParser> items = new ArrayList<>();
         for (String arg : args) {
             PepxmlParser pp = new PepxmlParser(new File(arg));
             items.add(pp);

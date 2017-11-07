@@ -32,7 +32,7 @@ public class ProteinParser {
 
     public static List<IPolypeptide> getPeptidesFromResource(String resource,IPeptideDigester digester) {
         List<IProtein> proteins  = getProteinsFromResource( resource);
-        List<IPolypeptide> holder = new ArrayList<IPolypeptide>();
+        List<IPolypeptide> holder = new ArrayList<>();
         for (IProtein protein : proteins) {
             IPolypeptide[] digested = digester.digest(protein);
               holder.addAll(Arrays.asList(digested));
@@ -44,7 +44,7 @@ public class ProteinParser {
     public static List<IPolypeptide> getPeptidesFromResource(String resource,
                                                              IPeptideDigester digester,PeptideModification[] mods) {
         List<IProtein> proteins  = getProteinsFromResource( resource);
-        List<IPolypeptide> holder = new ArrayList<IPolypeptide>();
+        List<IPolypeptide> holder = new ArrayList<>();
         for (IProtein protein : proteins) {
             List<IPolypeptide> digested = DigestProteinFunction.digestWithModifications(protein,digester,mods);
             holder.addAll(digested);
@@ -64,7 +64,7 @@ public class ProteinParser {
     }
 
     public static class ProteinFastaHandler implements IFastaHandler {
-        private final List<IProtein> m_proteins = new ArrayList<IProtein>();
+        private final List<IProtein> m_proteins = new ArrayList<>();
 
         public ProteinFastaHandler( ) {
           }

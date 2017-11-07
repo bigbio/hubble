@@ -1,6 +1,5 @@
 package com.lordjoe.distributed.spark;
 
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.systemsbiology.xtandem.*;
 import org.systemsbiology.xtandem.ionization.*;
 import org.systemsbiology.xtandem.peptide.*;
@@ -29,7 +28,7 @@ public class TheoreticalSetGenerator extends AbstractLoggingFlatMapFunction<IPol
      */
     @Override
     public Iterable<ITheoreticalSpectrumSet> doCall(final IPolypeptide pp) throws Exception {
-        List<ITheoreticalSpectrumSet> ret = new ArrayList<ITheoreticalSpectrumSet>();
+        List<ITheoreticalSpectrumSet> ret = new ArrayList<>();
 
         ret.add(generateTheoreticalSet(pp,MAX_CHARGE,sequenceUtilities));  // todo any reason to drop some
         return ret;

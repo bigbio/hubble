@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class ListKeyValueConsumer<K extends Serializable,V extends Serializable> implements IKeyValueConsumer<K,V> {
 
-    private final List<KeyValueObject<K,V>> list = new ArrayList<KeyValueObject<K,V>>();
+    private final List<KeyValueObject<K,V>> list = new ArrayList<>();
 
     @Override public void consume(final KeyValueObject<K, V> kv) {
         list.add(kv);

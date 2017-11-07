@@ -57,7 +57,7 @@ public class BinChargeMapper {
      * @return
      */
     public static Set<BinChargeKey> getSpectrumBins(IMeasuredSpectrum spec) {
-        Set<BinChargeKey> ret = new HashSet<BinChargeKey>();
+        Set<BinChargeKey> ret = new HashSet<>();
         Set<BinChargeKey> binChargeKeys = keysFromSpectrum(spec);
         ret.addAll(binChargeKeys);
         return ret;
@@ -109,7 +109,7 @@ public class BinChargeMapper {
      * @return
      */
     private static Set<BinChargeKey> keysFromChargeMzXX(int charge, double mz) {
-        Set<BinChargeKey> holder = new HashSet<BinChargeKey>();
+        Set<BinChargeKey> holder = new HashSet<>();
         double startMZ = mz - examineWidth;
         int start = BinChargeKey.mzAsInt(startMZ);
         while (BinChargeKey.intToMz(start) < mz + examineWidth) {

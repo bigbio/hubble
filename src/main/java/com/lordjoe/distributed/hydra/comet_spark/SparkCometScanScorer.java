@@ -237,7 +237,7 @@ public class SparkCometScanScorer {
         Map<BinChargeKey, Object> spectraCountsMap = keyedSpectra.countByKey();
         Map<BinChargeKey, Object> peptideCounts = keyedPeptides.countByKey();
         List<BinChargeKey> keys = new ArrayList(peptideCounts.keySet());
-        List<PairCounter> pairs = new ArrayList<PairCounter>();
+        List<PairCounter> pairs = new ArrayList<>();
 
         long specCount = 0;
         long peptideCount = 0;
@@ -633,7 +633,7 @@ public class SparkCometScanScorer {
     }
 
     protected static MapOfLists<Integer, BinChargeKey> computeBinSplit(Map<BinChargeKey, Long> usedBinsMap) {
-        MapOfLists<Integer, BinChargeKey> ret = new MapOfLists<Integer, BinChargeKey>();
+        MapOfLists<Integer, BinChargeKey> ret = new MapOfLists<>();
         int maxSize = getMaxBinSpectra();
         for (BinChargeKey key : usedBinsMap.keySet()) {
             long binsize = usedBinsMap.get(key);
@@ -963,7 +963,7 @@ public class SparkCometScanScorer {
      public static void showBinningData(final long pTotalSpectra,MapOfLists<Integer, BinChargeKey> keys,Map<BinChargeKey, Long> usedBinsMap,int pMaxSpectraInBin,int pMaxKeysInBin ) {
           PrintWriter savedAccumulators = SparkUtilities.getHadoopPrintWriter("BinningData.txt");
           savedAccumulators.println("TotalSpectra " + Long_Formatter.format(pTotalSpectra) + "\tMaxSpectraInBin " + pMaxSpectraInBin + "\tMaxKeysInBin " + pMaxKeysInBin);
-         List<Integer>   keysSorted = new ArrayList<Integer>(keys.keySet());
+         List<Integer>   keysSorted = new ArrayList<>(keys.keySet());
          Collections.sort(keysSorted);
          for (Integer key : keysSorted) {
              savedAccumulators.print( key + "\t" );
@@ -973,7 +973,7 @@ public class SparkCometScanScorer {
              savedAccumulators.println( );
          }
          savedAccumulators.println("=========================================");
-         List<BinChargeKey> bins =  new ArrayList<BinChargeKey>(usedBinsMap.keySet());
+         List<BinChargeKey> bins = new ArrayList<>(usedBinsMap.keySet());
          Collections.sort(bins);
          for (BinChargeKey key : bins) {
              String s = key + "\t" + usedBinsMap.get(key);
@@ -1005,7 +1005,7 @@ public class SparkCometScanScorer {
                 List<BinChargeKey> binChargeKeys = splitKeys.get(mzI);
                 int keyIndex = Math.abs(index++) % binChargeKeys.size();
                 BinChargeKey newKey = binChargeKeys.get(keyIndex);
-                return new Tuple2<BinChargeKey, CometScoredScan>(newKey, spectrum);
+                return new Tuple2<>(newKey, spectrum);
             }
         });
     }
@@ -1036,7 +1036,7 @@ public class SparkCometScanScorer {
      */
     private static Map<BinChargeKey, Long> getUsedBins(JavaPairRDD<BinChargeKey, CometScoredScan> keyedSpectra) {
         Map<BinChargeKey, Object> intermediate = keyedSpectra.countByKey();
-        Map<BinChargeKey, Long> ret = new HashMap<BinChargeKey, Long>();
+        Map<BinChargeKey, Long> ret = new HashMap<>();
         for (BinChargeKey key : intermediate.keySet()) {
             Long item = (Long) intermediate.get(key);
             ret.put(key, item);

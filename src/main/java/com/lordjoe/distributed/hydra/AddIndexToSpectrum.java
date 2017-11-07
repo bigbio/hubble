@@ -1,6 +1,5 @@
 package com.lordjoe.distributed.hydra;
 
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.systemsbiology.xtandem.*;
 import scala.*;
 

@@ -31,7 +31,7 @@ public class TandemXMLWriter {
             String pathAsString = prepent.toString();
             os = new FileOutputStream(pathAsString);
             PrintWriter out = new PrintWriter(os);
-            List<IScoredScan> holder = new ArrayList<IScoredScan>();
+            List<IScoredScan> holder = new ArrayList<>();
             for (Tuple2<String, IScoredScan> tp : scorings) {
                 holder.add(tp._2());
             }

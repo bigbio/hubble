@@ -39,11 +39,11 @@ public class DatasetTestObject implements Serializable {
 
     public synchronized void addValue(Integer i, Double d) {
         if (values == null) {
-            setFastScoringMapValues(new ArrayList<KeyValue<Integer, Double>>());
+            setFastScoringMapValues(new ArrayList<>());
         }
         if (!fastScoringMap.containsKey(i)) {
             fastScoringMap.put(i, d);
-            values.add(new KeyValue<Integer, Double>(i, d));
+            values.add(new KeyValue<>(i, d));
         }
         else {    // unhappy path rebuild
             fastScoringMap.put(i, d);

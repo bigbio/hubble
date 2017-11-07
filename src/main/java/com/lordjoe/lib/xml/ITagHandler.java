@@ -12,5 +12,5 @@ public interface ITagHandler
     * @param attributes non-null array of name-value pairs
     * @return possibly null handler
     */
-    public Object handleTag(String TagName,NameValue[] attributes);
+    Object handleTag(String TagName, NameValue[] attributes);
 }

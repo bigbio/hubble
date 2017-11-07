@@ -23,7 +23,7 @@ public class BinPartitioner extends Partitioner {
     public final int maxKeysInBin;
     private final long totalSpectra;
     private int maxIndex;
-    private final Map<BinChargeKey, Integer> keyToPartition = new HashMap<BinChargeKey, Integer>();
+    private final Map<BinChargeKey, Integer> keyToPartition = new HashMap<>();
 
     public BinPartitioner(final long pTotalSpectra, MapOfLists<Integer, BinChargeKey> keys, Map<BinChargeKey, Long> usedBinsMap, int pMaxSpectraInBin, int pMaxKeysInBin) {
         totalSpectra = pTotalSpectra;
@@ -57,7 +57,7 @@ public class BinPartitioner extends Partitioner {
         int binSpectra;
         maxIndex = 0;
         long total = 0;
-        List<KeyCount> holder = new ArrayList<KeyCount>();
+        List<KeyCount> holder = new ArrayList<>();
         for (BinChargeKey binChargeKey : usedBinsMap.keySet()) {
             Long size = usedBinsMap.get(binChargeKey);
             total += size;

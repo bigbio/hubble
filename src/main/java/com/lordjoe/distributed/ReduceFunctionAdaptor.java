@@ -26,7 +26,7 @@ public class ReduceFunctionAdaptor<K extends Serializable, V extends Serializabl
     @Override
     public Iterable<KeyValueObject<KOUT, VOUT>> call(Tuple2<K,KeyAndValues<K, V>> inp) throws Exception {
         final KeyAndValues<K, V> itr =  inp._2();
-          final List<KeyValueObject<KOUT, VOUT>> holder = new ArrayList<KeyValueObject<KOUT, VOUT>>();
+          final List<KeyValueObject<KOUT, VOUT>> holder = new ArrayList<>();
 
         Iterable<V> iterable = itr.getIterable();
         K key = itr.key;

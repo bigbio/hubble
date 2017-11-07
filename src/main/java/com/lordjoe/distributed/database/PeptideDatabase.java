@@ -29,7 +29,7 @@ public class PeptideDatabase implements Serializable {
 
     private transient  boolean logSilenced;
     private final String databaseName;
-    private final Map<Integer, Long> keyCounts = new HashMap<Integer, Long>();
+    private final Map<Integer, Long> keyCounts = new HashMap<>();
 
     public PeptideDatabase(XTandemMain app) {
         String fasta = app.getDatabaseName();
@@ -61,7 +61,7 @@ public class PeptideDatabase implements Serializable {
                 Long count = rw.getLong(1);
                 keyCounts.put(bin, count);
             }
-            List<BinChargeKey> keysWithData = new ArrayList<BinChargeKey>();
+            List<BinChargeKey> keysWithData = new ArrayList<>();
             for (Integer keyCount : keyCounts.keySet()) {
                 double mz = BinChargeKey.intToMz(keyCount);
                 BinChargeKey key = new BinChargeKey(1, mz);
@@ -113,7 +113,7 @@ public class PeptideDatabase implements Serializable {
     }
 
     private void showKeysWithAndWithoutData(final List<BinChargeKey> pKeysWithData) {
-        Set<Integer> keysWithoutData = new HashSet<Integer>() ;
+        Set<Integer> keysWithoutData = new HashSet<>() ;
         int start = pKeysWithData.get(0).getMzInt();
         int end = pKeysWithData.get(pKeysWithData.size() - 1).getMzInt();
         for (int i = start; i < end; i++) {
@@ -124,7 +124,7 @@ public class PeptideDatabase implements Serializable {
             System.out.println("Data " + binChargeKey);
             keysWithoutData.remove(binChargeKey.getMzInt());
         }
-        List<BinChargeKey> noData = new ArrayList<BinChargeKey>();
+        List<BinChargeKey> noData = new ArrayList<>();
         for (Integer integer : keysWithoutData) {
             noData.add(new BinChargeKey(1,BinChargeKey.intToMz(integer)));
         }
@@ -151,7 +151,7 @@ public class PeptideDatabase implements Serializable {
 
     public List<IPolypeptide> getPeptidesWithKey(BinChargeKey key) {
         guaranteeLogSilenced();
-        List<IPolypeptide> ret = new ArrayList<IPolypeptide>();
+        List<IPolypeptide> ret = new ArrayList<>();
         if (getKeyCounts(key) == 0)
             return ret;    // nothing to score
 

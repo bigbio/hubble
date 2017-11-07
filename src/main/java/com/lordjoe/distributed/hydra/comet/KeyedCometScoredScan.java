@@ -1,7 +1,6 @@
 package com.lordjoe.distributed.hydra.comet;
 
 import com.lordjoe.distributed.hydra.fragment.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 
 import java.util.*;
 
@@ -25,7 +24,7 @@ public class KeyedCometScoredScan extends CometScoredScan {
         @Override
         public Iterable<KeyedCometScoredScan> doCall(final CometScoredScan v1) throws Exception {
             Set<BinChargeKey> binChargeKeys = BinChargeMapper.keysFromSpectrum(v1.getRaw());
-            List<KeyedCometScoredScan> holder = new ArrayList<KeyedCometScoredScan>();
+            List<KeyedCometScoredScan> holder = new ArrayList<>();
             for (BinChargeKey binChargeKey : binChargeKeys) {
                 holder.add(new KeyedCometScoredScan(v1, binChargeKey));
             }

@@ -41,7 +41,7 @@ public class CometTestingUtilities {
 
     public static Map<Integer, RawPeptideScan> getScanMapFromResource(String resource) {
         List<RawPeptideScan> scans = CometTestingUtilities.getAllScanFromMZXMLResource(resource); //"/eg3_20/eg3_20.mzXML");
-        Map<Integer, RawPeptideScan> mapped = new HashMap<Integer, RawPeptideScan>();
+        Map<Integer, RawPeptideScan> mapped = new HashMap<>();
         for (RawPeptideScan scan : scans) {
             String id = scan.getId();
             mapped.put(new Integer(id), scan);
@@ -114,7 +114,7 @@ public class CometTestingUtilities {
      * @return
      */
     public static <K, V1, V2> MapOfLists<K, Tuple2<V1, V2>> join(MapOfLists<K, V1> ml1, MapOfLists<K, V2> ml2) {
-        MapOfLists<K, Tuple2<V1, V2>> ret = new MapOfLists<K, Tuple2<V1, V2>>();
+        MapOfLists<K, Tuple2<V1, V2>> ret = new MapOfLists<>();
         for (K k : ml1.keySet()) {
            if(ml2.containsKey(k))  {
                List<Tuple2<V1, V2>> tuple2s = joinLists(ml1.get(k), ml2.get(k));
@@ -126,10 +126,10 @@ public class CometTestingUtilities {
     }
 
     public static <V1, V2> List<Tuple2<V1, V2>> joinLists(List<V1> l1,List<V2> l2) {
-        List<Tuple2<V1, V2>> ret = new ArrayList<Tuple2<V1, V2>>();
+        List<Tuple2<V1, V2>> ret = new ArrayList<>();
         for (V1 v1 : l1) {
             for (V2 v2 : l2) {
-                  ret.add(new Tuple2<V1, V2>(v1,v2));
+                  ret.add(new Tuple2<>(v1, v2));
              }
 
         }
@@ -149,7 +149,7 @@ public class CometTestingUtilities {
 
         InputStream istr = cls.getResourceAsStream(mzXMLResource);
 
-        List<RawPeptideScan> holder = new ArrayList<RawPeptideScan>();
+        List<RawPeptideScan> holder = new ArrayList<>();
         final String scanTag = FileUtilities.readInFile(istr);
         List<String> scans = breakmzXMLIntoScans(scanTag);
         for (String scan : scans) {
@@ -162,7 +162,7 @@ public class CometTestingUtilities {
     protected static List<String> breakmzXMLIntoScans(String mzXML) {
         String[] lines = mzXML.split("\n");
         StringBuilder sb = new StringBuilder();
-        List<String> holder = new ArrayList<String>();
+        List<String> holder = new ArrayList<>();
 
         boolean inScan = false;
         int i = 0;
@@ -225,7 +225,7 @@ public class CometTestingUtilities {
 
     public static Map<IPolypeptide, List<BinnedChargeIonIndex>> readCometBins(InputStream is) {
         try {
-            Map<IPolypeptide, List<BinnedChargeIonIndex>> ret = new HashMap<IPolypeptide, List<BinnedChargeIonIndex>>();
+            Map<IPolypeptide, List<BinnedChargeIonIndex>> ret = new HashMap<>();
             LineNumberReader rdr = new LineNumberReader(new InputStreamReader(is));
             String line = rdr.readLine();
             while (line != null) {
@@ -253,7 +253,7 @@ public class CometTestingUtilities {
             return;
         int index = 0;
         IPolypeptide pp = Polypeptide.fromString(split[index++]);
-        List<BinnedChargeIonIndex> list = ret.computeIfAbsent(pp, k -> new ArrayList<BinnedChargeIonIndex>());
+        List<BinnedChargeIonIndex> list = ret.computeIfAbsent(pp, k -> new ArrayList<>());
         int bin = Integer.parseInt(split[index++]);
         int pos = Integer.parseInt(split[index++]);
         int charge = Integer.parseInt(split[index++]);

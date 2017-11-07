@@ -115,7 +115,7 @@ public class LargeFileTest {
 
         @Override
         public Iterable<DNAFragment> call(final DNAFragment t) throws Exception {
-            List<DNAFragment> newSet = new ArrayList<DNAFragment>();
+            List<DNAFragment> newSet = new ArrayList<>();
             for (int i = 0; i < multiplyer - 1; i++) {
                 newSet.add(makeDNAFragment());
             }
@@ -173,7 +173,7 @@ public class LargeFileTest {
      */
     public static JavaRDD<DNAFragment> getDnaFragmentJavaRDD(final JavaSparkContext ctx) {
         // Seet with a number of DNA Fragments
-        List<DNAFragment> firstSet = new ArrayList<DNAFragment>();
+        List<DNAFragment> firstSet = new ArrayList<>();
         for (int i = 0; i < COLLECTION_SIZE; i++) {
             firstSet.add(makeDNAFragment());
         }

@@ -44,7 +44,7 @@ public class ParseMGFTest {
 
         LineNumberReader rdr = new LineNumberReader(new FileReader(mgfFile));
 
-        List<Tuple2<String, String>> holder = new ArrayList<Tuple2<String, String>>();
+        List<Tuple2<String, String>> holder = new ArrayList<>();
         int index = 1;
         while (holder.size() < numberSpectra) {
             String spectrum = readOneSpectrum(rdr);
@@ -53,7 +53,7 @@ public class ParseMGFTest {
             holder.add(new Tuple2(Integer.toString(index++), spectrum));
         }
         timer.showElapsed("read " + holder.size() + " spectra");
-        List<IMeasuredSpectrum> specHolder = new ArrayList<IMeasuredSpectrum>();
+        List<IMeasuredSpectrum> specHolder = new ArrayList<>();
         MGFStringTupleToSpectrumTuple func = new MGFStringTupleToSpectrumTuple(null);
         for (Tuple2<String, String> s : holder) {
             Iterable<Tuple2<String, IMeasuredSpectrum>> call = func.call(s);

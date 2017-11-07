@@ -28,7 +28,7 @@ public class JavaMapReduceUtilities {
      */
     public static String[] readReaderLines(Reader rdr) {
         final BufferedReader br = new BufferedReader(rdr);
-        List<String> holder = new ArrayList<String>();
+        List<String> holder = new ArrayList<>();
         try {
             String line = br.readLine();
             while(line != null)   {
@@ -90,7 +90,7 @@ public class JavaMapReduceUtilities {
                        @Override public KeyValueObject<String,String> next() {
                            String ret = line;
                            line = readLineRuntimeException(br);
-                           return new KeyValueObject<String,String>(pathname,ret);
+                           return new KeyValueObject<>(pathname, ret);
                        }
 
 

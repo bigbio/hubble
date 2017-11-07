@@ -86,7 +86,7 @@ public class ScoreSpectrumAndPeptideWithCogroupWithoutHash extends AbstractLoggi
         MemoryUseAccumulatorAndBinSize binAcc = MemoryUseAccumulatorAndBinSize.empty();
 
 
-        List<IScoredScan> ret = new ArrayList<IScoredScan>();
+        List<IScoredScan> ret = new ArrayList<>();
         BinChargeKey binChargeKey = inp._1();
         Iterable<CometScoredScan> scans = inp._2()._1();
         Iterable<IPolypeptide> peptides = inp._2()._2();

@@ -18,7 +18,7 @@ public class JarUtilities {
 
 
     private final File m_JarFile;
-    private final Map<String, JarEntry> m_NameToEntry = new HashMap<String, JarEntry>();
+    private final Map<String, JarEntry> m_NameToEntry = new HashMap<>();
 
     public JarUtilities(File jarFile) {
         m_JarFile = jarFile;
@@ -52,7 +52,7 @@ public class JarUtilities {
     }
 
     protected File[] getPathDirectories(String[] pathItems) {
-        List<File> holder = new ArrayList<File>();
+        List<File> holder = new ArrayList<>();
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < pathItems.length; i++) {
             String pathItem = pathItems[i];

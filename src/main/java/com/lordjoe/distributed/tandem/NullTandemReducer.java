@@ -27,7 +27,7 @@ public class NullTandemReducer extends AbstractTandemFunction  implements IReduc
     public void handleValues(@Nonnull final String key, @Nonnull final Iterable<String> values, final IKeyValueConsumer<String, String>... consumer) {
         for (IKeyValueConsumer<String, String> aConsumer : consumer) {
             for (String value : values) {
-                aConsumer.consume(new KeyValueObject<String, String>(key, value));
+                aConsumer.consume(new KeyValueObject<>(key, value));
             }
         }
      }

@@ -16,7 +16,7 @@ import java.util.*;
 public class NthFilterTest {
 
     public static Set<Integer>  sequentialIntegers(int size) {
-        Set<Integer> holder = new HashSet<Integer>();
+        Set<Integer> holder = new HashSet<>();
         for (int i = 0; i < size; i++) {
             holder.add(i);
            }
@@ -41,8 +41,8 @@ public class NthFilterTest {
           if(args.length > 0)
               size = Integer.parseInt(args[0]);
           Set<Integer> integerSet = sequentialIntegers(size);
-          Set<Integer> afterFilter = new HashSet<Integer>();
-           List<Integer> values = new ArrayList<Integer>(integerSet);
+          Set<Integer> afterFilter = new HashSet<>();
+           List<Integer> values = new ArrayList<>(integerSet);
           JavaRDD<Integer> ints = ctx.parallelize(values);
 
           ints.coalesce(24,true); // force partitioning

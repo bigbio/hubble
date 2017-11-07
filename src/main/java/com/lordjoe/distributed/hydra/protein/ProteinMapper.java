@@ -19,7 +19,7 @@ public class ProteinMapper extends AbstractTandemFunction  implements  IMapperFu
 
 
     private long m_FragmentIndex;
-    private List<PeptideModification> m_Modifications = new ArrayList<PeptideModification>();
+    private List<PeptideModification> m_Modifications = new ArrayList<>();
     private boolean m_GenerateDecoysForModifiedPeptides;
 
 
@@ -107,7 +107,7 @@ public class ProteinMapper extends AbstractTandemFunction  implements  IMapperFu
     @Override
     public Iterable<KeyValueObject<String, String>> mapValues(@Nonnull final String annotation, @Nonnull final String sequence) {
 
-        List<KeyValueObject<String, String>> holder = new ArrayList<KeyValueObject<String, String>>();
+        List<KeyValueObject<String, String>> holder = new ArrayList<>();
 
 
         IPeptideDigester digester = getDigester();
@@ -172,7 +172,7 @@ public class ProteinMapper extends AbstractTandemFunction  implements  IMapperFu
             sb.append(pp.getId());
         }
 
-        holder.add(new KeyValueObject<String, String>(str, sb.toString()));
+        holder.add(new KeyValueObject<>(str, sb.toString()));
     }
 
 }

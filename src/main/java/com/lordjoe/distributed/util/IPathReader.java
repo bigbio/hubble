@@ -17,7 +17,7 @@ public interface IPathReader extends Serializable {
      * @param path path to the file
      * @return  !null array of lines
      */
-     public @Nonnull String[] readTextLines(@Nonnull String path);
+     @Nonnull String[] readTextLines(@Nonnull String path);
 
 
     /**
@@ -25,13 +25,13 @@ public interface IPathReader extends Serializable {
      * @param path   path to the directory
      * @return
      */
-     public boolean isDirectory(@Nonnull String path);
+    boolean isDirectory(@Nonnull String path);
 
     /**
      * assume the path represents a directory
      * @param path path to the directory
      * @return  !null array of paths to files in the directory
      */
-     public @Nonnull String[] readSubPaths(@Nonnull String path);
+     @Nonnull String[] readSubPaths(@Nonnull String path);
 
 }

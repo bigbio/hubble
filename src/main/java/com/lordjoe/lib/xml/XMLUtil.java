@@ -48,16 +48,7 @@ public abstract class XMLUtil {
     public static final String 
         DEFAULT_PARSER_PROPERTY = "org.xml.sax.parser";
     
-    
-    /**
-    * Handle the details of creating an HTMLParser
-    * @return non-null Parser;
-    */
-    @SuppressWarnings(value = "deprecated")
-    public static Parser getHTMLParser()
-    {
-        throw new UnsupportedOperationException("Fix This");
-    }
+
      /**
     * Handle the details of creating an XMLParser
     * @return non-null Parser;
@@ -130,7 +121,7 @@ public abstract class XMLUtil {
     @SuppressWarnings(value = "deprecated")
     public static Parser getXMLParser()
     {
-        Parser TheParser = null;
+        Parser TheParser;
         String DefaultParser = System.getProperty(DEFAULT_PARSER_PROPERTY);
         if(DefaultParser == null) {
             System.setProperty(DEFAULT_PARSER_PROPERTY,DEFAULT_PARSER_NAME);
@@ -867,16 +858,16 @@ public abstract class XMLUtil {
                     File f = new File(arg);
                     FileInputStream fIn = new FileInputStream(f);
                     int pos = 0;
-                    String xml = "";
+                    StringBuilder xml = new StringBuilder();
                     // Loop through file data
                     while (fIn.available() > 0) {
                         byte[] buf = new byte[fIn.available()];
                         pos += fIn.read(buf, pos, fIn.available());
-                        xml += new String(buf);
+                        xml.append(new String(buf));
                     }
                     // Display formatted XML
                     System.out.println(arg + ":");
-                    System.out.println(formatXML(xml));
+                    System.out.println(formatXML(xml.toString()));
                 } catch (IOException e) {
                     System.err.println("An I/O error has occured accessing " + arg + "\n" + e.getMessage());
                 }
@@ -1055,7 +1046,7 @@ public abstract class XMLUtil {
         String[] images = getElementImages(e);
         String TextUpper = text.toUpperCase();
          for (String image : images) {
-             if (image.toUpperCase().indexOf(TextUpper) >= 0)
+             if (image.toUpperCase().contains(TextUpper))
                  return (image);
          }
         return(null); // not found

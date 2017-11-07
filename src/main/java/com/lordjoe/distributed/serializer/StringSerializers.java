@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class StringSerializers {
 
-    private static final Map<Class, IStringSerializer> serializers = new HashMap<Class, IStringSerializer>();
+    private static final Map<Class, IStringSerializer> serializers = new HashMap<>();
     public static final IStringSerializer<String> STRING_STRING_SERIALIZER = new IStringSerializer<String>() {
         @Override
         public Class<? extends String> getSerializedClass() {

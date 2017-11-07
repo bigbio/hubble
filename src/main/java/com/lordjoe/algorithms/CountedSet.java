@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class CountedSet<T> {
 
-    private Map<T, Integer> m_Counts = new HashMap<T, Integer>();
+    private Map<T, Integer> m_Counts = new HashMap<>();
 
     public void clear() {
         m_Counts.clear();

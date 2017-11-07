@@ -18,7 +18,7 @@ public class SpectrumQuery  implements IEquivalent<SpectrumQuery> {
     public final double mass;
     public final int charge;
     public final double retentionTime;
-    private final List<SpectrumHit> hits = new ArrayList<SpectrumHit>();
+    private final List<SpectrumHit> hits = new ArrayList<>();
 
     public SpectrumQuery(String spectrum,
                          double mass,
@@ -62,8 +62,8 @@ public class SpectrumQuery  implements IEquivalent<SpectrumQuery> {
             return true;
 
 
-        List<SpectrumHit> cpHits = new ArrayList<SpectrumHit>(hits);
-        List<SpectrumHit> cpoHits = new ArrayList<SpectrumHit>(o.hits);
+        List<SpectrumHit> cpHits = new ArrayList<>(hits);
+        List<SpectrumHit> cpoHits = new ArrayList<>(o.hits);
         for (int i = 0; i < hits.size(); i++) {
             SpectrumHit hit1 = hits.get(i);
             SpectrumHit hit2 = o.hits.get(i);

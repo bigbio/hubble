@@ -9,7 +9,7 @@ import javax.annotation.*;
  */
 public interface IStringSerializer<T> {
 
-    public Class<? extends T>  getSerializedClass();
+    Class<? extends T>  getSerializedClass();
 
     /**
      * convert to string
@@ -17,13 +17,13 @@ public interface IStringSerializer<T> {
      * @return  string representation
      */
     @Nonnull
-    public String asString(@Nonnull T t);
+    String asString(@Nonnull T t);
 
     /**
      * build from a string - default may be to call constructor from string
      * @param t
      * @return
      */
-    public T fromString(@Nonnull String t);
+    T fromString(@Nonnull String t);
 
 }

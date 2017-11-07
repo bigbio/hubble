@@ -88,10 +88,10 @@ public class Deployer {
     };
 
 
-    public final Set<String> EXCLUDED_JARS = new HashSet<String>(Arrays.asList(EEXCLUDED_JARS_LIST));
+    public final Set<String> EXCLUDED_JARS = new HashSet<>(Arrays.asList(EEXCLUDED_JARS_LIST));
 
     @SuppressWarnings("unchecked")
-    private final Set<String> m_TaskExcludeJar = new HashSet<String>();
+    private final Set<String> m_TaskExcludeJar = new HashSet<>();
 
     public Deployer() {
     }
@@ -118,8 +118,8 @@ public class Deployer {
 
     public File[] filterClassPath(String[] pathItems, String javaHome, File libDir) {
 
-        List<File> holder = new ArrayList<File>();
-        Set<File> directoryHolder = new HashSet<File> ();
+        List<File> holder = new ArrayList<>();
+        Set<File> directoryHolder = new HashSet<>();
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < pathItems.length; i++) {
             String item = pathItems[i];
@@ -218,7 +218,7 @@ public class Deployer {
 
     protected void makeJars(File libDir, Collection<File> jarDirectories, Collection<File> holder) {
         //noinspection UnnecessaryLocalVariable,UnusedDeclaration,UnusedAssignment
-        Set<String>  usedClassName = new HashSet<String>();
+        Set<String>  usedClassName = new HashSet<>();
         for (File jarDirectory : jarDirectories) {
             String name = jarDirectory.getName();
       //      File jar = new File(name + ".jar");
@@ -325,9 +325,7 @@ public class Deployer {
             }
             return (false);
             // failure
-        } catch (IOException ex) {
-            return (false); // browser disallows
-        } catch (SecurityException ex) {
+        } catch (IOException | SecurityException ex) {
             return (false); // browser disallows
         }
     }

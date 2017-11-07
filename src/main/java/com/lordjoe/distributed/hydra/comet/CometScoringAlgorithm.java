@@ -147,7 +147,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
 
         CometScoringAlgorithm comet = (CometScoringAlgorithm) application.getScorer();
         IonUseCounter counter = new IonUseCounter();
-        List<XCorrUsedData> used = new ArrayList<XCorrUsedData>();
+        List<XCorrUsedData> used = new ArrayList<>();
 
         //if (SparkUtilities.validateDesiredUse(spec, peptide, 0))
         //    breakHere(); // look at these cases
@@ -350,7 +350,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
             return 0; // nothing to do
         // for debugging isolate one case
 
-        List<XCorrUsedData> used = new ArrayList<XCorrUsedData>();
+        List<XCorrUsedData> used = new ArrayList<>();
 
         for (ITheoreticalSpectrumSet tsSet : pSpectrums) {
             // debugging test
@@ -529,7 +529,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
         double lowestInten = 0.0;
         double maxInten = 0.001;   // so we dont get divide by 0
 
-        Set<CometPeak> holder = new HashSet<CometPeak>();
+        Set<CometPeak> holder = new HashSet<>();
         for (int i = 0; i < pBinnedPeaks.length; i++) {
             float peak = pBinnedPeaks[i];
             if (peak <= lowestInten)
@@ -541,7 +541,6 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
             }
             else {
                 float newLowest = saved.peak;
-                ;
                 CometPeak lowestPeak = saved;
                 for (CometPeak cometPeak : holder) {
                     newLowest = Math.min(newLowest, cometPeak.peak);
@@ -554,7 +553,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
                 lowestInten = newLowest;
             }
         }
-        ArrayList<CometPeak> ret = new ArrayList<CometPeak>();
+        ArrayList<CometPeak> ret = new ArrayList<>();
         for (CometPeak cometPeak : holder) {
             ret.add(new CometPeak(cometPeak.index, (float) (cometPeak.peak / maxInten)));
         }
@@ -814,7 +813,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
     @Override
     public double scoreSpectrum(final IMeasuredSpectrum measured, final ITheoreticalSpectrum theory, Object... otherdata) {
         IonUseCounter counter = new IonUseCounter();
-        List<DebugMatchPeak> holder = new ArrayList<DebugMatchPeak>();
+        List<DebugMatchPeak> holder = new ArrayList<>();
         double dot = dot_product(measured, theory, counter, holder);
         return dot;
     }
@@ -1249,7 +1248,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
     }
 
     protected void addHighestPeaks(final MutableMeasuredSpectrum pOut, final ISpectrumPeak[] pPeaks, final double pStart, final double pEnd) {
-        List<ISpectrumPeak> holder = new ArrayList<ISpectrumPeak>();
+        List<ISpectrumPeak> holder = new ArrayList<>();
         for (ISpectrumPeak peak : pPeaks) {
             double mass = peak.getMassChargeRatio();
             if (Math.abs(mass - 850) < 2)

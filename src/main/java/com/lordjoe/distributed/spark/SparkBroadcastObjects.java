@@ -34,7 +34,7 @@ public class SparkBroadcastObjects implements Serializable {
     /**
      * holds nameToBroadcast by name
      */
-    private final Map<String, Broadcast<Serializable>> nameToBroadcast = new HashMap<String,Broadcast<Serializable>>();
+    private final Map<String, Broadcast<Serializable>> nameToBroadcast = new HashMap<>();
 
     /**
      * must be called in the Executor before nameToBroadcast can be used
@@ -71,7 +71,7 @@ public class SparkBroadcastObjects implements Serializable {
      * @return
      */
     public List<String> getBroadcastNames() {
-        List<String> keys = new ArrayList<String>(nameToBroadcast.keySet());
+        List<String> keys = new ArrayList<>(nameToBroadcast.keySet());
         Collections.sort(keys);  // alphapetize
         return keys;
     }

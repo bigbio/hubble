@@ -79,27 +79,20 @@ public class SparkFileSaver {
         if (!srcFS.getFileStatus(srcDir).isDirectory())
             return false;
 
-        OutputStream out = dstFS.create(dstFile);
-
-        try {
+        try (OutputStream out = dstFS.create(dstFile)) {
             FileStatus contents[] = srcFS.listStatus(srcDir);
             Arrays.sort(contents);
             if (header != null)
                 out.write(header.getBytes("UTF-8"));
             for (FileStatus content : contents) {
                 if (content.isFile()) {
-                    InputStream in = srcFS.open(content.getPath());
-                    try {
+                    try (InputStream in = srcFS.open(content.getPath())) {
                         IOUtils.copyBytes(in, out, conf, false);
-                    } finally {
-                        in.close();
                     }
                 }
             }
             if (footer != null)
                 out.write(footer.getBytes("UTF-8"));
-        } finally {
-            out.close();
         }
 
 

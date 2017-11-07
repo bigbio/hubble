@@ -30,14 +30,14 @@ public class UsedSpectrum implements IEquivalent<UsedSpectrum> {
     public static Map<Integer, List<UsedSpectrum>> readUsedSpectra(InputStream is) {
         try {
             LineNumberReader rdr = new LineNumberReader(new InputStreamReader(is));
-            Map<Integer, List<UsedSpectrum>> ret = new HashMap<Integer, List<UsedSpectrum>>();
+            Map<Integer, List<UsedSpectrum>> ret = new HashMap<>();
 
             String line = rdr.readLine();
             while (line != null) {
                 UsedSpectrum read = new UsedSpectrum(line);
                 int spectrumIndex = read.spectrumIndex;
                 if (!ret.containsKey(spectrumIndex)) {
-                    ret.put(spectrumIndex, new ArrayList<UsedSpectrum>());
+                    ret.put(spectrumIndex, new ArrayList<>());
                 }
                 ret.get(spectrumIndex).add(read);
                 line = rdr.readLine();

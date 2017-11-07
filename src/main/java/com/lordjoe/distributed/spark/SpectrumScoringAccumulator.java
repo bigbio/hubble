@@ -1,7 +1,6 @@
 package com.lordjoe.distributed.spark;
 
 import com.lordjoe.distributed.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.apache.spark.*;
 
 import java.util.*;
@@ -22,7 +21,7 @@ public class SpectrumScoringAccumulator implements IAccumulator<SpectrumScoringA
 
     // key is the machine MAC address
     public final String scoredID;
-    private Map<String, Long> items = new HashMap<String, Long>();
+    private Map<String, Long> items = new HashMap<>();
     private long totalCalls;  // number function calls
 
     private  SpectrumScoringAccumulator() {
@@ -152,7 +151,7 @@ public class SpectrumScoringAccumulator implements IAccumulator<SpectrumScoringA
      * @return
      */
     public List<CountedItem> asCountedItems() {
-        List<CountedItem> holder = new ArrayList<CountedItem>();
+        List<CountedItem> holder = new ArrayList<>();
         for (String s : items.keySet()) {
             holder.add(new CountedItem(s, items.get(s)));
         }

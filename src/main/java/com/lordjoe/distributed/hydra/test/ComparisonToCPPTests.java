@@ -1,6 +1,5 @@
 package com.lordjoe.distributed.hydra.test;
 
-import com.lordjoe.distributed.hydra.scoring.*;
 import org.systemsbiology.xtandem.peptide.*;
 
 import java.io.*;
@@ -15,8 +14,8 @@ public class ComparisonToCPPTests {
 
     public static final Integer INTERESTING_KEY = 8852;
 
-    private final Map<Integer, List<CometScoredResult>> cppResultsByKey = new HashMap<Integer, List<CometScoredResult>>();
-    private final Map<Integer, List<CometScoredResult>> hydraResultsByKey = new HashMap<Integer, List<CometScoredResult>>();
+    private final Map<Integer, List<CometScoredResult>> cppResultsByKey = new HashMap<>();
+    private final Map<Integer, List<CometScoredResult>> hydraResultsByKey = new HashMap<>();
 
     public ComparisonToCPPTests() {
     }
@@ -33,7 +32,7 @@ public class ComparisonToCPPTests {
                         holder = cppResultsByKey.get(result.id);
                     }
                     else {
-                        holder = new ArrayList<CometScoredResult>();
+                        holder = new ArrayList<>();
                         cppResultsByKey.put(result.id, holder);
                     }
                     holder.add(result);
@@ -68,7 +67,7 @@ public class ComparisonToCPPTests {
                          holder = hydraResultsByKey.get(result.id);
                      }
                      else {
-                         holder = new ArrayList<CometScoredResult>();
+                         holder = new ArrayList<>();
                          hydraResultsByKey.put(result.id, holder);
                      }
                      holder.add(result);
@@ -89,7 +88,7 @@ public class ComparisonToCPPTests {
          return paptide.replace("[15]","");
     }
     public  Set<String> getPolypeptides() {
-         Set<String> peptides = new HashSet<String>();
+         Set<String> peptides = new HashSet<>();
          for (Integer key : cppResultsByKey.keySet()) {
              if(INTERESTING_KEY != key)
                  continue; // hard code one case
@@ -135,7 +134,7 @@ public class ComparisonToCPPTests {
 
 
                 Set < String > pepList = tests.getPolypeptides();
-        Set<IProtein> proteins = new HashSet<IProtein>();
+        Set<IProtein> proteins = new HashSet<>();
    //     GoodSampleConstructor.peptidesToProteins("contaminants_concatenated_target_decoy.fasta",pepList,proteins);
 
       //  GoodSampleConstructor.writeProteins("SmallSampleProteins.fasta",proteins);

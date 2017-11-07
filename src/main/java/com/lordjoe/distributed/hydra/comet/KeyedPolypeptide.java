@@ -1,7 +1,6 @@
 package com.lordjoe.distributed.hydra.comet;
 
 import com.lordjoe.distributed.hydra.fragment.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.systemsbiology.xtandem.peptide.*;
 
 import java.util.*;
@@ -26,7 +25,7 @@ public class KeyedPolypeptide extends Polypeptide {
         @Override
         public Iterable<KeyedPolypeptide> doCall(final Polypeptide v1) throws Exception {
             BinChargeKey binChargeKey = BinChargeMapper.oneKeyFromChargeMz(1, v1.getMass());
-            List<KeyedPolypeptide> holder = new ArrayList<KeyedPolypeptide>();
+            List<KeyedPolypeptide> holder = new ArrayList<>();
             holder.add(new KeyedPolypeptide(v1, binChargeKey));
             return holder;
         }

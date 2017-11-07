@@ -14,7 +14,7 @@ import java.util.*;
 public class CometSpectraUse {
 
 
-    private final Map<String, CometSpectralScoring> idToUse = new HashMap<String, CometSpectralScoring>();
+    private final Map<String, CometSpectralScoring> idToUse = new HashMap<>();
 
     public CometSpectraUse(File uses) {
         try {

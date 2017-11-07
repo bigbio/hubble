@@ -66,7 +66,7 @@ public class CometUtilities implements Serializable {
     }
 
     public static List<IPolypeptide> getPeptidesInBins(List<IPolypeptide> peptides, Set<Integer> bins) {
-        List<IPolypeptide> holder = new ArrayList<IPolypeptide>();
+        List<IPolypeptide> holder = new ArrayList<>();
         for (IPolypeptide peptide : peptides) {
             BinChargeKey binChargeKey = BinChargeMapper.keyFromPeptide(peptide);
             if (bins.contains(binChargeKey.getMzInt()))
@@ -90,7 +90,7 @@ public class CometUtilities implements Serializable {
 
 
     public static Set<Integer> getSpectrumBinsIntegers(Set<BinChargeKey> used) {
-        Set<Integer> ret = new HashSet<Integer>();
+        Set<Integer> ret = new HashSet<>();
         for (BinChargeKey binChargeKey : used) {
             ret.add(binChargeKey.getMzInt());
         }
@@ -129,15 +129,10 @@ public class CometUtilities implements Serializable {
                 line = rdr.readLine();
             }
         }
-        catch (UnsupportedOperationException e) {
+        catch (UnsupportedOperationException | IOException e) {
             throw new RuntimeException(e);
 
-        }
-        catch (IOException e) {
-              throw new RuntimeException(e);
-
-          }
-          finally {
+        } finally {
             try {
                 rdr.close();
             }

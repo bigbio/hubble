@@ -15,6 +15,6 @@ public interface ISingleOutputReducerFunction<K extends Serializable,V   extends
      * @param value
      * @return
      */
-     public @Nonnull  KeyValueObject<KOUT,VOUT> handleValue(@Nonnull K key, @Nonnull V value);
+     @Nonnull  KeyValueObject<KOUT,VOUT> handleValue(@Nonnull K key, @Nonnull V value);
 
 }

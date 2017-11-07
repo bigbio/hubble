@@ -2,7 +2,6 @@ package com.lordjoe.distributed.hydra.comet;
 
 
 import com.lordjoe.algorithms.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.apache.spark.*;
 
 import java.io.*;
@@ -61,7 +60,7 @@ public class CometTemporaryMemoryAccumulator implements IAccumulator<CometTempor
         return new CometTemporaryMemoryAccumulator();
     }
 
-    private final Map<Integer, TemporaryMemoryAllocation> allocations = new HashMap<Integer, TemporaryMemoryAllocation>();
+    private final Map<Integer, TemporaryMemoryAllocation> allocations = new HashMap<>();
 
     /**
      * Use static method empty
@@ -98,7 +97,7 @@ public class CometTemporaryMemoryAccumulator implements IAccumulator<CometTempor
 
         CometTemporaryMemoryAccumulator ret = empty();
 
-        Set<Integer> allKeys = new HashSet<Integer>(added.allocations.keySet());
+        Set<Integer> allKeys = new HashSet<>(added.allocations.keySet());
         allKeys.addAll(allocations.keySet());
         for (Integer allKey : allKeys) {
             TemporaryMemoryAllocation id1 = allocations.get(allKey);
@@ -140,7 +139,7 @@ public class CometTemporaryMemoryAccumulator implements IAccumulator<CometTempor
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        List<TemporaryMemoryAllocation> holder = new ArrayList<TemporaryMemoryAllocation>();
+        List<TemporaryMemoryAllocation> holder = new ArrayList<>();
         for (Integer key : allocations.keySet()) {
             holder.add(allocations.get(key));
         }

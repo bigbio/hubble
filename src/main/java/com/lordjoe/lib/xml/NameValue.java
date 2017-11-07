@@ -11,7 +11,7 @@ import java.util.*;
 public class NameValue  implements Serializable {
     public static final NameValue[] EMPTY_ARRAY = {};
     public static final Class THIS_CLASS = NameValue.class;
-   public static final Comparator VALUE_COMPARATOR = new ValueComparator();;
+   public static final Comparator VALUE_COMPARATOR = new ValueComparator();
 
     public static class ValueComparator implements Comparator,Serializable
     {

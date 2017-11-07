@@ -135,7 +135,7 @@ public class XMLTagInputFormat extends FileInputFormat<String, String> {
         long desiredMappers = job.getConfiguration().getLong("org.systemsbiology.jxtandem.DesiredXMLInputMappers", 0);
 
         // generate splits
-        List<InputSplit> splits = new ArrayList<InputSplit>();
+        List<InputSplit> splits = new ArrayList<>();
         List<FileStatus> fileStatuses = listStatus(job);
         boolean forceNumberMappers = fileStatuses.size() == 1;
         for (FileStatus file : fileStatuses) {
@@ -346,7 +346,7 @@ public class XMLTagInputFormat extends FileInputFormat<String, String> {
             m_Sb.setLength(0);
             m_Sb.append(startText);
 
-            String s =  m_Sb.toString();;
+            String s =  m_Sb.toString();
             index = s.indexOf(endTag);
             if (index == -1)
                 return false; // need more read

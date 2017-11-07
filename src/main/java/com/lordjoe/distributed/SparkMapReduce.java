@@ -2,7 +2,6 @@ package com.lordjoe.distributed;
 
 import com.lordjoe.distributed.spark.accumulators.*;
 import com.lordjoe.distributed.util.*;
-import com.lordjoe.distributed.wordcount.*;
 import org.apache.spark.*;
 import org.apache.spark.api.java.*;
 import scala.*;
@@ -125,7 +124,7 @@ public class SparkMapReduce<KEYIN extends Serializable, VALUEIN extends Serializ
            // if not commented out this line forces kvJavaPairRDD to be realized
         kkv = SparkUtilities.realizeAndReturn(kkv );
 
-        PartitionAdaptor<K> prt = new PartitionAdaptor<K>(getPartitioner());
+        PartitionAdaptor<K> prt = new PartitionAdaptor<>(getPartitioner());
         kkv = kkv.partitionBy(prt);
 
         IReducerFunction reduce = getReduce();
@@ -154,7 +153,7 @@ public class SparkMapReduce<KEYIN extends Serializable, VALUEIN extends Serializ
         MapFunctionAdaptor<KEYIN, VALUEIN, K, V> ma = new MapFunctionAdaptor<KEYIN, VALUEIN, K, V>(map);
 
         JavaRDD<KeyValueObject<K, V>> mappedKeys = pInputs.flatMap(ma);
-        JavaPairRDD<K, Tuple2<K, V>> kkv = mappedKeys.mapToPair(new KeyValuePairFunction<K, V>());
+        JavaPairRDD<K, Tuple2<K, V>> kkv = mappedKeys.mapToPair(new KeyValuePairFunction<>());
         kkv = kkv.sortByKey();
         return kkv;
     }
@@ -202,7 +201,7 @@ public class SparkMapReduce<KEYIN extends Serializable, VALUEIN extends Serializ
         // if not commented out this line forces kvJavaPairRDD to be realized
         reducedSets = SparkUtilities.realizeAndReturn(reducedSets );
 
-        PartitionAdaptor<K> prt = new PartitionAdaptor<K>(getPartitioner());
+        PartitionAdaptor<K> prt = new PartitionAdaptor<>(getPartitioner());
         reducedSets = reducedSets.partitionBy(prt);
         reducedSets = reducedSets.sortByKey();
 

@@ -27,7 +27,7 @@ public class NullStringReducer implements IReducerFunction<String, String,String
 
         for (IKeyValueConsumer<String, String> aConsumer : consumer) {
             for (String value : values) {
-                aConsumer.consume(new KeyValueObject<String, String>(key, value));
+                aConsumer.consume(new KeyValueObject<>(key, value));
             }
         }
 

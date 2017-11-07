@@ -2,10 +2,8 @@ package com.lordjoe.distributed.hydra;
 
 import com.lordjoe.distributed.*;
 import com.lordjoe.distributed.util.*;
-import com.lordjoe.distributed.wordcount.*;
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.*;
-import org.apache.spark.examples.*;
 import org.systemsbiology.xtandem.hadoop.*;
 import scala.*;
 
@@ -51,7 +49,7 @@ public class SimpleLoadTest {
          JavaRDD<String> words = lines.flatMap(new WordsMapFunction());
 
 
-         JavaPairRDD<String, Integer> ones = words.mapToPair((PairFunction<String, String, Integer>) s -> new Tuple2<String, Integer>(s, 1));
+         JavaPairRDD<String, Integer> ones = words.mapToPair((PairFunction<String, String, Integer>) s -> new Tuple2<>(s, 1));
 
           JavaPairRDD<String, Integer> sorted = ones.sortByKey();
          JavaRDD<WordNumber> answer = sorted.mapPartitions(new WordCountFlatMapFunction());

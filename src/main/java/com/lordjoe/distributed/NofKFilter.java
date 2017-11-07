@@ -1,7 +1,5 @@
 package com.lordjoe.distributed;
 
-import com.lordjoe.distributed.spark.accumulators.*;
-
 import java.io.*;
 
 /**
@@ -45,7 +43,7 @@ public class NofKFilter<T extends Serializable> extends AbstractLoggingFunction<
     protected long getIndex()
     {
         if(index == null) {
-            index = new ThreadLocal<Long>();
+            index = new ThreadLocal<>();
             index.set(0L);
         }
         long ret = index.get();

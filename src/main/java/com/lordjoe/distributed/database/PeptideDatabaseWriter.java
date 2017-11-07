@@ -32,7 +32,7 @@ public class PeptideDatabaseWriter implements Serializable {
     private Function2<String, String, String> endCombiner;
     private MZPartitioner partitioner;
     private XTandemMain application;
-    private CountedMap<String> peptideUses = new CountedMap<String>();
+    private CountedMap<String> peptideUses = new CountedMap<>();
     private String defaultPath;
 
     public static final int NUMBER_MZ_PARTITIONS = 1000;
@@ -114,39 +114,39 @@ public class PeptideDatabaseWriter implements Serializable {
 
     protected synchronized PrintWriter getCurrentWriter() {
         if (currentWriter == null)
-            currentWriter = new ThreadLocal<PrintWriter>();
+            currentWriter = new ThreadLocal<>();
         return currentWriter.get();
     }
 
     protected synchronized Integer getCurrentMass() {
         if (currentMass == null)
-            currentMass = new ThreadLocal<Integer>();
+            currentMass = new ThreadLocal<>();
         return currentMass.get();
     }
 
     protected synchronized Path getCurrentPath() {
         if (currentPath == null)
-            currentPath = new ThreadLocal<Path>();
+            currentPath = new ThreadLocal<>();
         return currentPath.get();
     }
 
     public synchronized void setCurrentMass(Integer pCurrentMass) {
         if (currentMass == null)
-            currentMass = new ThreadLocal<Integer>();
+            currentMass = new ThreadLocal<>();
 
         currentMass.set(pCurrentMass);
     }
 
     public void setCurrentPath(Path pCurrentPath) {
         if (currentPath == null)
-            currentPath = new ThreadLocal<Path>();
+            currentPath = new ThreadLocal<>();
 
         currentPath.set(pCurrentPath);
     }
 
     public void setCurrentWriter(PrintWriter pCurrentWriter) {
         if (currentWriter == null)
-            currentWriter = new ThreadLocal<PrintWriter>();
+            currentWriter = new ThreadLocal<>();
         currentWriter.set(pCurrentWriter);
     }
 

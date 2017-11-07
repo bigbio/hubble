@@ -44,7 +44,7 @@ public class RDDGenerator {
             JavaRDD<Byte> itemList = sc.parallelize(Arrays.asList(values));
             itemList = itemList.coalesce(partitions, true);
             return itemList.flatMap((FlatMapFunction<Byte, T>) t -> {
-                List<T> holder = new ArrayList<T>();
+                List<T> holder = new ArrayList<>();
                 for (int i = 0; i < listSize; i++) {
                     holder.add(generator.generateObject());
                 }

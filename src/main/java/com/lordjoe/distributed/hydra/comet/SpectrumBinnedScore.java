@@ -1,6 +1,5 @@
 package com.lordjoe.distributed.hydra.comet;
 
-import com.lordjoe.distributed.util.*;
 import org.systemsbiology.xtandem.*;
 
 import java.io.*;
@@ -14,7 +13,7 @@ import java.util.*;
 public class SpectrumBinnedScore implements Comparable<SpectrumBinnedScore>,IEquivalent<SpectrumBinnedScore> {
 
     public static List<SpectrumBinnedScore> fromBins(float[] bins) {
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         for (int i = 0; i < bins.length; i++) {
             float bin = bins[i];
             if (bin > 0.001) {
@@ -26,7 +25,7 @@ public class SpectrumBinnedScore implements Comparable<SpectrumBinnedScore>,IEqu
 
     public static List<SpectrumBinnedScore> fromResource(String resourceName) {
         try {
-            List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+            List<SpectrumBinnedScore> holder = new ArrayList<>();
             InputStream resourceAsStream = SpectrumBinnedScore.class.getResourceAsStream(resourceName);
             LineNumberReader rdr = new LineNumberReader(new InputStreamReader(resourceAsStream));
             String line = rdr.readLine();

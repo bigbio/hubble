@@ -9,7 +9,7 @@ import java.util.*;
  * @param <T>
  */
 public class CountedMap<T> implements Serializable {
-    private Map<T, Integer> items = new HashMap<T, Integer>();
+    private Map<T, Integer> items = new HashMap<>();
     private int total;
 
     public CountedMap() {
@@ -84,7 +84,7 @@ public class CountedMap<T> implements Serializable {
     }
 
     public CountedMap<T> getDifferences(CountedMap<T> others) {
-        CountedMap<T> ret = new CountedMap<T>();
+        CountedMap<T> ret = new CountedMap<>();
         for (T t : items.keySet()) {
             int me = get(t);
             int other = others.get(t);
@@ -113,7 +113,7 @@ public class CountedMap<T> implements Serializable {
     }
 
     public List<CountedString> asCountedStrings() {
-        List<CountedString> holder = new ArrayList<CountedString>();
+        List<CountedString> holder = new ArrayList<>();
         for (T t : items.keySet()) {
             int count = get(t);
             holder.add(new CountedString(t.toString(), count));

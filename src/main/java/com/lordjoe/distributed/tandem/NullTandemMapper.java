@@ -26,8 +26,8 @@ public class NullTandemMapper extends AbstractTandemFunction  implements IMapper
     @Nonnull
     @Override
     public Iterable<KeyValueObject<String, String>> mapValues(@Nonnull final String key, @Nonnull final String valuein) {
-        List<KeyValueObject<String, String>> holder = new ArrayList<KeyValueObject<String, String>>();
-          holder.add(new KeyValueObject<String, String>(key,valuein));
+        List<KeyValueObject<String, String>> holder = new ArrayList<>();
+          holder.add(new KeyValueObject<>(key, valuein));
             return holder;
       }
 }

@@ -2,7 +2,6 @@ package com.lordjoe.distributed.hydra.test;
 
 import com.lordjoe.distributed.*;
 import com.lordjoe.distributed.hydra.fragment.*;
-import com.lordjoe.distributed.spark.accumulators.*;
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.Function;
 import org.systemsbiology.hadoop.*;
@@ -24,8 +23,8 @@ import java.util.*;
  */
 public class TestUtilities {
 
-    private final static List<Tuple2<BinChargeKey, IPolypeptide>> peptideKeys = new ArrayList<Tuple2<BinChargeKey, IPolypeptide>>();
-    private final static List<Tuple2<BinChargeKey, IMeasuredSpectrum>> spectrumKeys = new ArrayList<Tuple2<BinChargeKey, IMeasuredSpectrum>>();
+    private final static List<Tuple2<BinChargeKey, IPolypeptide>> peptideKeys = new ArrayList<>();
+    private final static List<Tuple2<BinChargeKey, IMeasuredSpectrum>> spectrumKeys = new ArrayList<>();
 
     public static final String LOG_CALCULATIONS_PROPERTY = "com.lordjoe.distributed.hydra.test.TestUtilities.LogCalculations";
 
@@ -118,7 +117,7 @@ public class TestUtilities {
 
 
     };
-    public static final Set<String> INTERESTING_PROTEINS = new HashSet<String>(Arrays.asList(INTERESTING_PROTEIN_IDS));
+    public static final Set<String> INTERESTING_PROTEINS = new HashSet<>(Arrays.asList(INTERESTING_PROTEIN_IDS));
 
 
     public static final String[] INTERESTING_PEPTIDES_STRS = {
@@ -135,7 +134,7 @@ public class TestUtilities {
 
 
     };
-    public static final Set<String> INTERESTING_PEPTIDES = new HashSet<String>(Arrays.asList(INTERESTING_PEPTIDES_STRS));
+    public static final Set<String> INTERESTING_PEPTIDES = new HashSet<>(Arrays.asList(INTERESTING_PEPTIDES_STRS));
 
 
     public static final String[] INTERESTING_SPECTRUM_STRS = {
@@ -149,7 +148,7 @@ public class TestUtilities {
 
     };
 
-    public static final Set<String> INTERESTING_SPECTRUMS = new HashSet<String>(Arrays.asList(INTERESTING_SPECTRUM_STRS));
+    public static final Set<String> INTERESTING_SPECTRUMS = new HashSet<>(Arrays.asList(INTERESTING_SPECTRUM_STRS));
 
 
     public static boolean isInterestingScoringPair(IPolypeptide pp, IMeasuredSpectrum spec) {
@@ -231,7 +230,7 @@ public class TestUtilities {
     }
 
     public static List<SpectrumBinnedScore> activeValues(float[] all) {
-        List<SpectrumBinnedScore> holder = new ArrayList<SpectrumBinnedScore>();
+        List<SpectrumBinnedScore> holder = new ArrayList<>();
         for (int i = 0; i < all.length; i++) {
             float v = all[i];
             if (Math.abs(v) > 0.001) {
@@ -280,8 +279,8 @@ public class TestUtilities {
         JavaPairRDD<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>> onlyBiggest = bySpectrumId.filter((Function<Tuple2<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>>, Boolean>) x -> x._1().equals(acceptKey));
         final List<Tuple2<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>>> collect = onlyBiggest.collect();
 
-        Set<IPolypeptide> peptides = new HashSet<IPolypeptide>();
-        Map<String, IMeasuredSpectrum> spectraMap = new HashMap<String, IMeasuredSpectrum>();
+        Set<IPolypeptide> peptides = new HashSet<>();
+        Map<String, IMeasuredSpectrum> spectraMap = new HashMap<>();
         for (Tuple2<String, Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan>> v1 : collect) {
             final Tuple2<ITheoreticalSpectrumSet, ? extends IScoredScan> v2 = v1._2();
             IPolypeptide pp = v2._1().getPeptide();

@@ -83,7 +83,7 @@ public class SparkScanScorer {
     public static class ScanKeyMapper implements PairFlatMapFunction<Iterator<KeyValueObject<String, IScoredScan>>, String, IScoredScan> {
         @Override
         public Iterable<Tuple2<String, IScoredScan>> call(final Iterator<KeyValueObject<String, IScoredScan>> t) throws Exception {
-            List<Tuple2<String, IScoredScan>> mapped = new ArrayList<Tuple2<String, IScoredScan>>();
+            List<Tuple2<String, IScoredScan>> mapped = new ArrayList<>();
             while (t.hasNext()) {
                 KeyValueObject<String, IScoredScan> kscan = t.next();
                 IScoredScan value = kscan.value;
@@ -278,7 +278,7 @@ public class SparkScanScorer {
         Map<BinChargeKey, Object> spectraCountsMap = keyedSpectra.countByKey();
         Map<BinChargeKey, Object> peptideCounts = keyedPeptides.countByKey();
         List<BinChargeKey> keys = new ArrayList(peptideCounts.keySet());
-        List<PairCounter> pairs = new ArrayList<PairCounter>();
+        List<PairCounter> pairs = new ArrayList<>();
 
         long specCount = 0;
         long peptideCount = 0;

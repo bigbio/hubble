@@ -13,5 +13,5 @@ public interface ObjectGenerator<T> extends Serializable {
      * create an instance of the known type
      * @return
      */
-    public @Nonnull T generateObject();
+    @Nonnull T generateObject();
 }

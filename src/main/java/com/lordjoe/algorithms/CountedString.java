@@ -34,7 +34,7 @@ public class CountedString implements Comparable<CountedString> {
         Arrays.sort(items);
         String current = "";
         int currentCount = 0;
-        List<CountedString> holder = new ArrayList<CountedString>();
+        List<CountedString> holder = new ArrayList<>();
 
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < items.length; i++) {

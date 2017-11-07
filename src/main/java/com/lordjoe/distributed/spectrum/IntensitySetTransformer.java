@@ -53,7 +53,7 @@ public class IntensitySetTransformer {
 
 
         double totalIntensity = 0;
-        List<ISpectrumPeak> ret = new ArrayList<ISpectrumPeak>();
+        List<ISpectrumPeak> ret = new ArrayList<>();
 
         for (int i = 0; i < intensityReadings.size(); i++) {
             i = extractNextPeak(intensityReadings, ret, i);
@@ -64,7 +64,7 @@ public class IntensitySetTransformer {
 
         Collections.sort(ret, SpectrumPeak.INTENSITY_COMPARATOR);
 
-        List<ISpectrumPeak> pruned = new ArrayList<ISpectrumPeak>();
+        List<ISpectrumPeak> pruned = new ArrayList<>();
         for (ISpectrumPeak peak : ret) {
             if (peak.getMassChargeRatio() < MINIMUM_MZ)
                 continue;
@@ -115,7 +115,7 @@ public class IntensitySetTransformer {
         List<List<ISpectrumPeak>> peakGroups = buildPeakGroups(intensityReadings);
 
         double totalIntensity = 0;
-        List<ISpectrumPeak> ret = new ArrayList<ISpectrumPeak>();
+        List<ISpectrumPeak> ret = new ArrayList<>();
         for (List<ISpectrumPeak> peakGroup : peakGroups) {
             ISpectrumPeak peak = findSinglePeak(peakGroup);
             totalIntensity += peak.getPeak();
@@ -124,7 +124,7 @@ public class IntensitySetTransformer {
 
         Collections.sort(ret, SpectrumPeak.INTENSITY_COMPARATOR);
 
-        List<ISpectrumPeak> pruned = new ArrayList<ISpectrumPeak>();
+        List<ISpectrumPeak> pruned = new ArrayList<>();
         for (ISpectrumPeak peak : ret) {
             if (peak.getMassChargeRatio() < MINIMUM_MZ)
                 continue;
@@ -151,15 +151,15 @@ public class IntensitySetTransformer {
 
     private static List<List<ISpectrumPeak>> buildPeakGroups(final List<ISpectrumPeak> peaks) {
         double minPeakDifference = findMinimumPeakDifference(peaks);
-        List<List<ISpectrumPeak>> ret = new ArrayList<List<ISpectrumPeak>>();
-        List<ISpectrumPeak> current = new ArrayList<ISpectrumPeak>();
+        List<List<ISpectrumPeak>> ret = new ArrayList<>();
+        List<ISpectrumPeak> current = new ArrayList<>();
         boolean intensitySeen = false;
         double lastMz = 0;
         int index = 0;
         for (ISpectrumPeak peak : peaks) {
             if (isEndPeak(peak, lastMz, minPeakDifference)) {
                 if (intensitySeen) {
-                    ret.add(new ArrayList<ISpectrumPeak>(current));
+                    ret.add(new ArrayList<>(current));
                     current.clear();
                     intensitySeen = false;
                 }
@@ -174,7 +174,7 @@ public class IntensitySetTransformer {
             index++;
         }
         if (intensitySeen)
-            ret.add(new ArrayList<ISpectrumPeak>(current));
+            ret.add(new ArrayList<>(current));
         return ret;
     }
 

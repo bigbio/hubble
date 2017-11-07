@@ -19,10 +19,10 @@ public class XTandemComparator {
 
     public final XTandemScoringReport report1;
     public final XTandemScoringReport report2;
-    private final Map<String, MultiScanComparison> scanById = new HashMap<String, MultiScanComparison>();
-    private final List<MultiScanComparison> scanByScore = new ArrayList<MultiScanComparison>();
-    private final List<ScoredScan> scanByScore1Only = new ArrayList<ScoredScan>();
-    private final List<ScoredScan> scanByScore2Only = new ArrayList<ScoredScan>();
+    private final Map<String, MultiScanComparison> scanById = new HashMap<>();
+    private final List<MultiScanComparison> scanByScore = new ArrayList<>();
+    private final List<ScoredScan> scanByScore1Only = new ArrayList<>();
+    private final List<ScoredScan> scanByScore2Only = new ArrayList<>();
 
 
     public XTandemComparator(final XTandemScoringReport pReport1, final XTandemScoringReport pReport2) {
@@ -32,7 +32,7 @@ public class XTandemComparator {
     }
 
     protected Map<String, ScoredScan> toLabels(Map<String, ScoredScan> scans1) {
-        Map<String, ScoredScan> byLabel1 = new HashMap<String, ScoredScan>();
+        Map<String, ScoredScan> byLabel1 = new HashMap<>();
         for (ScoredScan scoredScan : scans1.values()) {
             IMeasuredSpectrum raw = scoredScan.getRaw();
             if (raw instanceof RawPeptideScan) {
@@ -53,20 +53,20 @@ public class XTandemComparator {
         Map<String, ScoredScan> scans2X = report2.getScoredScansMap();
         Map<String, ScoredScan> scans2 = toLabels(scans2X);
 
-        List<String> commonKeys = new ArrayList<String>(scans1.keySet());
+        List<String> commonKeys = new ArrayList<>(scans1.keySet());
         commonKeys.retainAll(scans2.keySet());
 
-        List<String> scan1OnlyKeys = new ArrayList<String>(scans1.keySet());
+        List<String> scan1OnlyKeys = new ArrayList<>(scans1.keySet());
         scan1OnlyKeys.removeAll(scans2.keySet());
 
-        List<String> scan2OnlyKeys = new ArrayList<String>(scans2.keySet());
+        List<String> scan2OnlyKeys = new ArrayList<>(scans2.keySet());
         scan2OnlyKeys.removeAll(scans1.keySet());
 
         for (String key : scan2OnlyKeys) {
             ScoredScan scan2 = scans2.get(key);
             ISpectralMatch bestMatch = scan2.getBestMatch();
         }
-        Set<String> commonKeySet = new HashSet<String>(commonKeys);
+        Set<String> commonKeySet = new HashSet<>(commonKeys);
 
         int size1 = scans1.size();
         int size2 = scans2.size();

@@ -13,7 +13,7 @@ public interface ISortAndShuffleFunction<K   extends Serializable,V   extends Se
         * this is what a shuffle does
          * @return iterator over mapped key values
         */
-       public @Nonnull Iterable<KeyValueObject<K,V>> returnValues( @Nonnull Iterable<V> values);
+       @Nonnull Iterable<KeyValueObject<K,V>> returnValues(@Nonnull Iterable<V> values);
 
 
 }
