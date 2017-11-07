@@ -97,7 +97,7 @@ public class MultiScorer implements IMultiScorer  {
             if(current == null)
                 addAlgorithm(addedScan);
             else
-                ((ScoredScan)current).addTo(addedScan);
+                current.addTo(addedScan);
         }
     }
 

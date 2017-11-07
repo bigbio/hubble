@@ -209,7 +209,7 @@ public abstract class AbstractNShotInputFormat<K, V> extends InputFormat<K, V> {
          */
         @Override
         public K getCurrentKey() throws IOException, InterruptedException {
-            return (K) m_Parent.getKeyFromIndex(m_NFired - getNumberSplits());
+            return m_Parent.getKeyFromIndex(m_NFired - getNumberSplits());
         }
 
         /**
@@ -221,7 +221,7 @@ public abstract class AbstractNShotInputFormat<K, V> extends InputFormat<K, V> {
          */
         @Override
         public V getCurrentValue() throws IOException, InterruptedException {
-            return (V) m_Parent.getValueFromIndex(m_NFired - getNumberSplits());
+            return m_Parent.getValueFromIndex(m_NFired - getNumberSplits());
         }
     }
 

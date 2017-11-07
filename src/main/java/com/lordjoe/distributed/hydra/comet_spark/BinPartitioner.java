@@ -43,7 +43,7 @@ public class BinPartitioner extends Partitioner {
 
     @Override
     public int getPartition(final Object key) {
-        Integer p = keyToPartition.get((BinChargeKey) key);
+        Integer p = keyToPartition.get(key);
         if (p == null)
             return key.hashCode() % maxIndex;
         int partition = p;

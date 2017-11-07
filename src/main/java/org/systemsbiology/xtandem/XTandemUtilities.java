@@ -708,20 +708,6 @@ public class XTandemUtilities {
     }
 
     /**
-     * throw an exception after the date use for testing patched to the coed when you do not wsnt to forget them
-     *
-     * @param year  like 2012 - 1900 internally subtacted
-     * @param month j1-12 1 internally subtracted
-     * @param day   1-31
-     */
-    public static void workUntil(int year, int month, int day) {
-        Date now = new Date();
-        Date stopWorking = new Date(year - 1900, month - 1, day);
-        if (now.after(stopWorking))
-            throw new IllegalStateException("Temporary patch has expired");
-    }
-
-    /**
      * quick and dirty test when hunting for doubles
      *
      * @param test
