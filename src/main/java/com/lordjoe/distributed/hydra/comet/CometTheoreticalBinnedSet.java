@@ -69,7 +69,7 @@ public class CometTheoreticalBinnedSet extends TheoreticalSpectrumSet {
                 binnedChargeIonIndexes.add(bcs);
             }
         }
-        Collections.sort(binnedChargeIonIndexes, BinnedChargeIonIndex.BY_INDEX);
+        binnedChargeIonIndexes.sort(BinnedChargeIonIndex.BY_INDEX);
         return binnedChargeIonIndexes;
     }
 

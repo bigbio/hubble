@@ -117,7 +117,7 @@ public class SparkContextGetter {
     }
 
     public static void showSparkPropertiesInAnotherThread() {
-        new Thread(() -> showSparkProperties()).start();
+        new Thread(SparkContextGetter::showSparkProperties).start();
     }
 
     /**

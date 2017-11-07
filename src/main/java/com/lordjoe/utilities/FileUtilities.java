@@ -436,13 +436,7 @@ public abstract class FileUtilities {
             Properties ret = new Properties();
             ret.load(fs);
             return ret;
-        }
-        catch (RuntimeException ex) // tempdt Why do we need this catch block?  It also is doing a poor job and not using a logger.
-        {
-            // ex.printStackTrace();
-            throw ex;
-        }
-        catch (IOException ex) // tempdt This really isn't an IllegalArgumentException.  Dave thinks this should be fixed.  Dave can explain if desired.
+        } catch (IOException ex) // tempdt This really isn't an IllegalArgumentException.  Dave thinks this should be fixed.  Dave can explain if desired.
         {
             throw new IllegalArgumentException("Cannot load properties from " + propName);
         }
@@ -451,7 +445,7 @@ public abstract class FileUtilities {
                 if (fs != null)
                     fs.close();
             }
-            catch (IOException e) {
+            catch (IOException ignored) {
 
             }
         }
@@ -472,13 +466,7 @@ public abstract class FileUtilities {
         try {
             FileOutputStream fs = new FileOutputStream(propName);
             props.store(fs, null);
-        }
-        catch (RuntimeException ex) // tempdt Why do we need this catch block?  It also is doing a poor job and not using a logger.
-        {
-            // ex.printStackTrace();
-            throw ex;
-        }
-        catch (IOException ex) // tempdt This really isn't an IllegalArgumentException.  Dave thinks this should be fixed.  Dave can explain if desired.
+        } catch (IOException ex) // tempdt This really isn't an IllegalArgumentException.  Dave thinks this should be fixed.  Dave can explain if desired.
         {
             throw new IllegalArgumentException("Cannot save properties to " + propName);
         }
@@ -1843,7 +1831,7 @@ public abstract class FileUtilities {
                 return (Lines);
             }
         }
-        catch (IOException e) {
+        catch (IOException ignored) {
 
         }
         finally {
@@ -2429,11 +2417,8 @@ public abstract class FileUtilities {
             }
             // exists - is directory
         }
-        if (guaranteeDirectory(DirName)) {
-            return (testDir.mkdir());
-        }
-        return (false);
-        // no can do
+        return guaranteeDirectory(DirName) && (testDir.mkdir());
+// no can do
     }
 
     /**
@@ -3210,7 +3195,7 @@ public abstract class FileUtilities {
             String osName = System.getProperty("os.name").toLowerCase();
             gOSIsCaseSensitive = !osName.contains("windows");
         }
-        return gOSIsCaseSensitive.booleanValue();
+        return gOSIsCaseSensitive;
     }
 
     private static Boolean gOSIsWindows;
@@ -4189,10 +4174,7 @@ public abstract class FileUtilities {
          * @primary }
          */
         public boolean accept(File dir, String name) {
-            if (name.endsWith(extension)) {
-                return (true);
-            }
-            return (new File(dir, name).isDirectory());
+            return name.endsWith(extension) || (new File(dir, name).isDirectory());
         }
 
 //- *******************

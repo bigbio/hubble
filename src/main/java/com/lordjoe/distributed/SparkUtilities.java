@@ -366,7 +366,7 @@ public class SparkUtilities implements Serializable {
     }
 
     public static void showSparkPropertiesInAnotherThread() {
-        new Thread(() -> showSparkProperties()).start();
+        new Thread(SparkUtilities::showSparkProperties).start();
     }
 
     /**

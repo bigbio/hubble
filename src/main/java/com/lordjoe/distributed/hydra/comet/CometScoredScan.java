@@ -898,9 +898,7 @@ public class CometScoredScan implements IScoredScan, IAddable<IScoredScan>, IMea
      */
     @Override
     public boolean isValidMatch() {
-        if (!isValid())
-            return false;
-        return getBestMatch() != null;
+        return isValid() && getBestMatch() != null;
     }
 
     public ISpectralMatch[] getSpectralMatches() {

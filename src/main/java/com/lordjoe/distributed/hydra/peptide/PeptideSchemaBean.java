@@ -29,7 +29,7 @@ public class PeptideSchemaBean implements IDatabaseBean {
     /**
      * function to convert IPolypeptide to PeptideSchemaBeans
      */
-    public static final Function<IPolypeptide, PeptideSchemaBean> TO_BEAN = (Function<IPolypeptide, PeptideSchemaBean>) pp -> new PeptideSchemaBean(pp);
+    public static final Function<IPolypeptide, PeptideSchemaBean> TO_BEAN = (Function<IPolypeptide, PeptideSchemaBean>) PeptideSchemaBean::new;
 
     /**
      * function to convert PeptideSchemaBeans to IPolypeptide
@@ -50,7 +50,7 @@ public class PeptideSchemaBean implements IDatabaseBean {
     /**
      * function to convert PeptideSchemaBeans to IPolypeptide
      */
-    public static final Function<PeptideSchemaBean, IPolypeptide> FROM_BEAN = (Function<PeptideSchemaBean, IPolypeptide>) bean -> bean.asPeptide();
+    public static final Function<PeptideSchemaBean, IPolypeptide> FROM_BEAN = (Function<PeptideSchemaBean, IPolypeptide>) PeptideSchemaBean::asPeptide;
 
     private String sequenceString;
     private double mass;

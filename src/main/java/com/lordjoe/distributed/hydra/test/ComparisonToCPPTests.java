@@ -121,8 +121,8 @@ public class ComparisonToCPPTests {
         final List<CometScoredResult> cppResults = tests.cppResultsByKey.get(INTERESTING_KEY);
         final List<CometScoredResult> HydraResults = tests.hydraResultsByKey.get(INTERESTING_KEY);
 
-        Collections.sort(cppResults, new CometScoredResultComparator());
-        Collections.sort(HydraResults, new CometScoredResultComparator());
+        cppResults.sort(new CometScoredResultComparator());
+        HydraResults.sort(new CometScoredResultComparator());
 
         for (CometScoredResult c : cppResults) {
             System.out.println(c);

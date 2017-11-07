@@ -51,8 +51,7 @@ public class XCorrUsedData implements Comparable<XCorrUsedData>, IEquivalent<XCo
 
         final XCorrUsedData that = (XCorrUsedData) o;
 
-        if (bin != that.bin) return false;
-        return Double.compare(that.score, score) == 0;
+        return bin == that.bin && Double.compare(that.score, score) == 0;
 
     }
 

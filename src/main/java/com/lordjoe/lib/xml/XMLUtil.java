@@ -1370,7 +1370,7 @@ public abstract class XMLUtil {
             in = new FileInputStream(id);
             return(getStreamDOM(in,parser)); 
         }
-        catch(IOException ex) {
+        catch(IOException ignored) {
         }
         return(null);
     }
@@ -1387,7 +1387,7 @@ public abstract class XMLUtil {
             in = openURLStream(id);
             return(getStreamDOM(in,parser));
        }
-        catch(IOException ex) {
+        catch(IOException ignored) {
         }
         return(null);
     }

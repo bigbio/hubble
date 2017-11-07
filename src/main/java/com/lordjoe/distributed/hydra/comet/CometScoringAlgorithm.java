@@ -273,9 +273,7 @@ public class CometScoringAlgorithm extends AbstractScoringAlgorithm {
 //        else
 //            ret = -del <= Math.abs(m_PlusLimit);
 
-        if (!ret)
-            return false;
-        return ret; // break here interesting result
+        return ret && ret;
     }
 
 

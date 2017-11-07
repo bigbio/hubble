@@ -3989,11 +3989,8 @@ public abstract class Util {
             return (t2 == null);
         }
 
-        if (t2 == null) {
-            return (false);
-        }
+        return t2 != null && (t1.equals(t2));
 
-        return (t1.equals(t2));
     }
 
     /**

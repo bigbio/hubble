@@ -55,7 +55,7 @@ public class IterableUtilities {
     public static void appendListKeyValueResults(final ListKeyValueConsumer<String, Integer> pResults,Appendable out) {
         try {
             List<KeyValueObject<String, Integer>> list = pResults.getList();
-            Collections.sort(list,KeyValueObject.KEY_COMPARATOR);
+            list.sort(KeyValueObject.KEY_COMPARATOR);
 
             for (KeyValueObject<String, Integer> kv : list) {
                 out.append(kv.toString());

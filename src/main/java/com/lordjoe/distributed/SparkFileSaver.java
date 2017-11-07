@@ -96,11 +96,7 @@ public class SparkFileSaver {
         }
 
 
-        if (deleteSource) {
-            return srcFS.delete(srcDir, true);
-        } else {
-            return true;
-        }
+        return !deleteSource || srcFS.delete(srcDir, true);
     }
 
 

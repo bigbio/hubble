@@ -61,7 +61,7 @@ public class ReduceFunctionAdaptorTupleIterator<K extends Serializable, V extend
         };
 
         final Iterable<V> vals = () -> itx;
-        final IKeyValueConsumer<KOUT, VOUT> consumer = kv -> holder.add(kv);
+        final IKeyValueConsumer<KOUT, VOUT> consumer = holder::add;
         K key = (K) first._1();
         reducer.handleValues(key, vals, consumer);
          return holder;

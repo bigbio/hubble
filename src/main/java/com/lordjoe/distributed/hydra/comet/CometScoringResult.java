@@ -137,10 +137,8 @@ public class CometScoringResult implements IScoredScan, IAddable<IScoredScan>, I
      */
     @Override
     public boolean equivalent(IMeasuredSpectrum test) {
-        if (m_Raw == null)
-            return false;
+        return m_Raw != null && m_Raw.equivalent(test);
 
-        return m_Raw.equivalent(test);
     }
 
     /**
@@ -231,9 +229,7 @@ public class CometScoringResult implements IScoredScan, IAddable<IScoredScan>, I
      */
     @Override
     public boolean equivalent(ISpectrum o) {
-        if (m_Raw == null)
-            return false;
-        return m_Raw.equivalent(o);
+        return m_Raw != null && m_Raw.equivalent(o);
     }
 
     /**

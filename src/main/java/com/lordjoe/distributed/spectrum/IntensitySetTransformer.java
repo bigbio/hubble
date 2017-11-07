@@ -62,7 +62,7 @@ public class IntensitySetTransformer {
 
         }
 
-        Collections.sort(ret, SpectrumPeak.INTENSITY_COMPARATOR);
+        ret.sort(SpectrumPeak.INTENSITY_COMPARATOR);
 
         List<ISpectrumPeak> pruned = new ArrayList<>();
         for (ISpectrumPeak peak : ret) {
@@ -122,7 +122,7 @@ public class IntensitySetTransformer {
             ret.add(peak);
         }
 
-        Collections.sort(ret, SpectrumPeak.INTENSITY_COMPARATOR);
+        ret.sort(SpectrumPeak.INTENSITY_COMPARATOR);
 
         List<ISpectrumPeak> pruned = new ArrayList<>();
         for (ISpectrumPeak peak : ret) {

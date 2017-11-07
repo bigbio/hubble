@@ -183,7 +183,7 @@ public class GoodSampleConstructor {
 
         List<ScoredScan> scans = Arrays.asList(report1.getScans());
 
-        Collections.sort(scans, new ScoredScanComparator());
+        scans.sort(new ScoredScanComparator());
 
         scans = scans.subList(0, Math.min(scans.size(), keepBest));
 
